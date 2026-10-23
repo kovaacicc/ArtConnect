@@ -1,46 +1,24 @@
 # 1. Opseg projekta
 
-**Cilj:** Objasniti odobreni projektni zadatak vlastitim riječima tima. Čitatelj treba razumjeti problem, ciljane korisnike, cilj projekta i njegove granice bez prethodnog čitanja detaljnih zahtjeva.
-
 ## 1.1 Problem i cilj projekta
 
-**Cilj:** Jasno razgraničiti problem koji se rješava od predloženog rješenja i stvarne koristi za korisnika.
+Mladim umjetnicima može biti teško pronaći umjetničke prilike, a organizatorima umjetničkih događanja valjane radove koji bi bili predstavljeni. Cilj ArtConnect web platforme je omogućiti povezivanje umjetnika i organizatora kako bi ostvarili suradnju na projektima.
 
-[Problem, cilj i očekivana korist vlastitim riječima tima.]
+Umjetnicima i organizatorima omogućena je besplatna registracija i prijava na platformu, dodavanje događaja na kojima sudjeluju u osobni kalendar kao i prikaz fizičkih lokacija izložbi na karti.
 
-<details>
-<summary><strong>Očekivane koristi i potkrepljujući dokazi</strong></summary>
+Jedna od glavnih poteškoća mladim umjetnicima može biti upravljanje vlastitim portfolijom. ArtConnect omogućuje izradu i uređivanje javnih digitalnih portfolija kako bi umjetnici mogli lakše prikazati svoja djela i slati ih na natječaje. 
 
-**Primjer — CrisisMap:** „Tijekom teških vremenskih prilika građaninu mogu trebati prijave kriznih događaja relevantne za njegovu lokaciju. CrisisMap ima za cilj prikazati lokacijski relevantne prijave kriznih događaja na karti kako bi ih građanin mogao pronaći na jednom mjestu.” Time su navedeni problem, ciljani korisnik, predložena mogućnost i očekivana korist. Ne tvrdi se da je izmjereno smanjenje vremena reagiranja niti da aplikacija ima integraciju sa službom za hitne intervencije. Tim i dalje mora opisati opseg odobren za vlastiti projekt.
+Umjetnicima također može biti teško pronaći događaje na kojima bi predstavili svoja djela. Platforma nudi pretraživanje prilika koje odgovaraju njihovom području umjetnosti kako bi prikazali svoje radove i povezali se s drugim profesionalcima iz njihovog područja djelovanja.
 
-„Aplikacija smanjuje vrijeme odgovora na krizni događaj za 30 % na temelju simulacija.” Broj očekivanu korist čini konkretnijom, ali odmah zahtijeva provjeru: **gdje je simulacija i kako je postotak izračunan?** Ako takav dokaz ne postoji, očekivanu korist navedite bez brojčanog rezultata.
-
-</details>
+Organizatorima izazov predstavlja promoviranje umjetničkih prilika koje organiziraju i pronalaženje odgovarajućih kandidata. Cilj ArtConnect-a je omogućiti organizatorima lakšu objavu natječaja te pregled prijava kako bi našli umjetnike koji najbolje odgovaraju zadanim kriterijima. 
 
 ## 1.2 Ciljani korisnici i dionici
 
-**Cilj:** Utvrditi osobe, uloge i organizacije čije potrebe i interesi određuju projektni zadatak.
-
 | Skupina korisnika ili dionika | Potreba ili interes relevantan za ovaj projekt |
 | --- | --- |
-|  |  |
-
-<details>
-<summary><strong>Korisnici, dionici i neobavezna persona</strong></summary>
-
-**Primjer — CrisisMap:**
-
-| Skupina korisnika ili dionika | Potreba ili interes relevantan za ovaj projekt |
-| --- | --- |
-| Građanin | Pronaći informacije o obližnjim kriznim događajima i podnijeti prijavu kriznog događaja s lokacijom. |
-| Koordinator pomoći | Pregledati prijave relevantne za područje i dostupne resurse, ako je koordinacija unutar odobrenog opsega. |
-| Regulatorno tijelo / Agencija za zaštitu podataka (Dionik) | Zahtijeva osiguravanje anonimnosti prijavitelja i zaštitu osobnih podataka (npr. usklađenost s GDPR-om). Ovaj dionik ne koristi aplikaciju, ali definira ograničenja sustava. |
-
-Riječ je o dvjema različitim potrebama, a ne o dvjema izmišljenim biografijama. Akter komunicira s aplikacijom; demonstrator na kolegiju kojem je rezultat zanimljiv ne mora biti akter aplikacije. Koristite uloge i ovlasti iz svojeg odobrenog zadatka. Persona je neobavezna i korisna je kada pomaže riješiti konkretno projektno pitanje.
-
-**Neobavezni primjer persone:** Ana, koordinatorica pomoći, treba aktualne informacije o resursima kako bi mogla rasporediti pomoć. To može pomoći kada tim odlučuje koje informacije koordinator treba vidjeti prve. Personu opišite samo ako objašnjava projektnu odluku; popis izmišljenih biografija nije obavezni rezultat kolegija.
-
-</details>
+| Umjetnik | Pronaći informacije o umjetničkim prilikama, izraditi digitalni portfolijo kako bi se prijavili na odabrani natječaj, pratiti status prijave, prikazati ostvarena sudjelovanja na projektima. |
+| Organizator | Objavljivanje umjetničkih prilika, pregled prijava umjetnika te njihovo prihvaćanje ili odbijanje, pregled osnovnih statistika prijava, objava rezultata organiziranih događaja. |
+| Administrator platforme | Upravljanje korisnicima, objavljenim sadržajem, organizatorima, kategorijama umjetnosti, kriterijima za pretraživanje i osnovnim postavkama sustava. |
 
 ## 1.3 Granice projekta
 
