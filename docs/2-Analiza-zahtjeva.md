@@ -52,42 +52,24 @@ Za složenu interakciju kratak scenarij *Given / When / Then* može pojasniti kr
 | ID | Opis | Prioritet | Izvor | Način provjere |
 |--- | --- | --- | --- | --- |
 | NF-01 | Sav promet u produkciji ide preko HTTPS. HTTP zahtjevi preusmjeravaju se na HTTPS. | Visok | Sigurnosna politika | Provjera certifikata SSL testom. Pokušaj pristupa stranici preko HTTP-a vraća 301 |
-| NF-02 | Na poslužitelju se radi provjera ovlasti. Zahtjev bez dopušenja vraća 403 | Visok | Upute | Provjera krajnjih točaka automatiziranim testovima različitim ulogama |
+| NF-02 | Na poslužitelju se radi provjera ovlasti. Zahtjev bez dopuštenja vraća 403 | Visok | Upute | Provjera krajnjih točaka automatiziranim testovima različitim ulogama |
 | NF-03 | Sustav je zaštićen od uobičajenih web ranjivosti (SQLi, XSS, CSRF...) | Visok | Sigurnosna praksa | Pregled koda i ručno penetracijsko testiranje. |
 | NF-04 | Dopušteno je prenositi samo slikovne, audio i PDF datoteke, do maksimalno 20MB. | Srednje | Upute | Testovi prijenosa većih i neodgovarajućih datoteka |
 | NF-05 | Na web stranici istodobno može biti prijavljeno 100 korisnika te je odziv manji od 2s po zahtjevu | Srednje | SLA | Testovi virtualno izazvanim opterećenjima |
 | NF-06 | Pretraživanje prilika po području, lokaciji i roku za prijavu vraća rezultate unutar 2s za bazu od 100 prilika. | Nizak | SLA | Mjerenje na bazi napunjenoj testnim podacima |
 | NF-07 | Nedostupnost Google Maps ili Google Calendar ne utječe na funkcionalnost ostatka stranice. | Srednji | Dogovor tima | Test s blokiranim pozivima prema Google API-ju. |
-| NF-08 | ustav je dostupan najmanje 95 % vremena tijekom razdoblja ocjenjivanja. | Nizak | SLA | Health-check s vanjskim monitoringom |
+| NF-08 | Sustav je dostupan najmanje 95 % vremena tijekom razdoblja ocjenjivanja. | Nizak | SLA | Health-check s vanjskim monitoringom |
 | NF-09 | Sve prijave i registracije korisnika odvijaju se isključivo putem OAuth 2.0 servisa | Visok | Upute | Testiranje registracije i prijave |
-| NF-10 | Baza podataka mora imati kapacitet pohrane 1000 korisnika te 1000 prilika/natjecanja. | Srednje | Procjena tima | Punjenje baze podataka testim podacima. |
+| NF-10 | Baza podataka mora imati kapacitet pohrane 1000 korisnika te 1000 prilika/natjecanja. | Srednje | Procjena tima | Punjenje baze podataka testnim podacima. |
 
 ## 2.3 Dionici i akteri
 
-**Cilj:** Utvrditi uloge koje utječu na zahtjeve i razlikovati dionike od aktera koji komuniciraju s aplikacijom.
+|**ID**|**Uloga**|**Odnos prema sustavu**|**Obuhvaćeni**<br>**funkcijski**<br>**zahtjevi**|
+|---|---|---|---|
+|A-01|Umjetnik|Može se prijavit u<br>sustav, može mijenjat<br>svoj profil i portfolio,<br>može objaviti svoj<br>sadržaj, može se<br>prijavit i gledat status<br>eventa|F-001<br>F-002<br>F-003<br>F-005<br>F-006<br>F-007<br>F-008<br>F-010<br>F-013<br>F-014<br>F-015<br>F-018|
+|A-02|Organizator|Može se prijavit u<br>sustav.<br>Može objaviti i upravljat<br>statusom natječaja te<br>pregledati predane<br>prijave te po potrebi<br>zatražiti dodatne<br>informacije od<br>umjetnika, može<br>gledati rezultate te ih<br>objaviti|F-001<br>F-002<br>F-003<br>F-008<br>F-009<br>F-010<br>F-011<br>F-012<br>F-016<br>F-017<br>F-019<br>F-020|
+|A-03|Administrator sustava|upravlja korisnicima,<br>objavljenim sadržajem<br>i organizatorima.<br>Također može<br>upravljati kategorijama<br>umjetnosti, kriterijima<br>za pretraživanje i<br>osnovnim postavkama<br>sustava. Pregledava<br>mjesečne izvještaje|F-003<br>F-021<br>F-022|
 
-| ID uloge ili aktera | Odnos prema sustavu | Relevantni zahtjevi |
-| --- | --- | --- |
-|  |  |  |
-
-<details>
-<summary><strong>Povezivanje aktera sa zahtjevima</strong></summary>
-
-**Primjer — akteri aplikacije CrisisMap:**
-
-| ID aktera | Uloga | Obuhvaćeni funkcijski zahtjevi |
-| --- | --- | --- |
-| A-01 | Koordinator pomoći | F-003: Pregled resursa; F-004: Podnošenje prijave kriznog događaja. |
-| A-02 | Građanin | F-001: Izrada računa; F-005: Primanje obavijesti. |
-| A-03 | Administrator sustava | NF-1.2: Provođenje sigurnosnih pravila; upravljanje korisnicima. |
-| A-04 | Posjetitelj | F-007: Pregled prijava na karti. |
-| A-05 | Moderator | F-008: Odobravanje ili odbijanje prijava. |
-
-**Odgovornosti aktera:** Uloga aktera treba biti povezana s interakcijom, a ne samo s nazivom. Provjerite podnosi li koordinator pomoći u odobrenom zadatku doista prijave kriznih događaja. Poveznica administratora s NF-1.2 navodi sigurnosni aspekt, ali sama po sebi ne opisuje obrazac uporabe; navedite stvarnu radnju administratora ili izostavite ulogu ako je nema. Nastavnici zainteresirani za rezultat mogu biti dionici, a da nisu akteri aplikacije. Tablica je polazište za razmišljanje, a ne potvrđen opis ovlasti u CrisisMapu.
-
-</details>
-
----
 
 ## 2.4 Ograničenja i pretpostavke
 
