@@ -82,7 +82,7 @@ Navedite nekoliko tehnologija i vanjskih usluga koje bitno određuju kako vaša 
 
 | Član | Glavna uloga ili doprinos |
 | --- | --- |
-| Luka | Backend |
+| Luka | Backend i CI|
 | Lovro | Frontend |
 | Klara | Baza podataka i backend |
 | Lara Š | Frontend i CI |
