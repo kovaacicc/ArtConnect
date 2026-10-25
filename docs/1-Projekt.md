@@ -24,9 +24,9 @@ Organizatorima izazov predstavlja promoviranje umjetničkih prilika koje organiz
 
 **Cilj:** Jasno definirati granice sustava — što je obuhvaćeno odobrenim zadatkom, što je svjesno izostavljeno ili odgođeno te o kojim vanjskim uslugama sustav izravno ovisi.
 
-**Uključeno:** [Glavne mogućnosti.]  
-**Izvan opsega ili odgođeno:** [Navedite funkcionalnosti koje su namjerno izostavljene ili prebačene u buduće verzije, uz kratko inženjersko ili vremensko obrazloženje.] 
-**Vanjske ovisnosti:** [Navedite nužne vanjske usluge, API-je, baze podataka ili izvore informacija bez kojih sustav ne može funkcionirati (npr. Google Maps, platni pristupnici, vanjski pružatelj identiteta (OAuth)).]
+**Uključeno:** Povezivanje umjetnika i organizatora kroz cijeli tijek suradnje: umjetnik izrađuje digitalni portfolio i određuje koja su djela javna, organizator objavljuje umjetničku priliku, umjetnik se na nju prijavljuje portfolijom i prati status prijave, a organizator prijave pregledava, prihvaća ili odbija (uz razlog odbijanja) te nakon događanja objavljuje rezultate. Sudjelovanja ostvarena putem platforme prikazuju se na profilu umjetnika. Uz to su uključeni pretraživanje prilika prema području umjetnosti, lokaciji i roku, osnovne statistike prijava za organizatore te administratorsko upravljanje korisnicima, sadržajem, kategorijama umjetnosti i mjesečnim izvještajima o korištenju.  
+**Izvan opsega ili odgođeno:** Platforma ne obrađuje plaćanja ni prodaju djela. Informacija o nagradi ili naknadi samo se prikazuje uz priliku, a prihvaćanje prijave označava odabir umjetnika i ne predstavlja ugovor niti posredovanje u financijskom dogovoru između umjetnika i organizatora. Plaćanja bi zahtijevala integraciju platnog pristupnika te dodatne sigurnosne i pravne provjere koje nisu dio projektnog zadatka. Izravna komunikacija u stvarnom vremenu (chat) nije obuhvaćena; komunikacija između umjetnika i organizatora svodi se na statuse prijava i razloge odbijanja.  
+**Vanjske ovisnosti:** Vanjski servis za autentifikaciju (OAuth 2.0) za registraciju i prijavu korisnika; Google Maps API za prikaz lokacije događanja na fizičkoj adresi; Google Calendar za dodavanje događanja u osobni kalendar prihvaćenog umjetnika. Platforma ostaje odgovorna za vlastite podatke o korisnicima, portfolijima, prilikama i prijavama.
 
 <details>
 <summary><strong>Definiranje početne granice projekta</strong></summary>
@@ -50,7 +50,9 @@ Ovaj pregled zadržite na razini opsega: navedite glavnu mogućnost i njezinu gr
 
 **Cilj:** Objasniti kako korisnici trenutačno rješavaju problem i koja preostala potreba opravdava odobreni projekt.
 
-[U dvije do četiri rečenice opišite jedan postojeći postupak ili relevantno rješenje, što ono već omogućuje i koja konkretna potreba motivira ovaj projekt. Činjenične tvrdnje o vanjskim proizvodima ili praksama potkrijepite izvorom.]
+Umjetnici danas prilike mogu tražiti na specijaliziranim platformama poput CaFÉ-a (CallForEntry.org) neprofitne organizacije WESTAF, gdje u privatni portfolio učitavaju uzorke radova i šalju prijave na više natječaja, uz kotizaciju ako je organizator traži. Portfolio na CaFÉ-u nije javan dok se radovi ne prilože prijavi, a natječaji se pretražuju prvenstveno prema američkim regijama i saveznim državama. ArtConnect stoga mladim umjetnicima nudi javni portfolio kojim se predstavljaju i prijavljuju na lokalne prilike, a organizatorima objavu prilika i pregled prijava, tako da se cijela suradnja od prijave do prikaza ostvarenog sudjelovanja odvija na jednom mjestu.
+
+*Izvor: [CaFÉ Artist Help Center](https://artist-help.callforentry.org/col/intro)*
 
 <details>
 <summary><strong>Postojeći pristupi i opravdanost projekta</strong></summary>
