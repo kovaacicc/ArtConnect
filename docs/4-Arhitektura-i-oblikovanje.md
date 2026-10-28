@@ -115,30 +115,23 @@ Dijagram prikazuje logičku podjelu ArtConnecta na komponente, njihove veze i va
 
 ## 4.4 Ponašanje tijekom izvođenja
 
-**Cilj:** Objasniti jednu važnu interakciju među dijelovima koji se izvode i životni ciklus jednog smislenog objekta. Odaberite primjere koji otkrivaju odluke ili neuspješne putove umjesto izrade dijagrama za svaku CRUD radnju.
-
 ### 4.4.1 Reprezentativni UML sekvencijski dijagram
 
-**Cilj:** Prikazati redoslijed poruka za jedan reprezentativni scenarij i odgovore na važnu alternativu.
+Dijagram prikazuje redoslijed poruka pri prijavi umjetnika na umjetničku priliku i odgovore sustava kada prijava nije moguća.
 
-**Scenarij:** [Naziv interakcije; dodajte UC ID ako postoji.]  
-**sekvencijski dijagram:** [Ugradite čitljiv UML sekvencijski dijagram.]  
-**PlantUML izvor:** [Poveznica na odgovarajuću `.puml` datoteku.]
+**Scenarij:** Prijava na priliku (UC-07)
 
-<details>
-<summary><strong>Odabir lokacije, provjera valjanosti i podnošenje prijave</strong></summary>
+**sekvencijski dijagram:**
 
-**Primjer — CrisisMap:** Građanin podnosi prijavu kriznog događaja nakon što ručno odabere lokaciju ili zatraži položaj uređaja. Interakcija prikazuje i što se događa kada je pristup lokaciji odbijen, podaci prijave nisu valjani ili pohrana ne uspije.
+![Sekvencijski dijagram prijave na priliku](./assets/diagrams/4-4-artconnect-application-submission-SD.svg)
 
-![Sekvencijski dijagram podnošenja prijave kriznog događaja](./assets/diagrams/4-4-crisismap-report-submission-SD.svg)
+**Slika 4.4. Sekvencijski dijagram prijave na priliku**
 
-**Slika 4.4. Sekvencijski dijagram podnošenja prijave kriznog događaja**
+**PlantUML izvor:** [izvor](./puml/4-4-artconnect-application-submission-SD.puml)
 
-**PlantUML izvor:** [izvor](./puml/4-4-crisismap-report-submission-SD.puml)
+**Opis dijagrama:** Umjetnik otvara obrazac za prijavu, odabire portfolio i po potrebi dodaje dodatne materijale. Zatim šalje prijavu, a web-klijent zahtjev prosljeđuje API-ju, koji ga predaje modulu za prijave. Modul provjerava je li prilika otvorena za prijave i je li rok istekao, a zatim sprema prijavu sa statusom „predana“ u bazu podataka. Umjetnik na kraju dobiva potvrdu s prikazom statusa prijave.
 
-**Analiza primjera:** Dva načina odabira lokacije te alternative provjere i pohrane imaju različite posljedice za korisnika; usporedite ih s odgovarajućim obrascem uporabe i njegovim alternativnim tijekovima. API preglednika za lokaciju mogućnost je preglednika; web-klijent, API, usluga i pohrana odgovaraju prikazu komponenata. Odaberite grane koje pomažu objasniti scenarij vašeg projekta i završni dijagram uskladite s implementiranom interakcijom.
-
-</details>
+Dijagram prikazuje dvije alternative. Ako prilika nije otvorena ili je rok istekao, prijava se odbija i umjetnik dobiva poruku da prijava nije moguća. Ako pohrana ne uspije, sustav javlja pogrešku i ne prikazuje lažnu potvrdu o predaji.
 
 ### 4.4.2 Reprezentativni UML dijagram stanja
 

@@ -1,0 +1,96 @@
+' ==============================================================================
+' @file 4-4-artconnect-application-submission-SD.puml
+' @brief Konceptualni sekvencijski dijagram prijave umjetnika na priliku (UC-07).
+'
+' @details
+' Ovaj artefakt modelira dinamičku interakciju umjetnika koji se prijavljuje na
+' umjetničku priliku. Prikazuje komunikaciju web-klijenta, API-ja, modula za
+' prijave i baze podataka te ponašanje sustava kada prilika nije otvorena za
+' prijave ili pohrana prijave ne uspije.
+'
+' Zahtjevi koje model pokriva:
+' - Razdvajanje odgovornosti između klijenta, API-ja, poslovne logike i pohrane.
+' - Provjera uvjeta prijave prije pohrane (prilika je otvorena, rok nije istekao).
+' - Jasno ponašanje sustava u slučaju neuspjeha, bez lažne potvrde umjetniku.
+'
+' Author(s): Lara Glavinić
+' Context: Programsko inženjerstvo
+'
+' AI Usage Disclosure:
+' Dijagram je izradila Lara Glavinić. Pomoć AI-ja pri objašnjavanju sintakse i
+' provjeri koda pregledala je autorica, koja je odgovorna za konačan sadržaj.
+'
+' Traceability Note:
+' Poruke i uvjetne grane definirane u ovom modelu moraju odgovarati konačnoj
+' logici web-klijenta i poslužiteljskog dijela aplikacije te alternativnim
+' tokovima obrasca uporabe UC-07.
+'
+' Diagram level: Conceptual Interaction Design
+' Diagram type:  Sequence Diagram
+' ==============================================================================
+
+@startuml 4-4-artconnect-application-submission-SD
+
+
+skinparam maxMessageSize 150
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam sequenceMessageAlign center
+
+autonumber
+
+' ==============================================================================
+' Lifelines (Stereotyped)
+' ==============================================================================
+actor Umjetnik
+participant "Web-klijent" as Client <<UI>>
+participant "API" as Api <<API>>
+participant "Modul za prijave" as Applications <<Application>>
+database "PostgreSQL" as Db <<Persistence>>
+
+' ==============================================================================
+' Faza 1: Priprema prijave
+' ==============================================================================
+Umjetnik -> Client++ : otvara obrazac za prijavu na priliku
+
+Umjetnik -> Client : odabire portfolio za prijavu
+
+opt umjetnik ima dodatne materijale
+  Umjetnik -> Client : dodaje dodatne materijale
+end
+
+Client --> Umjetnik-- : prikaz odabranog sadržaja prijave
+
+' ==============================================================================
+' Faza 2: Predaja, provjera i pohrana
+' ==============================================================================
+Umjetnik -> Client : šalje prijavu
+Client -> Api++ : zahtjev za predaju prijave
+Api -> Applications++ : predaj prijavu
+Applications -> Db++ : provjeri status i rok prilike
+Db --> Applications-- : podaci o prilici
+
+alt prilika je otvorena i rok nije istekao
+  Applications -> Db++ : spremi prijavu sa statusom „predana"
+
+  alt pohrana je uspjela
+    Db --> Applications-- : prijava spremljena
+    Applications --> Api-- : prijava je predana
+    Api --> Client-- : potvrda predaje prijave
+    Client --> Umjetnik : prikaz potvrde i statusa „predana"
+  else pohrana nije uspjela
+    Db --> Applications-- : greška pri pohrani
+    Applications --> Api-- : prijava nije spremljena
+    Api --> Client-- : greška pri predaji prijave
+    Client --> Umjetnik : poruka o grešci, prijava nije predana
+  end
+
+else prilika nije otvorena ili je rok istekao
+  Applications --> Api-- : prijava odbijena (prilika nije otvorena za prijave)
+  Api --> Client-- : razlog odbijanja prijave
+  Client --> Umjetnik : poruka da prijava na priliku nije moguća
+end
+
+deactivate Client
+
+@enduml
