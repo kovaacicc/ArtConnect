@@ -135,26 +135,17 @@ Dijagram prikazuje dvije alternative. Ako prilika nije otvorena ili je rok istek
 
 ### 4.4.2 Reprezentativni UML dijagram stanja
 
-**Cilj:** Prikazati važna stanja jednog domenskog objekta ili eksplicitno upravljanog načina rada sustava te događaje ili uvjete koji ih mijenjaju.
+Dijagram prikazuje životni ciklus prijave umjetnika na priliku, od predaje do odluke organizatora.
 
-**Vlasnik stanja i razlog odabira:** [Navedite objekt ili način rada sustava, kako se njegovo stanje prepoznaje i zašto su prijelazi važni.]  
-**Dijagram stanja:** [Ugradite čitljiv UML dijagram stanja.]  
-**PlantUML izvor:** [Poveznica na odgovarajuću `.puml` datoteku.]
+**Vlasnik stanja i razlog odabira:** Vlasnik stanja je prijava umjetnika na priliku. Njezino stanje prepoznaje se po statusu koji vidi umjetnik (predana, u pregledu, potrebna dopuna, prihvaćena, odbijena). Prijelazi su važni jer određuju što umjetnik i organizator u kojem trenutku mogu napraviti.
 
-<details>
-<summary><strong>Načini rada i dostupnost usluge</strong></summary>
+**Dijagram stanja:**
 
-**Primjer — CrisisMap:** Način koordinacije kriznog događaja mijenja se kako se događaj procjenjuje i rješava. Istodobno se korisniku vidljiva dostupnost aplikacije može neovisno mijenjati kada pružatelj karte ili poslužiteljski sustav postanu nedostupni.
+![Dijagram stanja prijave na priliku](./assets/diagrams/4-5-artconnect-application-SM.svg)
 
-![Dijagram stanja prijave kriznog događaja](./assets/diagrams/4-5-crisismap-report-SM.svg)
+**PlantUML izvor:** [izvor](./puml/4-5-artconnect-application-SM.puml)
 
-**Slika 4.5. Dijagram stanja prijave kriznog događaja**
-
-**PlantUML izvor:** [izvor](./puml/4-5-crisismap-report-SM.puml)
-
-**Analiza primjera:** Dvije regije opisuju neovisne aspekte modeliranog sustava: način koordinacije kriznog događaja i opaženu dostupnost usluge. Izvode se paralelno; aktivni krizni događaj može postojati uz normalno ili ograničeno pružanje usluge. Grane nakon oporavka poslužiteljskog sustava uzimaju u obzir da pružatelj karte možda i dalje nije dostupan. Prijelazi stanja imaju imenovane okidače ili uvjete umjesto da budu samo popis zaslona. Ovaj oblik koristite samo ako aplikacija stvarno održava ili pouzdano izvodi obje vrste stanja. Projekt čiji važan životni ciklus pripada prijavi, rezervaciji ili narudžbi treba modelirati taj objekt; složenost dijagrama nije kriterij vrednovanja. Pri završnom pregledu model stanja usporedite s ponašanjem koje pokrenuta aplikacija stvarno podržava.
-
-</details>
+**Opis dijagrama:** Prijava nastaje predajom umjetnika i ulazi u stanje „Predana“. Kad organizator započne pregled, prelazi u stanje „U pregledu“. Iz tog stanja organizator može zatražiti dopunu (prijava prelazi u „Potrebna dopuna“, a nakon što umjetnik dopunu dostavi, vraća se u „U pregledu“), prihvatiti prijavu ili je odbiti uz razlog odbijanja. „Prihvaćena“ i „Odbijena“ su završna stanja. Nakon prihvaćanja umjetnik može dodati događaj u osobni kalendar, ali to ne mijenja stanje prijave.
 
 ## 4.5 Zapisi arhitekturnih odluka
 
