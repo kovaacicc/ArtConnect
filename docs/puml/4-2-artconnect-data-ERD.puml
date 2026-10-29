@@ -1,0 +1,260 @@
+' ==============================================================================
+' @file 4-2-artconnect-data-ERD.puml
+' @brief Initial logical data model for the ArtConnect web platform.
+'
+' @details
+' This artifact defines the principal persistent entities required to support 
+' the foundational architecture of the ArtConnect platform. 
+' The model captures core domain relationships encompassing system users,
+' artist portfolios, art fields, opportunities, applications, participation
+' records, calendar integration, and administrative configuration,
+' abstracting away the physical database implementation.
+'
+' Architectural Scope & Rationale:
+' This model is explicitly scoped to the logical architecture tier. It focuses 
+' on capturing stable domain concepts, independent identities (Primary Keys), 
+' representative domain attributes, and precise relationship cardinalities. 
+'
+' System Requirements Addressed:
+' This model establishes the structural integrity of the application by defining:
+' - The minimal viable data entities the system must persist.
+' - The entity bounded contexts and their independent life cycles.
+' - The relational mapping between artists, artworks, opportunities, and applications.
+' - The cardinality constraints governing data integrity and application logic.
+'
+' Author(s): Klara Vlašić
+' Context: Software Engineering Course
+'
+' AI Usage Disclosure:
+' Designed by Klara Vlašić. AI-assisted revision and documentation comments were
+' reviewed by the author, who is responsible for the final content.
+'
+' Traceability Note:
+' The entities, attributes, and relationships defined herein must strictly map 
+' to the finalized software implementation. Any architectural deviations introduced 
+' during development must be retroactively updated in this model to maintain 
+' evidence chain completeness from requirements to code.
+'
+' Diagram level: Logical data model
+' Diagram type:  Entity-Relationship Diagram (ERD)
+' ==============================================================================
+
+@startuml
+
+' ==============================================================================
+' Diagram Layout and Style
+' ==============================================================================
+
+left to right direction
+
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+skinparam entity {
+    BackgroundColor #E7F1FF
+    BorderColor #0D6EFD
+    FontColor #212529
+}
+
+skinparam note {
+    BackgroundColor #F8F9FA
+    BorderColor #212529
+    FontColor #212529
+}
+
+skinparam ArrowColor #212529
+
+' ==============================================================================
+' Core User Entity
+' ==============================================================================
+
+entity "User" as User {
+    * user_id : ID <<PK>>
+    --
+    display_name : text
+    email : text
+    role : enum
+    oauth_provider : text
+    oauth_subject : text
+    is_active : boolean
+    registered_at : datetime
+}
+
+' ==============================================================================
+' User Management Entities
+' ==============================================================================
+
+entity "Artist Profile" as ArtistProfile {
+  * user_id : ID <<PK, FK>>
+  --
+  first_name : text
+  last_name : text
+  biography : text
+  work_description : text
+  website_url : text
+  social_url : text
+  portfolio_public : boolean
+}
+
+entity "Artist Field" as ArtistField {
+  * artist_id : ID <<PK, FK>>
+  * field_id : ID <<PK, FK>>
+}
+
+entity "Organizer Profile" as OrganizerProfile {
+  * user_id : ID <<PK, FK>>
+  --
+  name : text
+  organization_type : text
+  description : text
+  approved : boolean
+}
+
+' ==============================================================================
+' Portfolio Entities
+' ==============================================================================
+
+entity "Artwork" as Artwork {
+  * artwork_id : ID <<PK>>
+  --
+  * artist_id : ID <<FK>>
+  title : text
+  year_created : integer
+  technique : text
+  dimensions : text
+  description : text
+  is_public : boolean
+}
+
+entity "Artwork File" as ArtworkFile {
+  * file_id : ID <<PK>>
+  --
+  * artwork_id : ID <<FK>>
+  url : text
+  file_type : text
+}
+
+entity "Past Exhibition" as PastExhibition {
+  * exhibition_id : ID <<PK>>
+  --
+  * artist_id : ID <<FK>>
+  title : text
+  year : integer
+  description : text
+}
+
+' ==============================================================================
+' Opportunity and Application Entities
+' ==============================================================================
+
+entity "Opportunity" as Opportunity {
+  * opportunity_id : ID <<PK>>
+  --
+  * organizer_id : ID <<FK>>
+  * field_id : ID <<FK>>
+  created_at : datetime
+  type : enum
+  title : text
+  description : text
+  deadline : date
+  address : text
+  latitude : decimal
+  longitude : decimal
+  starts_at : datetime
+  ends_at : datetime
+  age_criteria : text
+  reward : text
+  status : enum
+  results : text
+}
+
+entity "Application" as Application {
+  * application_id : ID <<PK>>
+  --
+  * opportunity_id : ID <<FK>>
+  * artist_id : ID <<FK>>
+  status : enum
+  message : text
+  rejection_reason : text
+  submitted_at : datetime
+  participated : boolean
+}
+
+entity "Application Artwork" as ApplicationArtwork {
+  * application_id : ID <<PK, FK>>
+  * artwork_id : ID <<PK, FK>>
+}
+
+entity "Application Material" as ApplicationMaterial {
+  * material_id : ID <<PK>>
+  --
+  * application_id : ID <<FK>>
+  name : text
+  url : text
+}
+
+entity "Calendar Entry" as CalendarEntry {
+  * entry_id : ID <<PK>>
+  --
+  * application_id : ID <<FK>>
+  external_event_id : text
+  added_at : datetime
+}
+
+' ==============================================================================
+' Administration Entities
+' ==============================================================================
+
+entity "Search Criterion" as SearchCriterion {
+  * criterion_id : ID <<PK>>
+  --
+  name : text
+  active : boolean
+}
+
+entity "System Setting" as SystemSetting {
+  * setting_key : text <<PK>>
+  --
+  value : text
+}
+
+entity "Art Field" as ArtField {
+  * field_id : ID <<PK>>
+  --
+  name : text
+  active : boolean
+}
+
+' ==============================================================================
+' Entity Relationships
+' ==============================================================================
+
+User "1" ||--o| "0..1" ArtistProfile : is >
+User "1" ||--o| "0..1" OrganizerProfile : is >
+
+ArtistProfile "1" ||--o{ "0..*" ArtistField : works in >
+ArtistProfile "1" ||--o{ "0..*" PastExhibition : lists >
+ArtistProfile "1" ||--o{ "0..*" Artwork : owns >
+ArtistProfile "1" ||--o{ "0..*" Application : submits >
+
+ArtField "1" ||--o{ "0..*" ArtistField : groups >
+ArtField "1" ||--o{ "0..*" Opportunity : classifies >
+
+Artwork "1" ||--o{ "0..*" ArtworkFile : has >
+Artwork "1" ||--o{ "0..*" ApplicationArtwork : submitted in >
+
+OrganizerProfile "1" ||--o{ "0..*" Opportunity : publishes >
+
+Opportunity "1" ||--o{ "0..*" Application : receives >
+
+Application "1" ||--o{ "0..*" ApplicationArtwork : includes >
+Application "1" ||--o{ "0..*" ApplicationMaterial : has >
+Application "1" ||--o| "0..1" CalendarEntry : synced as >
+
+' ==============================================================================
+' Design Guidance
+' ==============================================================================
+
+
+
+@enduml
