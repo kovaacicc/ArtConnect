@@ -90,6 +90,9 @@ DATABASES = {
     }
 }
 
+
+AUTH_USER_MODEL = "users.User"  # kažemo Djangu da koristi naš custom User model, jer on ima i svoj defaultni
+
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
 
