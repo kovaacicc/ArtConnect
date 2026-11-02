@@ -1,12 +1,12 @@
 from django.db import models
 
+
 from django.contrib.auth.models import (
     AbstractBaseUser,       # već gotove klase za stvaranje usera u bazi
     BaseUserManager,
     PermissionsMixin,
 )
 
-# Create your models here.
 
 # UserManager je custom objects manager kako bi pazio da u kreiranju usera imamo normaliziran mail i pasword da se "onemogući" + admin kreacija
 class UserManager(BaseUserManager):
@@ -90,7 +90,8 @@ class ArtistProfile(models.Model):
         User,
         on_delete=models.CASCADE,
         primary_key=True,   # kaže da je FK, ali i PK ArtistProfila upravo ono PK od User-a, što je user_id
-        related_name="artist_profile",  # služi za pristupanje relaciji ArtistProfile ako krenemo od instance user tablice User, npr:
+        related_name="artist_profile",  # pridjeljeno ime kako u pythonu zovemo tu tablicu
+                                        # služi za pristupanje relaciji ArtistProfile ako krenemo od instance user tablice User, npr:
                                         # user = User.objects.get(email="ana@gmail.com")
                                         # user.artist_profile.biography go from User to ArtistProfile
                                         
@@ -104,8 +105,8 @@ class ArtistProfile(models.Model):
     portfolio_public = models.BooleanField(default=False)
  
     art_fields = models.ManyToManyField( # opisuje vezu ArtField prema ArtistProfile
-        ArtField,
-        through="ArtistField",
+        "portfolio.ArtField",       # mora tako jer ako gore importam iz portfolio appa, događa se circular import između ta 2 appa (users i portfolio) i Django se ljuti
+        through="portfolio.ArtistField",   # kažemo koja tablica se koristi kao join table između ArtField i ArtistProfile
         related_name="artists",
     )
  
