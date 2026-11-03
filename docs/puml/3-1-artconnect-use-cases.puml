@@ -1,0 +1,186 @@
+
+' ==============================================================================
+' @file 3-1-artconnect-use-cases.puml
+' @brief Dijagram obrazaca uporabe za platformu ArtConnect.
+'
+' @details
+' Ovaj artefakt definira primarne aktere i njihove interakcije s platformom
+' ArtConnect. Prikazuje granice ponašanja sustava te kako umjetnici,
+' organizatori i administrator pokreću ključne poslovne procese: upravljanje
+' portfoliom, pretraživanje i objavu umjetničkih prilika, prijavu na prilike
+' i praćenje statusa prijava, odlučivanje o prijavama te administraciju
+' korisnika, sadržaja i postavki sustava.
+'
+' Opseg i arhitekturno obrazloženje:
+' Model je ograničen na razinu zahtjeva i ponašanja sustava.
+' Usredotočen je na ciljeve korisnika i granice sustava, a ne na
+' implementacijske detalje. Unutarnja logika sustava, pohrana podataka i
+' tijekovi korisničkog sučelja namjerno su ostavljeni za kasnije strukturne
+' modele.
+'
+' Zahtjevi koje model pokriva:
+' Model uspostavlja funkcionalnu osnovu aplikacije definiranjem:
+' - Primarnih i sekundarnih aktera koji komuniciraju sa sustavom.
+' - Osnovnih funkcionalnih zahtjeva grupiranih po ciljevima korisnika.
+' - Granica sustava i relacija proširenja (extend).
+' - Razdvajanja ovlasti umjetnika, organizatora i administratora.
+'
+' Author(s): Lara Glavinić 
+' Context: Programsko Inženjerstvo
+'
+' AI Usage Disclosure:
+' Dijagram je izradila Lara Glavinić. Pomoć AI-ja pri objašnjavanju sintakse i
+' provjeri koda pregledala je autorica, koja je odgovorna za konačan sadržaj.
+'
+' Traceability Note:
+' Obrasci uporabe definirani u ovom modelu moraju se strogo preslikavati na
+' implementirane funkcionalnosti i skupove funkcionalnih testova. Svako
+' odstupanje u ponašanju uvedeno tijekom razvoja mora se naknadno unijeti u
+' ovaj model kako bi se očuvala potpunost lanca dokaza od zahtjeva do koda.
+'
+' Diagram level: System Requirements
+' Diagram type:  Use Case Diagram
+' ==============================================================================
+
+@startuml
+
+left to right direction
+
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam packageStyle rectangle
+
+skinparam actor {
+    BackgroundColor #F8F9FA
+    BorderColor #212529
+    ' External systems are visually distinct from human actors.
+    BackgroundColor<<external system>> #FFF3CD
+    BorderColor<<external system>> #856404
+}
+
+skinparam usecase {
+    BackgroundColor #E7F1FF
+    BorderColor #0D6EFD
+    ArrowColor #212529
+}
+
+' ==============================================================================
+' Primarni akteri
+' ==============================================================================
+
+actor Umjetnik 
+actor Organizator 
+actor Administrator
+
+
+' Relacije za raspored dijagrama.
+Umjetnik -[hidden]down-> Organizator
+Organizator -[hidden]down-> Administrator
+
+' ==============================================================================
+' Sekundarni akteri
+' ==============================================================================
+
+actor "OAuth / Servis za Autentifikaciju" as OAuth <<external system>>
+actor "Kartografski servis" as Maps <<external system>>
+actor "Kalendarski servis" as Cal <<external system>>
+
+' Relacije za raspored dijagrama.
+OAuth -[hidden]down-> Maps
+Maps -[hidden]down-> Cal
+
+
+' ==============================================================================
+' Granica sustava
+' ==============================================================================
+
+rectangle "ArtConnect" as ArtConnect{
+
+    ' Prijava i registracija
+    (UC-01 Registracija računa) as UC_Registracija
+    (UC-02 Prijava i odjava) as UC_PrijavaOdjava
+
+    ' Portfolio i profil umjetnika
+    (UC-03 Upravljanje portfoliom) as UC_Portfolio
+    (UC-04 Pregled javnog portfolija umjetnika) as UC_PregledUmjetnika
+
+    ' Prilike: pretraživanje i prijava (umjetnik)
+    (UC-05 Pretraživanje i pregled prilika) as UC_PregledPrilika
+    (UC-07 Prijava na priliku) as UC_PrijavaPrilika
+    (UC-10 Praćenje statusa prilike) as UC_Status
+    (UC-11 Dostava dopune prijave) as UC_DopunaUmjetnik
+    (UC-12 Dodavanje događaja u kalendar) as UC_Kalendar
+
+    ' Prilike: objava i odlučivanje (organizator)
+    (UC-08 Objava prilike) as UC_ObjavaPrilike
+    (UC-09 Upravljanje prilikom) as UC_UpravljanjePrilikom
+    (UC-13 Pregled i odlučivanje o prijavama) as UC_PregledPrijave
+    (UC-14 Zatraživanje dopune prijave) as UC_DopunaOrganizator
+    (UC-15 Pregled statistike) as UC_Statistika
+    (UC-16 Objava rezultata i označavanje sudionika) as UC_Rezultati
+
+    ' Karta 
+    (UC-06 Prikaz lokacije na karti) as UC_Karta
+
+    ' Administracija
+    (UC-17 Upravljanje korisnicima i sadržajem) as UC_AdmKorisnici
+    (UC-18 Upravljanje kategorijama i postavkama) as UC_AdmKategorije
+    (UC-19 Pregled mjesečnih izvještaja) as UC_Izvjestaj
+
+}
+
+' ==============================================================================
+' Asocijacije aktera i obrazaca uporabe
+' ==============================================================================
+
+' Mogućnosti umjetnika
+Umjetnik -- UC_Registracija
+Umjetnik -- UC_PrijavaOdjava
+Umjetnik -- UC_Portfolio
+Umjetnik -- UC_PregledUmjetnika
+Umjetnik -- UC_PregledPrilika
+Umjetnik -- UC_PrijavaPrilika
+Umjetnik -- UC_Status
+Umjetnik -- UC_DopunaUmjetnik
+
+' Mogućnosti organizatora
+Organizator -- UC_Registracija
+Organizator -- UC_PrijavaOdjava
+Organizator -- UC_PregledUmjetnika
+Organizator -- UC_ObjavaPrilike
+Organizator -- UC_UpravljanjePrilikom
+Organizator -- UC_PregledPrijave
+Organizator -- UC_DopunaOrganizator
+Organizator -- UC_Statistika
+Organizator -- UC_Rezultati
+
+' Mogućnosti administratora
+Administrator -- UC_PrijavaOdjava
+Administrator -- UC_AdmKorisnici
+Administrator -- UC_AdmKategorije
+Administrator -- UC_Izvjestaj
+' ==============================================================================
+' UML relacije
+' ==============================================================================
+
+UC_PregledPrilika <.. UC_Karta : <<extend>>
+UC_ObjavaPrilike <.. UC_Karta : <<extend>>
+UC_Status <.. UC_DopunaUmjetnik : <<extend>>
+UC_Status <.. UC_Kalendar : <<extend>>
+UC_PregledPrijave <.. UC_DopunaOrganizator : <<extend>>
+
+' Autentifikacija se namjerno NE modelira kao <<include>> za ostale obrasce
+' uporabe. Svi korisnici platforme (umjetnik, organizator, administrator)
+' moraju biti prijavljeni prije njihova pokretanja, pa se prijava (UC-02)
+' tretira kao preduvjet, a ne kao dio svakog pojedinog obrasca uporabe.
+
+' ==============================================================================
+' Interakcije sekundarnih aktera
+' ==============================================================================
+
+UC_Registracija -right- OAuth
+UC_PrijavaOdjava -right- OAuth
+UC_Karta -right- Maps
+UC_Kalendar -right- Cal
+
+@enduml

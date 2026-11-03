@@ -1,0 +1,119 @@
+' ==============================================================================
+' @file 4-1-crisismap-system-CMP.puml
+' @brief Dijagram komponenata arhitekture platforme ArtConnect.
+'
+' @details
+' Ovaj artefakt definira glavne strukturne komponente potrebne za podršku
+' sustavu ArtConnect. Model prikazuje cjelokupnu programsku arhitekturu:
+' web-klijent (React), poslužiteljsku aplikaciju (Django) podijeljenu na module
+' s jasnim odgovornostima, bazu podataka (PostgreSQL) te vanjske integracije
+' (OAuth 2.0 pružatelj identiteta, Google Maps API i Google Calendar API).
+'
+' Opseg i arhitekturno obrazloženje:
+' Model je izričito ograničen na razinu makroarhitekture. Usredotočen je na
+' prepoznavanje modula, njihove odgovornosti i komunikaciju među dijelovima
+' sustava. Strukture razreda, implementacija metoda i fizički razmještaj
+' namjerno su ostavljeni za kasnije faze oblikovanja.
+'
+' Zahtjevi koje model pokriva:
+' Model uspostavlja strukturnu osnovu aplikacije definiranjem:
+' - Razdvajanja odgovornosti između prezentacijskog sloja, logike i podataka.
+' - Sučelja i ovisnosti između modula poslužiteljske aplikacije.
+' - Točaka integracije s vanjskim servisima.
+'
+' Author(s): Lara Glavinić
+' Context: Programsko Inženjerstvo
+'
+' AI Usage Disclosure:
+' Dijagram je izradila Lara Glavinić. Pomoć AI-ja pri objašnjavanju sintakse i
+' provjeri koda pregledala je autorica, koja je odgovorna za konačan sadržaj.
+'
+' Traceability Note:
+' Arhitekturne komponente definirane u ovom modelu moraju se strogo preslikavati
+' na konačnu strukturu repozitorija i implementirane module. Svako odstupanje
+' uvedeno tijekom razvoja mora se naknadno unijeti u ovaj model kako bi se
+' očuvala potpunost lanca dokaza od zahtjeva do koda.
+'
+' Diagram type: UML Component Diagram
+' Abstraction:  High-level logical architecture
+' Viewpoint:    Software structure and component dependencies
+' ==============================================================================
+
+@startuml
+
+' ==============================================================================
+' Diagram Layout and Style
+' ==============================================================================
+
+left to right direction
+
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam packageStyle rectangle
+skinparam componentStyle rectangle
+
+skinparam component {
+    BackgroundColor #E7F1FF
+    BorderColor #0D6EFD
+    ArrowColor #212529
+}
+
+skinparam database {
+    BackgroundColor   #FFF3CD
+    BorderColor #212529
+}
+
+' ==============================================================================
+' Granica sustava ArtConnect i unutarnje komponente
+' ==============================================================================
+
+rectangle "ArtConnect" as ArtConnect {
+
+    component "Web-klijent\n(React)" as Client
+
+    rectangle "Poslužiteljska aplikacija (Django)" as Server {
+        component "API" as Api
+        component "Modul za korisnike\ni autentifikaciju" as Users
+        component "Modul za portfolije" as Portfolios
+        component "Modul za prilike" as Opportunities
+        component "Modul za prijave" as Applications
+        component "Modul za administraciju\ni izvještaje" as Admin
+    }
+
+    database "PostgreSQL" as Db
+}
+' ==============================================================================
+' Vanjski sustavi
+' ==============================================================================
+
+component "OAuth 2.0\npružatelj identiteta" as OAuth <<external system>>
+component "Google Maps API" as Maps <<external system>>
+component "Google Calendar API" as Calendar <<external system>>
+
+' ==============================================================================
+' Ovisnosti i sučelja komponenata
+' ==============================================================================
+
+Client --> Api : zahtjevi i odgovori\n(HTTPS, JSON)
+
+Api --> Users : prijava, registracija\ni uloge
+Api --> Portfolios : upravljanje portfoliom\ni prikaz djela
+Api --> Opportunities : objava i pretraživanje\nprilika
+Api --> Applications : prijave na prilike\ni njihovi statusi
+Api --> Admin : upravljanje sustavom\ni izvještaji
+
+Users --> Db : korisnici i uloge
+Portfolios --> Db : portfoliji i djela
+Opportunities --> Db : prilike
+Applications --> Db : prijave i statusi
+Admin --> Db : kategorije, postavke\ni statistika
+
+' ==============================================================================
+' Veze s vanjskim sustavima
+' ==============================================================================
+
+Client --> Maps : prikaz lokacije\nna karti
+Users --> OAuth : prijava i\nidentitet korisnika
+Applications --> Calendar : događaj prihvaćenog\numjetnika
+
+@enduml
