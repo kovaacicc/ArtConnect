@@ -14,12 +14,12 @@ Kratice članova tima: LG = Lara Glavinić, KV = Klara Vlašić, LU = Luka Uremo
 | --- | --- | --- | --- |
 | 12.10.2026; LG, KV, LŠR, LŠT | upoznavanje i naziv tima | Tim nazvan Računala |  |
 | 16.10.2026; LG, KV, LŠR, LŠT, LU, KK, PS | Dodjela zadataka | obje Lare, Petar i Lovro rade frontend, Klara radi baze te Lula i Karlo će raditi backend | |
-| 19.10.2026; LU, KK, LŠT | Upit vezan za funkcijske i nefunkcijske zahtjeve | Karlo i Luka će raditi nefunkcijske zahtjeve, Lare i Lovro funkcijske, a Petar će raditi na poglavljima 1.3 i 1.4  | |
-| 22.10.2026; LG, LŠR, LŠT| spremanje funkcijskih zahtjeva | Određivanje funkcijskih zahtjeva koje ćemo dodati u dokument te njihov stupanj prioriteta | |
-| 26.10.2026; LG, KV, LU, LŠT | Provjera funkcijskih i nefunkcijskih zahtjeva | U 1.3 i 1.4 izbacit template tekstove (tj. njihove primjere i ciljeve). u 1.4 razraditi postojanje sličnih aplikacija (tj. opisati ih pa usporediti s našom, npr. po čemu je naša drugačija/bolja, dala je neki primjer kao instagram za umjetnike pa kolko je to slično našem). Funkcijski zahtjevi (2.1) spojiti F-001 i F-003, a F-002 staviti kao npr. F-001.1 |  |
-| 27.10.2026; LG, KV, LŠR, LŠT, LU, KK, PS | podjela daljnih uloga | Lare, Petar i Lovro trebaju napraviti frontend dio, Luka i Karlo backend te s Klarom povezati baze | |
-| 29.10.2026; LU, KK | Incijalizacija Django projekta | Incijalizirati startproject i prvi app  | Zadatak #18 |
-| 30.10.2026; LG, PS, LŠR, LŠT | Stvaranje fontenda | Napravljena početna stranica sa sign in i register gumbima | |
+| 19.10.2026; LU, KK, LŠT | Upit vezan za funkcijske i nefunkcijske zahtjeve | Karlo i Luka će raditi nefunkcijske zahtjeve, Lare i Lovro funkcijske, a Petar će raditi na poglavljima 1.3 i 1.4  | Zadatci 2, 4, 5, 9, 11|
+| 22.10.2026; LG, LŠR, LŠT| spremanje funkcijskih zahtjeva | Određivanje funkcijskih zahtjeva koje ćemo dodati u dokument te njihov stupanj prioriteta | Zadatci 4, 5 |
+| 26.10.2026; LG, KV, LU, LŠT | Provjera funkcijskih i nefunkcijskih zahtjeva na labosu | U 1.3 i 1.4 izbacit template tekstove (tj. njihove primjere i ciljeve). u 1.4 razraditi postojanje sličnih aplikacija (tj. opisati ih pa usporediti s našom, npr. po čemu je naša drugačija/bolja, dala je neki primjer kao instagram za umjetnike pa kolko je to slično našem). Funkcijski zahtjevi (2.1) spojiti F-001 i F-003, a F-002 staviti kao npr. F-001.1 | Zadatci 11 i 5 |
+| 27.10.2026; LG, KV, LŠR, LŠT, LU, KK, PS | podjela daljnih uloga | Lare, Petar i Lovro trebaju napraviti frontend dio, Luka i Karlo backend te s Klarom povezati baze, također je svatko dobio neku individualni zadatak | Zadatak 17, 19, 20 |
+| 29.10.2026; LU, KK | Incijalizacija Django projekta | Incijalizirati startproject i prvi app  | Zadatak 18 |
+| 30.10.2026; LG, PS, LŠR, LŠT | Stvaranje fontenda | Napravljena početna stranica sa sign in i register gumbima | Zadatak 17 |
 
 
 Za svaki relevantan sastanak ili zapis tjedne koordinacije upišite jedan sažet redak. Dodijeljeni zadatak treba imati odgovornu osobu; za neriješeno pitanje treba navesti tko će ga dalje obraditi. Sam naslov sastanka ne pokazuje što se promijenilo. U ovu evidenciju nemojte kopirati cijeli popis issuea ni prijepis razgovora.
