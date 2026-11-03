@@ -93,3 +93,4 @@ venv/
 media/
 staticfiles/
 .ruff_cache/
+db.sqlite3
