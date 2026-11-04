@@ -1,0 +1,24 @@
+services:
+ db:
+   image: postgres:17
+   volumes:
+     - postgres_data:/var/lib/postgresql/data
+   env_file:
+     - .env
+   healthcheck:
+    test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+    interval: 5s
+    retries: 10
+ 
+ backend:
+   build: ./backend
+   command: sh -c "python3 manage.py migrate --noinput && gunicorn --bind 0.0.0.0:8000 --workers 3 core.wsgi:application"
+   ports:
+     - "${DJANGO_LOCAL_PORT}:8000"
+   depends_on:
+     db:
+       condition: service_healthy
+   env_file:
+     - .env
+volumes:
+   postgres_data:
