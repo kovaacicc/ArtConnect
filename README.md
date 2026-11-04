@@ -35,18 +35,18 @@ Za potpuni opseg, zahtjeve, oblikovanje i dokaze ispitivanja pogledajte [docs](d
 
 <!-- Obavezno od Demo 1 nadalje. Zamijenite mjesta za unos naredbama koje je drugi član tima uspješno izvršio nakon čistog kloniranja repozitorija. Detaljne upute za administraciju držite u projektnoj dokumentaciji u direktoriju docs/. -->
 
-**Preduvjeti:** [Potrebno izvršno okruženje (engl. runtime) i verzija, upravitelj paketa (engl. package manager), baza podataka ili vanjska usluga ako je nužna.]
+**Preduvjeti:** Git, docker i docker compose
 
 ```bash
-git clone [repository URL]
-cd [repository directory]
-[install dependencies]
-[run the application]
+git clone https://github.com/kovaacicc/ArtConnect
+cd ArtConnect
+cp .env.example .env
+docker compose up --build
 ```
 
 **Adresa:** [Na primjer, stvarna adresa koju aplikacija ispiše nakon pokretanja.]
 
-**Konfiguracija:** [Navedite potrebne varijable okruženja (engl. environment variables) ili uputite na sigurnu datoteku `.env.example`; objasnite gdje se dobivaju vrijednosti. Nikada ne stavljajte stvarne pristupne podatke u ovu datoteku, primjer konfiguracije, snimke zaslona, zapise ni zapise promjena (engl. commits).]
+**Konfiguracija:** Postaviti .env prema primjeru .env.example
 
 [Dodajte kratak korak provjere, primjerice koja se stranica treba otvoriti ili koja naredba pokreće osnovnu provjeru.] Za detaljno postavljanje pogledajte [projektnu dokumentaciju].
 
