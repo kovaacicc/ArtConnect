@@ -1,8 +1,8 @@
 services:
  db:
-   image: postgres:17
+   image: postgres:18
    volumes:
-     - postgres_data:/var/lib/postgresql/data
+     - postgres_data:/var/lib/postgresql
    env_file:
      - .env
    healthcheck:
