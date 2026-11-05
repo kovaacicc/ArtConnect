@@ -20,7 +20,7 @@ Kratice članova tima: LG = Lara Glavinić, KV = Klara Vlašić, LU = Luka Uremo
 | 27.10.2026; LG, KV, LŠR, LŠT, LU, KK, PS | podjela daljnih uloga | Lare, Petar i Lovro trebaju napraviti frontend dio, Luka i Karlo backend te s Klarom povezati baze, također je svatko dobio neku individualni zadatak | Zadatak 17, 19, 20 |
 | 29.10.2026; LU, KK | Incijalizacija Django projekta | Incijalizirati startproject i prvi app  | Zadatak 18 |
 | 30.10.2026; LG, PS, LŠR, LŠT | Stvaranje fontenda | Napravljena početna stranica sa sign in i register gumbima | Zadatak 17 |
-| 5.11.2026; KK, PS, LŠR, KV, LŠT| Dogovor za daljnju raspodjelu posla | Podijelit ćemo frontend u tko će što radit te će se spariti s osobom koja radi backend kako bi zajedno mogli raditi. Klara i Lovro rade umjetnićki dio, Karlo i Luka i Petar rade login i ostale zajedničke funkcije, a Lare će raditi za organizatore dio. | |
+| 5.11.2026; KK, PS, LŠR, KV, LŠT| Dogovor za daljnju raspodjelu posla | Podijelit ćemo frontend u dijelove te će se jedna osoba s fronta spariti s osobom koja radi backend. Klara i Lovro rade umjetnički dio, Karlo i Luka i Petar rade login i ostale zajedničke funkcije, a Lare će raditi za organizatore dio. | |
 
 
 Za svaki relevantan sastanak ili zapis tjedne koordinacije upišite jedan sažet redak. Dodijeljeni zadatak treba imati odgovornu osobu; za neriješeno pitanje treba navesti tko će ga dalje obraditi. Sam naslov sastanka ne pokazuje što se promijenilo. U ovu evidenciju nemojte kopirati cijeli popis issuea ni prijepis razgovora.
