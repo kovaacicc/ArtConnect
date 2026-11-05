@@ -1,6 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useState, type MouseEvent } from 'react'
+import { flushSync } from 'react-dom'
 
-function savedTheme() {
+type Theme = 'dark' | 'light'
+
+function savedTheme(): Theme {
   try {
     return localStorage.getItem('theme') === 'light' ? 'light' : 'dark'
   } catch {
@@ -13,23 +16,39 @@ export default function ThemeToggle() {
   const isDark = theme === 'dark'
   const label = isDark ? 'Uključi svijetli način' : 'Uključi tamni način'
 
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme
-    try {
-      localStorage.setItem('theme', theme)
-    } catch {
-      // Tema se tada jednostavno ne pamti.
+  function toggle(event: MouseEvent<HTMLButtonElement>) {
+    const next: Theme = isDark ? 'light' : 'dark'
+    const apply = () => {
+      document.documentElement.dataset.theme = next
+      try {
+        localStorage.setItem('theme', next)
+      } catch {
+        // Tema se tada jednostavno ne pamti.
+      }
+      flushSync(() => setTheme(next))
     }
-  }, [theme])
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!document.startViewTransition || reduceMotion) return apply()
+
+    // Nova tema se širi iz gumba u krug dok ne prekrije cijeli ekran.
+    const button = event.currentTarget.getBoundingClientRect()
+    const x = button.left + button.width / 2
+    const y = button.top + button.height / 2
+    const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))
+    const transition = document.startViewTransition(apply)
+    transition.ready
+      .then(() => {
+        document.documentElement.animate(
+          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+          { duration: 700, easing: 'cubic-bezier(.65, 0, .35, 1)', pseudoElement: '::view-transition-new(root)' },
+        )
+      })
+      .catch(() => {})
+  }
 
   return (
-    <button
-      type="button"
-      className="theme-toggle"
-      aria-label={label}
-      title={label}
-      onClick={() => setTheme(isDark ? 'light' : 'dark')}
-    >
+    <button type="button" className="theme-toggle" aria-label={label} title={label} onClick={toggle}>
       {isDark ? (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
           <circle cx="12" cy="12" r="4.5" />

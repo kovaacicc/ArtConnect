@@ -651,3 +651,14 @@ a {
     display: none;
   }
 }
+
+/* Promjena teme: nova tema se širi iz gumba (animacija je u ThemeToggle.tsx). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+}
