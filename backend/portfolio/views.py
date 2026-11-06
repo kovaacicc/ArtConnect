@@ -5,7 +5,7 @@ from .models import ArtField
 from .serializers import ArtFieldSerializer
 
 
-class ArtFieldListView(ListAPIView):
+class ArtFieldListView(ListAPIView):    # ListAPIView je klasa koja već vraća response sa stvarima koje mi ispod navedemo
     """GET /api/art-fields/ - all active art fields (public, used by the register form)."""
 
     queryset = ArtField.objects.filter(active=True).order_by("name")

@@ -27,7 +27,7 @@ class RegisterView(APIView):
     def post(self, request):
         user = request.user
 
-        if is_registration_complete(user):
+        if is_registration_complete(user):  # ako se želi registrirati user koji je već registriran, vraća se greška 409
             return Response(
                 {"detail": "Registration is already complete."},
                 status=status.HTTP_409_CONFLICT,
@@ -75,7 +75,7 @@ class LogoutView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        logout(request)
+        logout(request) # Djangov logout() function flushes the session data and deletes the session cookie
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

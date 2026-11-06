@@ -5,7 +5,11 @@ from portfolio.serializers import ArtFieldSerializer
 
 from .models import ArtistProfile, OrganizerProfile, User
 
+# A serializer converts between Python objects and JSON, and validates incoming data. Views call them explicitly.
 
+
+# pomoćna funkcija i kasnije varijabla koja će označavati kada se neki user po prvi put ulogirao sa oAuth i idalje nema definiran dal je artist ili organizer
+# pa za nedefinirane artist ili organizer rolove dobiva registration_complete == false, i šalje se na registraciju na frontendu. 
 def is_registration_complete(user):
     """A user finished registration once they have a profile (admins are exempt)."""
     return (
@@ -16,8 +20,9 @@ def is_registration_complete(user):
 
 
 class ArtistProfileSerializer(serializers.ModelSerializer):
-    art_fields = ArtFieldSerializer(many=True, read_only=True)
+    art_fields = ArtFieldSerializer(many=True, read_only=True)  # pretvorimo art_fields u svoje jsone
 
+    # opis jsona za retke modela ArtistProfile 
     class Meta:
         model = ArtistProfile
         fields = (
@@ -42,7 +47,8 @@ class UserSerializer(serializers.ModelSerializer):
     """Response of GET /api/users/me/."""
 
     id = serializers.IntegerField(source="user_id", read_only=True)
-    registration_complete = serializers.SerializerMethodField()
+    registration_complete = serializers.SerializerMethodField() # za SerializerMethodField() DRF traži metodu definiranu u ovoj klasi koja počinje sa get_ 
+                                                                # i onda se prepiše ime varijablje od lijevo u koju spremamo rezultat: get_registration_complete, što je ime metode koju trebamo
     artist_profile = ArtistProfileSerializer(read_only=True, allow_null=True)
     organizer_profile = OrganizerProfileSerializer(read_only=True, allow_null=True)
 
@@ -65,6 +71,7 @@ class UserSerializer(serializers.ModelSerializer):
 class RegisterSerializer(serializers.Serializer):
     """Request body of POST /api/users/me/register/."""
 
+    # POST register dolazi na backend i prvo se radi validacija podataka tako da se definiraju ovu seralizeri sa nekim uvjetima
     role = serializers.ChoiceField(
         choices=[User.Role.ARTIST.value, User.Role.ORGANIZER.value]
     )
@@ -84,6 +91,7 @@ class RegisterSerializer(serializers.Serializer):
         queryset=ArtField.objects.filter(active=True),
     )
 
+    
     # organizer fields
     name = serializers.CharField(required=False, max_length=200)
     organization_type = serializers.CharField(
@@ -91,6 +99,7 @@ class RegisterSerializer(serializers.Serializer):
     )
     description = serializers.CharField(required=False, allow_blank=True)
 
+    # provjerava podatake koje backend dobi POST-om regeister nakon validacije serijalizera
     def validate(self, attrs):
         if attrs["role"] == User.Role.ARTIST:
             errors = {
