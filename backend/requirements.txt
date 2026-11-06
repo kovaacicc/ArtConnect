@@ -5,3 +5,5 @@ psycopg==3.3.7
 psycopg-binary==3.3.7
 python-dotenv==1.2.4
 sqlparse==0.6.1
+django-allauth[socialaccount]==65.21.1
+whitenoise==6.12.0
