@@ -8,11 +8,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import ArtistProfile, OrganizerProfile, User
-from .serializers import RegisterSerializer, UserSerializer, is_registration_complete
+from .helpers import is_registration_complete
+from .serializers import RegisterSerializer, UserSerializer
 
 
 class MeView(APIView):
-    """GET /api/users/me/ - the logged-in user (401 if nobody is logged in)."""
+    """GET /api/users/me/"""
 
     def get(self, request):
         return Response(UserSerializer(request.user).data)
@@ -20,14 +21,14 @@ class MeView(APIView):
 
 class RegisterView(APIView):
     """
-    POST /api/users/me/register/ - finish registration after the first Google login.
-    Creates the artist or organizer profile and sets the user's role.
+    POST /api/users/me/register/
+    Kreira artist ili organizer profile u bazi podataka i postavlja role.
     """
 
     def post(self, request):
         user = request.user
 
-        if is_registration_complete(user):  # ako se želi registrirati user koji je već registriran, vraća se greška 409
+        if is_registration_complete(user):  
             return Response(
                 {"detail": "Registration is already complete."},
                 status=status.HTTP_409_CONFLICT,
@@ -64,7 +65,7 @@ class RegisterView(APIView):
                 user.display_name = data["display_name"]
             user.save(update_fields=["role", "display_name"])
 
-        # re-fetch so the response doesn't use stale cached relations
+        # ponovno dohvati usera da response koristi i nove informacije o useru
         user = User.objects.get(pk=user.pk)
         return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
 
@@ -75,7 +76,7 @@ class LogoutView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        logout(request) # Djangov logout() function flushes the session data and deletes the session cookie
+        logout(request) # flusha session data i briše session cookie
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

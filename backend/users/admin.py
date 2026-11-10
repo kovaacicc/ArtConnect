@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django import forms
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 
 from .models import ArtistProfile, OrganizerProfile, User
 
@@ -13,22 +12,18 @@ class CustomUserCreationForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.set_unusable_password()   # OAuth users have no password
+        user.set_unusable_password()   # OAuth useri ne treabaju imati password, pa se koristi ova metoda kako bi se funkcionalnost passworda 
+                                    # potpuno onemogućila jer atribut passworda idalje postoji u modelu/bazi zbog nasljeđivanja AbstractBaseUser klase
+        user.email = User.objects.normalize_email(user.email)
         if commit:
             user.save()
         return user
 
-class CustomUserChangeForm(UserChangeForm):
-    class Meta(UserChangeForm.Meta):
-        model = User
-        fields = "__all__"
-
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    # Django's default UserAdmin assumes a "username" field,
-    # so everything below is adapted to email-based login.
-    form = CustomUserChangeForm
+    # Djangov default UserAdmin podrazumijeva korištenje username fielda, a kako je nama mail primaran
+    # sve ispod je prilagođeno email login logici 
     add_form = CustomUserCreationForm
 
     list_display = ("email", "display_name", "role", "is_active", "registered_at")

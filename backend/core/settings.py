@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("POSTGRES_DB", "artconnect"),    # default values come after comma, for if DB env variables are missing
+        "NAME": os.environ.get("POSTGRES_DB", "artconnect"),    # defaultne vrijednosti su ove nakon zareza kao drugi argument
         "USER": os.environ.get("POSTGRES_USER", "postgres"),
         "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
         "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
@@ -111,10 +111,10 @@ AUTH_USER_MODEL = "users.User"  # kažemo Djangu da koristi naš custom User mod
 # za oauth
 
 AUTHENTICATION_BACKENDS = [
-    # Needed to login by username in Django admin, regardless of `allauth`
+    # Potrebno za login sa usernameom u Django admin, ovo je neovisno o allauth-u
     'django.contrib.auth.backends.ModelBackend',
 
-    # `allauth` specific authentication methods, such as login by email
+    # `allauth` specifične authentication metode, poput logina sa mailom što mi koristimo
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
@@ -131,15 +131,15 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 SITE_ID = 1
-LOGIN_REDIRECT_URL = "/"    # nakon logina tu nas baca google
+LOGIN_REDIRECT_URL = "/"    # nakon logina google će nas baciti nazad na našu stranicu na ovaj url
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_SIGNUP_FIELDS = ["email*"]
-ACCOUNT_EMAIL_VERIFICATION = "none"      # Google already verifies emails; "mandatory" would need an SMTP server
+ACCOUNT_EMAIL_VERIFICATION = "none"      # none jer Google već verificira emailove
 
-SOCIALACCOUNT_LOGIN_ON_GET = True        # skip the extra "continue" page
-SOCIALACCOUNT_STORE_TOKENS = True        # you'll need the tokens for Google Calendar
+SOCIALACCOUNT_LOGIN_ON_GET = True        # preskoči dodatnu "continue" stranicu prilikom logina
+SOCIALACCOUNT_STORE_TOKENS = True        # tokene koristimo za Google Calendar
 SOCIALACCOUNT_ADAPTER = "users.adapters.SocialAdapter"
 
 
@@ -147,25 +147,6 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ["users.authentication.SessionAuthentication401"],
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
 }
-
-# Password validation
-# https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.1/topics/i18n/
@@ -185,11 +166,3 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Email
-# https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
-
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
