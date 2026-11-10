@@ -12,7 +12,7 @@ services:
  
  backend:
    build: ./backend
-   command: sh -c "python3 manage.py migrate --noinput && gunicorn --bind 0.0.0.0:8000 --workers 3 core.wsgi:application"
+   command: sh -c "python3 manage.py collectstatic --noinput && python3 manage.py migrate --noinput && gunicorn --bind 0.0.0.0:8000 --workers 3 core.wsgi:application"
    ports:
      - "${DJANGO_LOCAL_PORT}:8000"
    depends_on:
