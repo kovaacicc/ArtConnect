@@ -164,7 +164,7 @@ const assert = require('assert');
 
 **Najnovije izvođenje ili dokaz:** Najnovije izvođenje: 10. 11. 2026., lokalno u Docker okruženju (Django u kontejneru backend, PostgreSQL 18 u kontejneru db), naredba docker compose exec backend python manage.py test. Rezultat: pronađeno i izvedeno 21 testova, svi prošli (OK), provjera sustava bez primjedbi. Revizija aplikacije: commit 43f7186.
 
-Izvođenje u GitHub Actionsu (ci.yml) još nije zabilježeno.
+Izvođenje u GitHub Actionsu (ci.yml) uspješno.
 
 Stupci **Stvarni rezultat** i **Ishod** iznad mjerodavni su rezultati za pojedinačni slučaj. Nemojte kopirati sve rezultate u drugu obaveznu tablicu. Neuspješna i blokirana izvođenja zabilježite iskreno; pri ponovnom izvođenju zadržite relevantnu povijest umjesto prikazivanja starog uspješnog rezultata kao trenutačnog.
 
