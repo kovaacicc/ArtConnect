@@ -10,6 +10,13 @@
 
 **Opis dijagrama:** Dijagram prikazuje granicu sustava ArtConnect, tri primarna aktera (umjetnik, organizator i administrator) te tri sekundarna aktera (pružatelj identiteta OAuth 2.0, kartografski servis Google Maps API i kalendarski servis Google Calendar). Primarni akteri imaju različite ovlasti: umjetnik upravlja portfoliom te pretražuje prilike i prijavljuje se na njih, organizator objavljuje prilike i odlučuje o prijavama, a administrator upravlja korisnicima, sadržajem, kategorijama i postavkama sustava.
 
+Relacije `<<extend>>` koriste se za dijelove koji se događaju samo u nekim slučajevima:
+
+- UC-06 (Prikaz lokacije na karti) proširuje UC-08 i UC-05 kad prilika ima fizičku lokaciju.
+- UC-13 (Dostava dopune prijave) proširuje UC-10 kad je status prijave „potrebna dopuna".
+- UC-14 (Dodavanje događaja u kalendar) proširuje UC-10 kad je umjetnik prihvaćen.
+- UC-12 (Zatraživanje dopune prijave) proširuje UC-11 kad organizator traži dopunu.
+
 ## 3.2 Specifikacije obrazaca uporabe
 
 **Cilj:** Za svaki obrazac uporabe iz dijagrama objasniti cilj aktera, uobičajenu interakciju s aplikacijom i važne alternative. Jednostavne obrasce uporabe opišite kratko; proširite one kod kojih alternative, vanjske ovisnosti ili posljedice zahtijevaju dodatno objašnjenje.

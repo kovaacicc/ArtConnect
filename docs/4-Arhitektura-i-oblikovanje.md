@@ -71,7 +71,7 @@ Dijagram prikazuje logičku podjelu ArtConnecta na komponente, njihove veze i va
 
 Dijagram prikazuje važne pohranjene entitete platforme ArtConnect, njihove identifikatore i veze te dovoljno atributa za razumijevanje podataka aplikacije.
 
-**ER dijagram:** ![ER dijagram podataka za ArtConnect](./assets/diagrams/4-2-artconnect-data-ERD.svg)  
+**ER dijagram:** ![ER dijagram podataka za ArtConnect](./assets/diagrams/4-2-artconnect-data-ERD.svg)
 
 **Slika 4.2. ER dijagram podataka za ArtConnect**
 
@@ -107,7 +107,7 @@ Dijagram prikazuje važne pohranjene entitete platforme ArtConnect, njihove iden
 
 Dijagram prikazuje redoslijed poruka pri prijavi umjetnika na umjetničku priliku i odgovore sustava kada prijava nije moguća.
 
-**Scenarij:** Prijava na priliku (UC-07)
+**Scenarij:** Prijava na priliku (UC-09)
 
 **sekvencijski dijagram:**
 

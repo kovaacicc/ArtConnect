@@ -1,6 +1,6 @@
 ' ==============================================================================
 ' @file 4-4-artconnect-application-submission-SD.puml
-' @brief Konceptualni sekvencijski dijagram prijave umjetnika na priliku (UC-07).
+' @brief Konceptualni sekvencijski dijagram prijave umjetnika na priliku (UC-09).
 '
 ' @details
 ' Ovaj artefakt modelira dinamičku interakciju umjetnika koji se prijavljuje na
@@ -23,7 +23,7 @@
 ' Traceability Note:
 ' Poruke i uvjetne grane definirane u ovom modelu moraju odgovarati konačnoj
 ' logici web-klijenta i poslužiteljskog dijela aplikacije te alternativnim
-' tokovima obrasca uporabe UC-07.
+' tokovima obrasca uporabe UC-09.
 '
 ' Diagram level: Conceptual Interaction Design
 ' Diagram type:  Sequence Diagram

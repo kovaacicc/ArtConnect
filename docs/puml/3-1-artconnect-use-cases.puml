@@ -105,17 +105,17 @@ rectangle "ArtConnect" as ArtConnect{
     (UC-04 Pregled javnog portfolija umjetnika) as UC_PregledUmjetnika
 
     ' Prilike: pretraživanje i prijava (umjetnik)
-    (UC-05 Pretraživanje i pregled prilika) as UC_PregledPrilika
-    (UC-07 Prijava na priliku) as UC_PrijavaPrilika
+    (UC-08 Pretraživanje i pregled prilika) as UC_PregledPrilika
+    (UC-09 Prijava na priliku) as UC_PrijavaPrilika
     (UC-10 Praćenje statusa prilike) as UC_Status
-    (UC-11 Dostava dopune prijave) as UC_DopunaUmjetnik
-    (UC-12 Dodavanje događaja u kalendar) as UC_Kalendar
+    (UC-13 Dostava dopune prijave) as UC_DopunaUmjetnik
+    (UC-14 Dodavanje događaja u kalendar) as UC_Kalendar
 
     ' Prilike: objava i odlučivanje (organizator)
-    (UC-08 Objava prilike) as UC_ObjavaPrilike
-    (UC-09 Upravljanje prilikom) as UC_UpravljanjePrilikom
-    (UC-13 Pregled i odlučivanje o prijavama) as UC_PregledPrijave
-    (UC-14 Zatraživanje dopune prijave) as UC_DopunaOrganizator
+    (UC-05 Objava prilike) as UC_ObjavaPrilike
+    (UC-07 Upravljanje prilikom) as UC_UpravljanjePrilikom
+    (UC-11 Pregled i odlučivanje o prijavama) as UC_PregledPrijave
+    (UC-12 Zatraživanje dopune prijave) as UC_DopunaOrganizator
     (UC-15 Pregled statistike) as UC_Statistika
     (UC-16 Objava rezultata i označavanje sudionika) as UC_Rezultati
 
