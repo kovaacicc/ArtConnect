@@ -1,0 +1,50 @@
+services:
+  db:
+    image: postgres:18
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    command: sh -c "python3 manage.py collectstatic --noinput && python3 manage.py migrate --noinput && gunicorn --bind 0.0.0.0:8000 --workers 3 core.wsgi:application"
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    volumes:
+      - django_static:/backend/staticfiles
+
+  nginx: 
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    environment: 
+      ARTCONNECT_DOMAIN: ${ARTCONNECT_DOMAIN}
+    volumes:
+      - django_static:/backend/staticfiles:ro
+      - ./nginx/prod:/etc/nginx/templates
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+    depends_on: 
+      - backend
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+        - ./nginx/certbot/conf:/etc/letsencrypt
+        - ./nginx/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"       
+   
+volumes:
+  postgres_data:
+  django_static:
