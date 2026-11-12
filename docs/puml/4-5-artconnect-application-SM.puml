@@ -1,0 +1,79 @@
+' ==============================================================================
+' @file 4-5-artconnect-application-SM.puml
+' @brief Dijagram stanja prijave umjetnika na priliku.
+'
+' @details
+' Ovaj artefakt modelira životni ciklus prijave umjetnika na umjetničku priliku.
+' Prikazuje stanja kroz koja prijava prolazi od predaje do konačne odluke
+' organizatora te događaje koji uzrokuju promjenu stanja: pregled prijave,
+' zatraživanje i dostavu dopune, prihvaćanje i odbijanje.
+'
+' Zahtjevi koje model pokriva:
+' - Praćenje statusa prijave od strane umjetnika.
+' - Odlučivanje organizatora o prijavama (prihvaćanje ili odbijanje s razlogom).
+' - Zatraživanje i dostava dopune prijave.
+'
+' Author(s): Lara Glavinić
+' Context: Programsko inženjerstvo
+'
+' AI Usage Disclosure:
+' Dijagram je izradila Lara Glavinić. Pomoć AI-ja pri objašnjavanju sintakse i
+' provjeri koda pregledala je autorica, koja je odgovorna za konačan sadržaj.
+'
+' Traceability Note:
+' Stanja i prijelazi definirani u ovom modelu moraju odgovarati statusima prijave
+' u implementaciji (podatkovni model i logika modula za prijave).
+'
+' Diagram level: System-Level Behavioral Design
+' Diagram type:  State Machine Diagram
+' ==============================================================================
+
+@startuml 4-5-artconnect-application-SM
+
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam state {
+    BackgroundColor #E7F1FF
+    BorderColor #0D6EFD
+    ArrowColor #212529
+}
+ 
+' ==============================================================================
+' Stanja prijave
+' ==============================================================================
+state "Predana" as Submitted
+state "U pregledu" as InReview
+state "Potrebna dopuna" as NeedsInfo
+state "Prihvaćena" as Accepted
+state "Odbijena" as Rejected
+
+' ==============================================================================
+' Prijelazi između stanja
+' ==============================================================================
+' Početak životnog ciklusa
+[*] --> Submitted : umjetnik predaje prijavu
+
+' Pregled prijave
+Submitted --> InReview : organizator započinje pregled
+
+' Dopuna prijave
+InReview --> NeedsInfo : organizator traži dopunu
+NeedsInfo --> InReview : umjetnik dostavlja dopunu
+
+' Odluka organizatora
+InReview --> Accepted : organizator prihvaća prijavu
+InReview --> Rejected : organizator odbija prijavu\n[uz razlog odbijanja]
+
+' Završna stanja
+Accepted --> [*]
+Rejected --> [*]
+
+' ==============================================================================
+' Napomene
+' ==============================================================================
+
+note right of Accepted
+  Umjetnik može dodati događaj
+  u osobni kalendar.
+end note
+@enduml
