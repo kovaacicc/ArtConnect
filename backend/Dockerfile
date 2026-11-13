@@ -26,6 +26,8 @@ COPY --chown=backend:backend . .
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1 
 
+RUN mkdir /backend/staticfiles && chown backend:backend /backend/staticfiles
+
 USER backend
  
 EXPOSE 8000 
