@@ -37,6 +37,7 @@ services:
       - ./nginx/certbot/www:/var/www/certbot
     depends_on: 
       - backend
+    command: /bin/sh -c 'while :; do sleep 12h & wait $${!}; nginx -s reload; done & exec /docker-entrypoint.sh nginx -g "daemon off;"'
 
   certbot:
     image: certbot/certbot

@@ -1,0 +1,9 @@
+.git
+.env
+.env.*
+!.env.example
+**/node_modules
+**/.venv
+**/__pycache__
+frontend/dist
+nginx/certbot
