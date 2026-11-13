@@ -14,7 +14,7 @@ class OpportunityAdmin(admin.ModelAdmin):
     list_display = ("title", "type", "status", "organizer", "field", "deadline")
     list_filter = ("type", "status", "field")
     search_fields = ("title", "description", "address")
-    readonly_fields = ("created_at",)
+    readonly_fields = ("created_at", "deleted_at", "deletion_reason")
 
 
 class ApplicationArtworkInline(admin.TabularInline):
