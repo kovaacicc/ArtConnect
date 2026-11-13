@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
+import { LayoutDashboard, Sparkles, Palette, FileText, User, Sun, Moon } from 'lucide-react'; // Uvoz ikona
 import '../../pages/artist/artist.css';
 
 const NAV = [
-  { to: '/umjetnik', label: 'Pregled', end: true },
-  { to: '/umjetnik/prilike', label: 'Prilike' },
-  { to: '/umjetnik/portfolio', label: 'Portfolio' },
-  { to: '/umjetnik/prijave', label: 'Moje prijave' },
-  { to: '/umjetnik/profil', label: 'Profil' },
+  { to: '/umjetnik', label: 'Pregled', icon: <LayoutDashboard size={20} />, end: true },
+  { to: '/umjetnik/prilike', label: 'Prilike', icon: <Sparkles size={20} /> },
+  { to: '/umjetnik/prijave', label: 'Moje prijave', icon: <FileText size={20} /> },
+  { to: '/umjetnik/profil', label: 'Profil', icon: <User size={20} /> },
 ];
 
 export function Logo() {
@@ -25,7 +25,6 @@ export default function ArtistLayout() {
 
   const toggleTheme = () => {
     const next = light ? 'dark' : 'light';
-    // Isti mehanizam kao u index.html: samo 'light' se postavlja kao data-theme.
     if (next === 'light') document.documentElement.dataset.theme = 'light';
     else delete document.documentElement.dataset.theme;
     try { localStorage.setItem('theme', next); } catch { /* ignore */ }
@@ -36,15 +35,19 @@ export default function ArtistLayout() {
     <div className="ac ac-shell">
       <aside className="ac-side">
         <div className="ac-brand"><Logo /><span>ArtConnect</span></div>
+        
+        {/* Navigacija */}
         <nav className="ac-nav" aria-label="Glavna navigacija">
           {NAV.map((n) => (
             <NavLink key={n.to} to={n.to} end={n.end} className={({ isActive }) => (isActive ? 'is-active' : '')}>
-              {n.label}
+              {n.icon}
+              <span>{n.label}</span>
             </NavLink>
           ))}
         </nav>
+        
         <button className="ac-icon-btn ac-theme" onClick={toggleTheme} aria-label="Promijeni temu">
-          {light ? '☾' : '☀'}
+          {light ? <Moon size={20} /> : <Sun size={20} />}
         </button>
       </aside>
       <main className="ac-main"><Outlet /></main>

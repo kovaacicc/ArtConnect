@@ -1,0 +1,664 @@
+/* Boje */
+:root {
+  color-scheme: dark;
+  --panel: #1c1c1e;
+  --hero: #0b0d12;
+  --divider: #3a3a3c;
+  --text: #f5f5f5;
+  --muted: #a8a8ad;
+  --soft: #c9c9ce;
+  --border: #5e5e63;
+  --link: #aebbff;
+  --outline: #8fa0ff;
+  --accent: #ff5a36;
+  --selected-bg: #232a52;
+  --selected-border: #8fa0ff;
+  --chip-bg: #f5f5f5;
+  --chip-text: #111;
+  --disabled-bg: #2c2c30;
+  --disabled-text: #a8a8ad;
+  --shadow: rgba(0, 0, 0, 0.55);
+  --primary: #2f4bff;
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+  --panel: #fff;
+  --hero: #f4f4f1;
+  --divider: #dededa;
+  --text: #111;
+  --muted: #5c5c5c;
+  --soft: #444;
+  --border: #8a8a86;
+  --link: #1f3dff;
+  --outline: #2f4bff;
+  --accent: #e03e17;
+  --selected-bg: #e8ecff;
+  --selected-border: #2f4bff;
+  --chip-bg: #111;
+  --chip-text: #fff;
+  --disabled-bg: #e4e4e0;
+  --disabled-text: #5c5c5c;
+  --shadow: rgba(0, 0, 0, 0.22);
+}
+
+/* Osnova */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--panel);
+  color: var(--text);
+  font-family: 'Instrument Sans', system-ui, sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--outline);
+  outline-offset: 2px;
+}
+
+::placeholder {
+  color: var(--muted);
+}
+
+/* Zajedničko */
+.theme-toggle {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--panel);
+}
+
+.btn {
+  width: 100%;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border-radius: 999px;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.btn-primary {
+  border: 0;
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-primary:disabled {
+  background: var(--disabled-bg);
+  color: var(--disabled-text);
+  cursor: not-allowed;
+}
+
+.btn-outline {
+  border: 1px solid var(--outline);
+  background: transparent;
+  color: var(--link);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.link {
+  padding: 12px 0;
+  border: 0;
+  background: none;
+  color: var(--link);
+  text-decoration: underline;
+}
+
+/* Prijava */
+.login {
+  min-height: 100dvh;
+  display: flex;
+}
+
+.login-hero {
+  flex: 1.3 1 0;
+  min-width: 0;
+  padding: 40px 48px 48px;
+  display: flex;
+  flex-direction: column;
+  background: var(--hero);
+  border-right: 1px solid var(--divider);
+  overflow: hidden;
+}
+
+.headline {
+  margin: 28px auto 0;
+  text-align: center;
+  font-size: clamp(38px, 4vw, 56px);
+  line-height: 1.18;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.login-panel {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 440px;
+}
+
+.login-center {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-phone-intro {
+  display: none;
+}
+
+.login-title {
+  margin: 0 0 28px;
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.google-icon {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.login-question {
+  margin: 56px 0 14px;
+  text-align: center;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.login-terms {
+  margin: 28px 0 0;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* Kolaž */
+.collage {
+  position: relative;
+  flex: none;
+  width: 560px;
+  max-width: 100%;
+  height: 470px;
+  margin: 40px auto 0;
+}
+
+.card {
+  position: absolute;
+  overflow: hidden;
+}
+
+.card > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.card-left {
+  left: 26px;
+  top: 70px;
+  width: 190px;
+  height: 320px;
+  border-radius: 24px;
+  transform: rotate(-8deg);
+}
+
+.card-right {
+  left: 344px;
+  top: 82px;
+  width: 180px;
+  height: 300px;
+  border-radius: 24px;
+  transform: rotate(7deg);
+}
+
+.card-center {
+  left: 160px;
+  top: 8px;
+  width: 250px;
+  height: 450px;
+  border-radius: 28px;
+  box-shadow: 0 24px 60px var(--shadow);
+}
+
+.card-caption {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1.5px solid #fff;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.chip {
+  position: absolute;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  color: #111;
+  font-size: 14px;
+  box-shadow: 0 8px 24px var(--shadow);
+}
+
+.chip-field {
+  left: 100px;
+  top: 44px;
+  background: #f5f5f5;
+  font-weight: 500;
+  transform: rotate(-8deg);
+}
+
+.chip-status {
+  left: 400px;
+  top: 136px;
+  background: #ff5a36;
+  font-weight: 600;
+}
+
+.avatar-ring {
+  position: absolute;
+  left: 424px;
+  top: 320px;
+  width: 76px;
+  height: 76px;
+  padding: 4px;
+  border: 2px solid #ff5a36;
+  border-radius: 50%;
+  background: var(--hero);
+}
+
+.avatar-ring svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+/* Registracija */
+.register {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 32px 16px 64px;
+}
+
+.register-title {
+  margin: 24px 0 0;
+  font-size: clamp(30px, 4vw, 40px);
+  line-height: 1.12;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.register-intro {
+  margin: 12px 0 0;
+  font-size: 17px;
+  line-height: 1.45;
+  color: var(--soft);
+}
+
+.google-account {
+  margin-top: 28px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+
+.initials {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.google-account-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-wrap: anywhere;
+}
+
+.google-account-text small {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.google-account .link {
+  flex: none;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.label {
+  margin: 28px 0 10px;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.roles,
+.name-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.name-row {
+  margin-top: 24px;
+}
+
+.name-row .field {
+  margin-top: 0;
+}
+
+.role {
+  min-height: 96px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: transparent;
+}
+
+.role strong {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.role span {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--soft);
+}
+
+.role[aria-pressed='true'] {
+  border-color: var(--selected-border);
+  box-shadow: inset 0 0 0 1px var(--selected-border);
+  background: var(--selected-bg);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.field-chip {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  font-size: 15px;
+}
+
+.field-chip[aria-pressed='true'] {
+  border-color: var(--chip-bg);
+  background: var(--chip-bg);
+  color: var(--chip-text);
+}
+
+.field {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.field em {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--panel);
+  font-size: 17px;
+  font-weight: 400;
+}
+
+.field input,
+.field select {
+  min-height: 60px;
+  padding: 0 20px;
+}
+
+.field textarea {
+  padding: 18px 20px;
+  resize: vertical;
+}
+
+.register-submit {
+  margin-top: 32px;
+}
+
+.register-login {
+  margin: 16px 0 0;
+  text-align: center;
+  font-size: 15px;
+  color: var(--soft);
+}
+
+/* Početna */
+.home {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--hero);
+}
+
+[data-theme='light'] .home {
+  background: var(--panel);
+}
+
+.home-header {
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 24px 92px 24px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.home-header .brand {
+  font-size: 20px;
+}
+
+.logout {
+  padding: 12px 0;
+  border: 0;
+  background: none;
+  color: var(--soft);
+  font-size: 15px;
+}
+
+.home-main {
+  flex: 1;
+  padding: 40px 16px 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-main h1 {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(44px, 7vw, 96px);
+  line-height: 1.02;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+/* Mobitel */
+@media (max-width: 860px) {
+  .login-hero,
+  .login-title {
+    display: none;
+  }
+
+  .login-panel {
+    padding: 72px 16px 24px;
+  }
+
+  .login-box {
+    min-height: calc(100dvh - 96px);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .login-center {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .login-phone-intro {
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .headline {
+    font-size: 36px;
+    line-height: 1.15;
+  }
+
+  .login-question {
+    margin-top: 36px;
+  }
+
+  .login-terms {
+    margin-top: 16px;
+  }
+
+  .theme-toggle {
+    top: 16px;
+    right: 16px;
+  }
+
+  .register {
+    padding-top: 20px;
+  }
+
+  .home-header {
+    padding: 16px 76px 16px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .name-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .role {
+    min-height: 60px;
+    padding: 0 12px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .role span {
+    display: none;
+  }
+}
+
+/* Promjena teme: nova tema se širi iz gumba (animacija je u ThemeToggle.tsx). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+}

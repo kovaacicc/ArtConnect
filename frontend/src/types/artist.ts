@@ -45,6 +45,7 @@ export interface Exhibition {
 }
 
 export interface ArtistProfile {
+  username: string;
   name: string;
   email: string;
   field: ArtField;
@@ -53,6 +54,8 @@ export interface ArtistProfile {
   website: string;
   social: string;
   exhibitions: Exhibition[];
+  avatarUrl?: string;
+  
 }
 
 export interface Opportunity {

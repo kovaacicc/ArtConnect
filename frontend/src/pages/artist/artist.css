@@ -50,11 +50,32 @@
   background: var(--ac-panel); border-right: 1px solid var(--ac-line);
 }
 .ac-brand { display: flex; align-items: center; gap: 0.6rem; font-size: 1.15rem; font-weight: 500; padding: 0 0.5rem; }
-.ac-nav { display: flex; flex-direction: column; gap: 0.25rem; }
+/* Postojeći .ac-side ostaje isti, on već ima flex-direction: column */
+.ac-side {
+  position: sticky; top: 0; height: 100vh; padding: 1.5rem 1rem;
+  display: flex; flex-direction: column; gap: 2rem;
+  background: var(--ac-panel); border-right: 1px solid var(--ac-line);
+}
+
+.ac-nav { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 0.75rem; /* Povećan razmak s 0.25rem na 0.75rem */
+  margin-top: auto;    /* Gura navigaciju prema dolje */
+  margin-bottom: auto; /* Gura navigaciju prema gore, čime je centrira */
+}
+
 .ac-nav a {
-  padding: 0.7rem 1rem; border-radius: 999px; text-decoration: none; color: var(--ac-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem; /* Razmak između ikone i teksta */
+  padding: 0.85rem 1.2rem; /* Malo veći padding za "mesnatiji" gumb */
+  border-radius: 999px; 
+  text-decoration: none; 
+  color: var(--ac-muted);
   transition: background 0.15s, color 0.15s;
 }
+
 .ac-nav a:hover { background: var(--ac-panel-2); color: var(--ac-text); }
 .ac-nav a.is-active { background: var(--ac-blue); color: #fff; }
 .ac-theme { margin-top: auto; align-self: flex-start; }
@@ -199,3 +220,188 @@ textarea.ac-input { resize: vertical; }
   .ac-stats { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) { .ac * { transition: none !important; } }
+/* --- Instagram Profil Header --- */
+.ac-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  margin-bottom: 3rem;
+  padding: 1rem 0;
+}
+
+/* Profilna slika i hover efekt */
+.ac-avatar-wrapper {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  cursor: pointer;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 2px solid var(--ac-line);
+  background: var(--ac-panel-2);
+}
+
+.ac-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ac-avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-size: 4rem;
+  font-weight: 500;
+  color: var(--ac-muted);
+}
+
+.ac-avatar-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 0.85rem;
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.ac-avatar-wrapper:hover .ac-avatar-overlay {
+  opacity: 1;
+}
+
+/* Tekstualni dio */
+.ac-profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ac-profile-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ac-profile-title h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.ac-flag {
+  font-size: 1.2rem;
+}
+
+.ac-name {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.ac-profile-stats {
+  display: flex;
+  gap: 1.5rem;
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+.ac-profile-stats strong {
+  font-weight: 600;
+  color: var(--ac-text);
+}
+
+.ac-bio {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  white-space: pre-wrap; /* Poštuje prijelome redova */
+}
+
+.ac-link {
+  color: var(--ac-blue-soft);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.ac-link:hover {
+  text-decoration: underline;
+}
+
+/* Responzivnost za mobitele */
+@media (max-width: 600px) {
+  .ac-profile-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+  .ac-profile-stats {
+    justify-content: center;
+  }
+  .ac-profile-title {
+    justify-content: center;
+  }
+}
+
+/* Gumb ispod profila */
+.ac-profile-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.ac-btn--block {
+  width: 100%;
+  background: var(--ac-panel-2);
+  border: 1px solid transparent;
+  color: var(--ac-text);
+  font-weight: 600;
+  padding: 0.6rem 1rem;
+}
+
+.ac-btn--block:hover {
+  background: var(--ac-line);
+}
+
+/* --- Sklopive kartice (Accordion) --- */
+.ac-card--collapsible {
+  padding: 0; /* Maknut ćemo padding s kartice da bi header mogao biti klikabilan cijelom širinom */
+  overflow: hidden;
+}
+
+.ac-card__header-click {
+  padding: 1.4rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  transition: background 0.15s;
+}
+
+.ac-card__header-click:hover {
+  background: var(--ac-panel-2); /* Lagana promjena boje kad pređeš mišem */
+}
+
+.ac-card__details {
+  padding: 0 1.4rem 1.4rem 1.4rem;
+  border-top: 1px dashed var(--ac-line); /* Isprekidana linija koja odvaja detalje */
+  margin-top: 0.5rem;
+  padding-top: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  animation: slideDown 0.2s ease-out;
+}
+
+/* Mala animacija da iskoči glatko */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

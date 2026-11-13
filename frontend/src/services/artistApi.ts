@@ -10,6 +10,7 @@ const delay = <T,>(v: T, ms = 250) => new Promise<T>((r) => setTimeout(() => r(s
 const uid = () => Math.random().toString(36).slice(2, 10);
 
 let profile: ArtistProfile = {
+  username: 'ana.horvat',
   name: 'Ana Horvat',
   email: 'ana.horvat@gmail.com',
   field: 'Slikarstvo',
@@ -21,6 +22,7 @@ let profile: ArtistProfile = {
     { id: 'e1', title: 'Mlada scena', year: 2025, place: 'Galerija Greta, Zagreb' },
     { id: 'e2', title: 'Pogled iz prozora', year: 2024, place: 'Kulturni centar Travno' },
   ],
+  avatarUrl: '',
 };
 
 let artworks: Artwork[] = [
