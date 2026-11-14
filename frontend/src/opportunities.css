@@ -26,3 +26,25 @@
 .org-card-top {
   display: flex;
 }
+
+.org-form {
+  max-width: 720px;
+  margin-top: 1.25rem;
+}
+
+.org-hint {
+  font-size: 0.85rem;
+}
+
+.org-field-error {
+  color: var(--ac-bad);
+  font-size: 0.88rem;
+}
+
+.ac-input[aria-invalid='true'] {
+  border-color: var(--ac-bad);
+}
+
+.org-owner-actions {
+  margin-bottom: 1.5rem;
+}
