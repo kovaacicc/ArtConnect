@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
-import { ChartColumn, CirclePlus, FolderOpen, Moon, Sparkles, Sun } from 'lucide-react'
+import { ChartColumn, CirclePlus, FolderOpen, LayoutDashboard,  Moon, Sparkles, Sun } from 'lucide-react'
 import Logo from '../Logo'
 import '../../pages/artist/artist.css'
 import '../../opportunities.css'
 
 const NAV = [
-  { to: '/organizator', label: 'Moje prilike', icon: <FolderOpen size={20} />, end: true },
+  { to: '/organizator', label: 'Pregled', icon: <LayoutDashboard size={20} />, end: true },
+  { to: '/organizator/moje', label: 'Moje prilike', icon: <FolderOpen size={20} /> },
   { to: '/organizator/nova', label: 'Nova prilika', icon: <CirclePlus size={20} /> },
   { to: '/organizator/prilike', label: 'Sve prilike', icon: <Sparkles size={20} /> },
   { to: '/organizator/statistika', label: 'Statistika', icon: <ChartColumn size={20} /> },
