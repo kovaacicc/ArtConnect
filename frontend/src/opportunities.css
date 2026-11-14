@@ -1,0 +1,28 @@
+/* Organizatorski dio – dodaci uz artist.css */
+.ac-badge--opp-preparation,
+.ac-badge--opp-finished {
+  color: var(--ac-muted);
+}
+
+.ac-badge--opp-open {
+  color: var(--ac-good);
+  background: color-mix(in srgb, var(--ac-good) 16%, transparent);
+}
+
+.ac-badge--opp-closed {
+  color: var(--ac-bad);
+  background: color-mix(in srgb, var(--ac-bad) 16%, transparent);
+}
+
+.ac-badge--opp-selection {
+  color: var(--ac-blue-soft);
+  background: color-mix(in srgb, var(--ac-blue) 18%, transparent);
+}
+
+.org-card {
+  align-content: start;
+}
+
+.org-card-top {
+  display: flex;
+}
