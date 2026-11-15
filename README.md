@@ -20,15 +20,15 @@ Za potpuni opseg, zahtjeve, oblikovanje i dokaze ispitivanja pogledajte [docs](d
 
 <!-- UPUTA: Obavezno od kontrolne točke 1 (8. tjedan). Provjerite vodi li URL na javno dostupnu pokrenutu aplikaciju i radi li navedeni tijek uporabe. Nikada ne objavljujte lozinke ni pristupne tokene. -->
 
-**Javno dostupna aplikacija:** [Javni URL]
+**Javno dostupna aplikacija:** https://artconnect.austriaeast.cloudapp.azure.com/
 
 **Isprobajte:** [Jedna ili dvije kratke radnje koje pokazuju funkcionalan korisnički tijek.]
 
-**Demonstracija:** [Objasnite kako dobiti potreban ograničeni pristup ako je prijava obavezna; u suprotnom napišite „Korisnički račun nije potreban.” Ovdje ne objavljujte lozinke ni pristupne tokene.]
+**Demonstracija:** Pri otvaranju stranice klikne se gumb "Prijavi se putem Googlea", što korisnika zatim odvede na Google za prijavu. Ako se korisnik nije prethodno registrirao, treba upisati svoje podatke za registraciju, u suprotnom odmah dobiva pristup stranici.
 
 **Ograničenja:** [Kratko navedite ograničenja postavljene inačice ili postavite poveznicu na jedinstveno mjerodavno mjesto u dokumentaciji s poznatim problemima.]
 
-[Vodič za postavljanje i pokretanje] opisuje smještaj aplikacije (engl. hosting) koji tim stvarno koristi. Tim može koristiti Render ili drugu platformu koju ste dogovorili s asistentom/demonstratorom.
+Aplikacija je postavljena na Azure virtualnoj mašini s Ubuntu 24.04 LTS OS-om.
 
 <a id="quick-start"></a>
 ## Brzi početak / instalacija
@@ -37,16 +37,28 @@ Za potpuni opseg, zahtjeve, oblikovanje i dokaze ispitivanja pogledajte [docs](d
 
 **Preduvjeti:** Git, docker i docker compose
 
+Lokalno pokretanje:
 ```bash
 git clone https://github.com/kovaacicc/ArtConnect
 cd ArtConnect
-cp .env.example .env
-docker compose up --build
+cp .env.example .env # te urediti .env
+docker compose -f docker-compose-dev.yaml up --build
 ```
 
-**Adresa:** [Na primjer, stvarna adresa koju aplikacija ispiše nakon pokretanja.]
+**Adresa:** http://artconnect.austriaeast.cloudapp.azure.com/
 
-**Konfiguracija:** Postaviti .env prema primjeru .env.example
+Produkcijsko pokretanje:
+```bash
+git clone https://github.com/kovaacicc/ArtConnect
+cd ArtConnect
+cp .env.example .env # te urediti .env
+./init-letsencrypt.sh
+docker compose -f docker-compose-prod.yaml up --build
+```
+
+**Adresa:** https://artconnect.austriaeast.cloudapp.azure.com/
+
+**Konfiguracija:** Postaviti .env prema primjeru .env.example. Konfigurirati Google OAuth na Google Cloud Console te unijeti Client ID i Secret.
 
 [Dodajte kratak korak provjere, primjerice koja se stranica treba otvoriti ili koja naredba pokreće osnovnu provjeru.] Za detaljno postavljanje pogledajte [projektnu dokumentaciju].
 
@@ -99,7 +111,7 @@ Navedite nekoliko tehnologija i vanjskih usluga koje bitno određuju kako vaša 
 
 **Status licence:** Projekt je licenciran pod MIT; vidi datoteku [LICENSE](LICENSE).
 
-Dokumentacijski predložak kolegija sadrži otvorene obrazovne sadržaje (engl. Open Educational Resources, OER) i licenciran je licencom Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International. Ta licenca **ne određuje automatski licencu studentske aplikacije**; tim treba jasno navesti licencu svojeg projekta u prethodnom retku i datoteci `LICENSE`, ako je primjenjivo.
+Dokumentacijski predložak kolegija sadrži otvorene obrazovne sadržaje (engl. Open Educational Resources, OER) i licenciran je licencom Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International.
 
 Kod trećih strana, skupovi podataka, slike, ikone i ostali sadržaji zadržavaju vlastite licence i zahtjeve za navođenje izvora. [Po potrebi postavite poveznicu na dodatne zahvale i izvore.]
 
