@@ -3,6 +3,7 @@ import { Link, useLocation, useParams } from 'react-router-dom'
 import { formatDate, formatEventTime } from '../../components/opportunities/format'
 import OpportunityMap from '../../components/opportunities/opportunityMap'
 import StatusBadge from '../../components/opportunities/status'
+import StatusActions from '../../components/opportunities/statusActions'
 import { ApiError } from '../../services/api'
 import { opportunitiesApi } from '../../services/opportunitiesApi'
 import { TYPE_LABELS, type Opportunity } from '../../types/opportunity'
@@ -12,6 +13,7 @@ export default function OpportunityDetail() {
   const notice = (useLocation().state as { notice?: string } | null)?.notice
   const [opportunity, setOpportunity] = useState<Opportunity | null>(null)
   const [isOwner, setIsOwner] = useState(false)
+  const [approved, setApproved] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -23,13 +25,18 @@ export default function OpportunityDetail() {
       .mine()
       .then((mine) => setIsOwner(mine.some((o) => o.id === id)))
       .catch(() => setIsOwner(false))
+    opportunitiesApi
+      .me()
+      .then((user) => setApproved(user.organizer_profile?.approved === true))
+      .catch(() => setApproved(false))
   }, [id])
 
   if (error) return <p className="ac-note ac-note--bad" role="alert">{error}</p>
   if (!opportunity) return <p className="ac-muted" role="status">Učitavanje…</p>
 
   const o = opportunity
-    return (
+
+  return (
     <>
       <Link to={isOwner ? '/organizator/moje' : '/organizator/prilike'} className="ac-back">← Natrag</Link>
       {notice && <p className="ac-note ac-note--good" role="status">{notice}</p>}
@@ -42,10 +49,15 @@ export default function OpportunityDetail() {
         <p className="ac-muted">{TYPE_LABELS[o.type]} · {o.field_name} · {o.organizer_name}</p>
       </header>
 
-      {isOwner && o.status !== 'finished' && (
-        <div className="ac-row org-owner-actions">
-          <Link to={`/organizator/prilike/${o.id}/uredi`} className="ac-btn ac-btn--ghost">Uredi</Link>
-        </div>
+      {isOwner && (
+        <section className="org-owner-actions">
+          <StatusActions opportunity={o} approved={approved} onChanged={setOpportunity} />
+          {o.status !== 'finished' && (
+            <div className="ac-row">
+              <Link to={`/organizator/prilike/${o.id}/uredi`} className="ac-btn ac-btn--ghost">Uredi</Link>
+            </div>
+          )}
+        </section>
       )}
 
       <div className="ac-cols ac-cols--detail">
