@@ -166,6 +166,8 @@ entity "Opportunity" as Opportunity {
   reward : text
   status : enum
   results : text
+  deleted_at : datetime
+  deletion_reason : text
 }
 
 entity "Application" as Application {
