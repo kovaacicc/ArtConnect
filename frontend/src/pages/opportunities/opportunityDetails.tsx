@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import DeleteDialog from '../../components/opportunities/delete'
 import { formatDate, formatEventTime } from '../../components/opportunities/format'
 import OpportunityMap from '../../components/opportunities/opportunityMap'
 import StatusBadge from '../../components/opportunities/status'
@@ -10,11 +11,13 @@ import { TYPE_LABELS, type Opportunity } from '../../types/opportunity'
 
 export default function OpportunityDetail() {
   const id = Number(useParams().id)
+  const navigate = useNavigate()
   const notice = (useLocation().state as { notice?: string } | null)?.notice
   const [opportunity, setOpportunity] = useState<Opportunity | null>(null)
   const [isOwner, setIsOwner] = useState(false)
   const [approved, setApproved] = useState(false)
   const [error, setError] = useState('')
+  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
     opportunitiesApi
@@ -52,11 +55,14 @@ export default function OpportunityDetail() {
       {isOwner && (
         <section className="org-owner-actions">
           <StatusActions opportunity={o} approved={approved} onChanged={setOpportunity} />
-          {o.status !== 'finished' && (
-            <div className="ac-row">
+          <div className="ac-row">
+            {o.status !== 'finished' && (
               <Link to={`/organizator/prilike/${o.id}/uredi`} className="ac-btn ac-btn--ghost">Uredi</Link>
-            </div>
-          )}
+            )}
+            <button type="button" className="ac-btn ac-btn--ghost ac-btn--danger" onClick={() => setDeleting(true)}>
+              Obriši
+            </button>
+          </div>
         </section>
       )}
 
@@ -75,6 +81,16 @@ export default function OpportunityDetail() {
           <OpportunityMap latitude={o.latitude} longitude={o.longitude} title={o.title} />
         </section>
       </div>
+
+      {deleting && (
+        <DeleteDialog
+          opportunity={o}
+          onClose={() => setDeleting(false)}
+          onDeleted={() =>
+            navigate('/organizator/moje', { state: { notice: `Prilika „${o.title}” je obrisana.` } })
+          }
+        />
+      )}
     </>
   )
 }
