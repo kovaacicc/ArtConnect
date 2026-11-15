@@ -63,7 +63,9 @@ class PastExhibitionSerializer(serializers.ModelSerializer):
 
 def get_participations(profile):
     applications = (
-        profile.applications.filter(participated=True) #dodati opportunity__deleted_at__isnull=True kad se spoji opportunities na main
+        profile.applications.filter(
+            participated=True, opportunity__deleted_at__isnull=True
+        ) 
         .select_related("opportunity")
         .order_by("-opportunity__starts_at")
     )

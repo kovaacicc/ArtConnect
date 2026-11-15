@@ -600,25 +600,29 @@ class PublicPortfolioTests(APITestCase):
 
         self.assertEqual(response.status_code, 404)
 
-    def test_participations_show_only_marked_ones(self):
+    def test_participations_show_only_marked_and_not_deleted(self):
         organizer, organizer_profile = make_organizer()
-        field = self.painting
 
-        def make_opportunity(title):
+        def make_opportunity(title, **extra):
             return Opportunity.objects.create(
                 organizer=organizer_profile,
-                field=field,
+                field=self.painting,
                 type="exhibition",
                 title=title,
+                **extra,
             )
 
         took_part = make_opportunity("Izložba A")
         not_marked = make_opportunity("Izložba B")
+        deleted = make_opportunity("Izložba C", deleted_at=timezone.now())
         Application.objects.create(
             opportunity=took_part, artist=self.profile, participated=True
         )
         Application.objects.create(
             opportunity=not_marked, artist=self.profile, participated=False
+        )
+        Application.objects.create(
+            opportunity=deleted, artist=self.profile, participated=True
         )
         self.client.force_authenticate(self.viewer_user)
 
