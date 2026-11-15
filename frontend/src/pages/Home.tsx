@@ -1,11 +1,14 @@
 import Logo from '../components/Logo'
+import { greetingName, type User } from '../services/auth'
 
 type Props = {
-  name: string
+  user: User
   onLogout: () => void
 }
 
-export default function Home({ name, onLogout }: Props) {
+export default function Home({ user, onLogout }: Props) {
+  const waitingForApproval = user.organizer_profile?.approved === false
+
   return (
     <div className="home">
       <header className="home-header">
@@ -16,7 +19,8 @@ export default function Home({ name, onLogout }: Props) {
         <button type="button" className="logout" onClick={onLogout}>Odjava</button>
       </header>
       <main className="home-main">
-        <h1>Dobar dan, {name}.</h1>
+        <h1>Dobar dan, {greetingName(user)}.</h1>
+        {waitingForApproval && <p className="home-note">Vaš račun organizatora čeka odobrenje administratora.</p>}
       </main>
     </div>
   )
