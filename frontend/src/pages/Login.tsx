@@ -1,10 +1,6 @@
 import ArtCollage from '../components/ArtCollage'
 import Logo from '../components/Logo'
-
-type Props = {
-  onLogin: () => void
-  onRegister: () => void
-}
+import { loginWithGoogle } from '../services/auth'
 
 function Headline() {
   return (
@@ -29,7 +25,7 @@ function GoogleIcon() {
   )
 }
 
-export default function Login({ onLogin, onRegister }: Props) {
+export default function Login() {
   return (
     <div className="login">
       <section className="login-hero">
@@ -48,13 +44,13 @@ export default function Login({ onLogin, onRegister }: Props) {
 
             <h2 className="login-title">Prijavite se na ArtConnect</h2>
 
-            <button type="button" className="btn btn-primary btn-google" onClick={onLogin}>
+            <button type="button" className="btn btn-primary btn-google" onClick={() => loginWithGoogle()}>
               <GoogleIcon />
               Prijavi se putem Googlea
             </button>
 
             <p className="login-question">Nemate račun?</p>
-            <button type="button" className="btn btn-outline" onClick={onRegister}>
+            <button type="button" className="btn btn-outline" onClick={() => loginWithGoogle(true)}>
               Kreiraj novi korisnički račun
             </button>
           </div>

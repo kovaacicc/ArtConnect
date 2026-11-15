@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import ThemeToggle from './components/ThemeToggle'
 import OrganizerLayout from './components/organizer/organizerLayout'
 import Home from './pages/Home'
@@ -11,31 +11,66 @@ import OpportunityForm from './pages/opportunities/opportunityForm'
 import OpportunityList from './pages/opportunities/opportunityList'
 import OrganizerHome from './pages/organizer/organizerHome'
 import OrganizerStats from './pages/organizer/organizerStats'
-import { setUnauthorizedHandler } from './services/api'
+import { ApiError, setUnauthorizedHandler } from './services/api'
+import { getMe, loginWithGoogle, logout, type User } from './services/auth'
 
-type Screen = 'login' | 'register' | 'home'
 
 function Start() {
-  const [screen, setScreen] = useState<Screen>('login')
-  const [name, setName] = useState('')
+  const [user, setUser] = useState<User | null | undefined>(undefined)
+  const [offline, setOffline] = useState(false)
 
-  function enter(userName: string) {
-    setName(userName)
-    setScreen('home')
+  function loadUser() {
+    setOffline(false)
+    getMe()
+      .then(setUser)
+      .catch((error) => {
+        if (error instanceof ApiError && error.status === 401) setUser(null)
+        else setOffline(true)
+      })
+  }
+
+  useEffect(() => {
+    loadUser()
+  }, [])
+
+  async function handleLogout() {
+    await logout().catch(() => {})
+    setUser(null)
+  }
+
+  async function switchAccount() {
+    await logout().catch(() => {})
+    loginWithGoogle(true)
+  }
+
+  let screen
+  if (offline) {
+    screen = (
+      <main className="loading">
+        <p>Poslužitelj nije dostupan.</p>
+        <button type="button" className="link" onClick={loadUser}>Pokušaj ponovno</button>
+      </main>
+    )
+  } else if (user === undefined) {
+    screen = <main className="loading" aria-busy="true" />
+  } else if (user === null) {
+    screen = <Login />
+  } else if (!user.registration_complete) {
+    screen = <Register user={user} onDone={setUser} onSwitchAccount={switchAccount} />
+  } else if (user.role === 'organizer') {
+    return <Navigate to="/organizator" replace />
+  } else {
+    screen = <Home user={user} onLogout={handleLogout} />
   }
 
   return (
     <>
       <ThemeToggle />
-      {screen === 'login' && (
-        // Privremeno: stvarna Google prijava dolazi s backendom.
-        <Login onLogin={() => enter('Ana')} onRegister={() => setScreen('register')} />
-      )}
-      {screen === 'register' && <Register onDone={enter} onBack={() => setScreen('login')} />}
-      {screen === 'home' && <Home name={name} onLogout={() => setScreen('login')} />}
+      {screen}
     </>
   )
 }
+
 
 function UnauthorizedRedirect() {
   const navigate = useNavigate()
