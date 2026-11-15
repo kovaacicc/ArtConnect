@@ -1,4 +1,4 @@
-const API_KEY = (import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined) || "AIzaSyDrLvNgjw0xMOJWf7Vso6L60Z5-tY4pE30"
+const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined
 
 export type Coordinates = { latitude: string; longitude: string }
 
