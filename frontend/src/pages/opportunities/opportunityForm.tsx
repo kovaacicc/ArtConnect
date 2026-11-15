@@ -101,6 +101,7 @@ export default function OpportunityForm() {
   if (original?.status === 'finished') {
     return <p className="ac-note ac-note--bad" role="alert">Završena prilika se više ne može uređivati.</p>
   }
+
   const published = original !== null && original.status !== 'preparation'
   const locked = (name: keyof Values) => published && !EDITABLE_AFTER_PUBLISH.includes(name)
 
@@ -124,7 +125,7 @@ export default function OpportunityForm() {
     return e
   }
 
-async function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault()
     const clientErrors = validate()
     setErrors(clientErrors)
@@ -136,7 +137,8 @@ async function handleSubmit(event: FormEvent) {
     let geocodeFailed = false
 
     const addressChanged = payload.address !== (original?.address ?? '')
-    if (addressChanged) {
+    const missingCoordinates = original !== null && original.latitude === null && payload.address !== ''
+    if (addressChanged || missingCoordinates) {
       payload.latitude = null
       payload.longitude = null
       if (payload.address) {
@@ -150,7 +152,7 @@ async function handleSubmit(event: FormEvent) {
       const before = toInput(toValues(original))
       payload = Object.fromEntries(
         Object.entries(payload).filter(([name, value]) => {
-          if (name === 'latitude' || name === 'longitude') return addressChanged
+          if (name === 'latitude' || name === 'longitude') return addressChanged || missingCoordinates
           if (published && !EDITABLE_AFTER_PUBLISH.includes(name as keyof OpportunityInput)) return false
           return value !== before[name as keyof OpportunityInput]
         }),
@@ -181,7 +183,8 @@ async function handleSubmit(event: FormEvent) {
       setBusy(false)
     }
   }
-    function field(name: keyof Values, label: string, input: ReactNode, hint?: string) {
+
+  function field(name: keyof Values, label: string, input: ReactNode, hint?: string) {
     return (
       <label>
         {label}
@@ -202,7 +205,7 @@ async function handleSubmit(event: FormEvent) {
     }
   }
 
-    return (
+  return (
     <>
       <Link to={original ? `/organizator/prilike/${original.id}` : '/organizator/moje'} className="ac-back">
         ← Natrag
