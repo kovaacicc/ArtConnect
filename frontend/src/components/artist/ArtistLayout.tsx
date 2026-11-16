@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Sparkles, Palette, FileText, User, Sun, Moon } from 'lucide-react'; // Uvoz ikona
+import { LayoutDashboard, Sparkles, Palette, FileText, User, Sun, Moon } from 'lucide-react'; 
 import '../../pages/artist/artist.css';
 
 const NAV = [
@@ -27,7 +27,7 @@ export default function ArtistLayout() {
     const next = light ? 'dark' : 'light';
     if (next === 'light') document.documentElement.dataset.theme = 'light';
     else delete document.documentElement.dataset.theme;
-    try { localStorage.setItem('theme', next); } catch { /* ignore */ }
+    try { localStorage.setItem('theme', next); } catch {}
     setLight(!light);
   };
 
@@ -36,7 +36,7 @@ export default function ArtistLayout() {
       <aside className="ac-side">
         <div className="ac-brand"><Logo /><span>ArtConnect</span></div>
         
-        {/* Navigacija */}
+        {}
         <nav className="ac-nav" aria-label="Glavna navigacija">
           {NAV.map((n) => (
             <NavLink key={n.to} to={n.to} end={n.end} className={({ isActive }) => (isActive ? 'is-active' : '')}>

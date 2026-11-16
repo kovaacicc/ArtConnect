@@ -12,7 +12,6 @@ export default function Applications() {
   const [filter, setFilter] = useState<ApplicationStatus | ''>('');
   const [loading, setLoading] = useState(true);
 
-  // Stanje koje pamti koje su kartice proširene
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
 
   useEffect(() => {
@@ -56,7 +55,7 @@ export default function Applications() {
             return (
               <li key={a.id} className="ac-card ac-card--collapsible">
                 
-                {/* GORNJI DIO (Bez plave linije, samo naslov, bedž i strelica) */}
+                {}
                 <div className="ac-card__header-click" onClick={() => toggleExpand(a.id)}>
                   <div className="ac-card__top">
                     <h3>{a.opportunityTitle}</h3>
@@ -67,7 +66,7 @@ export default function Applications() {
                   </div>
                 </div>
 
-                {/* DONJI DIO (Vidljiv samo ako je prošireno) */}
+                {}
                 {isExpanded && (
                   <div className="ac-card__details">
                     <p className="ac-muted">Predano {formatDate(a.submittedAt)} · {a.artworkIds.length} {a.artworkIds.length === 1 ? 'rad' : 'radova'}</p>

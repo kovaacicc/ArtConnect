@@ -11,8 +11,8 @@ export default function ArtistProfile() {
   const [apps, setApps] = useState<Application[]>([]);
   const [works, setWorks] = useState<Artwork[]>([]);
   
-  const [isEditing, setIsEditing] = useState(false); // Stanje za modal profila
-  const [draft, setDraft] = useState<Draft | null>(null); // Stanje za modal radova
+  const [isEditing, setIsEditing] = useState(false); 
+  const [draft, setDraft] = useState<Draft | null>(null); 
   const [saved, setSaved] = useState(false);
   
   const [newEx, setNewEx] = useState({ title: '', year: new Date().getFullYear(), place: '' });
@@ -50,7 +50,6 @@ export default function ArtistProfile() {
 
   const participations = apps.filter((a) => a.status === 'prihvacena');
 
-  // Funkcije za radove (preuzeto iz Portfolio.tsx)
   const togglePublic = async (a: Artwork) => setWorks(await artistApi.saveArtwork({ ...a, isPublic: !a.isPublic }));
   const removeArtwork = async (a: Artwork) => {
     if (window.confirm(`Obrisati rad „${a.title}”?`)) setWorks(await artistApi.deleteArtwork(a.id));
@@ -58,7 +57,7 @@ export default function ArtistProfile() {
 
   return (
     <>
-      {/* --- HEADER (Instagram stil) --- */}
+      {}
       <header className="ac-profile-header">
         <div className="ac-avatar-wrapper" onClick={() => fileInputRef.current?.click()}>
           {p.avatarUrl ? <img src={p.avatarUrl} alt="Profilna" className="ac-avatar-img" /> : <div className="ac-avatar-placeholder">{p.name.charAt(0)}</div>}
@@ -82,14 +81,14 @@ export default function ArtistProfile() {
         </div>
       </header>
 
-      {/* --- GUMB ZA UREĐIVANJE --- */}
+      {}
       <div className="ac-profile-actions">
         <button className="ac-btn ac-btn--block" onClick={() => setIsEditing(true)}>
           Uredi profil
         </button>
       </div>
 
-      {/* --- PORTFOLIO SEKCIJA --- */}
+      {}
       <section style={{ marginTop: '3rem' }}>
         <div className="ac-row" style={{ justifyContent: 'space-between', marginBottom: '1.5rem' }}>
           <h2 style={{ margin: 0 }}>Moji radovi</h2>
@@ -128,7 +127,7 @@ export default function ArtistProfile() {
         )}
       </section>
 
-      {/* --- MODAL ZA UREĐIVANJE PROFILA --- */}
+      {}
       {isEditing && (
         <Modal title="Uredi profil" onClose={() => setIsEditing(false)}>
           <form className="ac-form" onSubmit={saveProfile}>
@@ -174,7 +173,7 @@ export default function ArtistProfile() {
         </Modal>
       )}
 
-      {/* --- MODAL ZA DODAVANJE/UREĐIVANJE RADA --- */}
+      {}
       {draft && (
         <ArtworkModal
           draft={draft} onClose={() => setDraft(null)}
@@ -185,7 +184,6 @@ export default function ArtistProfile() {
   );
 }
 
-// Preuzeto iz Portfolio.tsx - Modal za radove
 function ArtworkModal({ draft, onClose, onSave }: { draft: Draft; onClose: () => void; onSave: (d: Draft) => Promise<void> }) {
   const [d, setD] = useState<Draft>(draft);
   const set = <K extends keyof Draft>(k: K, v: Draft[K]) => setD((x) => ({ ...x, [k]: v }));

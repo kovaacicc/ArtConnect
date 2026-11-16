@@ -1,9 +1,4 @@
-/**
- * Sloj za komunikaciju s backendom (Django).
- * Trenutno radi nad mock podacima u memoriji kako bi se frontend mogao razvijati
- * neovisno o backendu. Kad endpointi budu spremni, zamijeni tijela funkcija s
- * fetch pozivima (potpisi funkcija ostaju isti).
- */
+
 import type { Application, ArtistProfile, Artwork, Opportunity } from '../types/artist';
 
 const delay = <T,>(v: T, ms = 250) => new Promise<T>((r) => setTimeout(() => r(structuredClone(v)), ms));
@@ -73,7 +68,6 @@ export const artistApi = {
   },
 };
 
-/** Poveznica "Dodaj u Google Calendar" (bez OAuth-a, koristi Google Calendar template URL). */
 export function googleCalendarUrl(o: Opportunity): string {
   const d = o.eventDate.replace(/-/g, '');
   const next = new Date(o.eventDate); next.setDate(next.getDate() + 1);

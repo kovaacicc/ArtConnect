@@ -64,10 +64,10 @@ export interface Opportunity {
   description: string;
   organizer: string;
   field: ArtField;
-  deadline: string; // ISO datum (YYYY-MM-DD)
-  eventDate: string; // ISO datum
+  deadline: string; 
+  eventDate: string; 
   city: string;
-  address?: string; // ako postoji, prikazuje se karta
+  address?: string; 
   ageCriteria?: string;
   reward?: string;
   status: OpportunityStatus;
