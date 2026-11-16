@@ -18,8 +18,6 @@ Za potpuni opseg, zahtjeve, oblikovanje i dokaze ispitivanja pogledajte [docs](d
 <a id="deployment"></a>
 ## Postavljanje (engl. deployment)
 
-<!-- UPUTA: Obavezno od kontrolne točke 1 (8. tjedan). Provjerite vodi li URL na javno dostupnu pokrenutu aplikaciju i radi li navedeni tijek uporabe. Nikada ne objavljujte lozinke ni pristupne tokene. -->
-
 **Javno dostupna aplikacija:** https://artconnect.austriaeast.cloudapp.azure.com/
 
 **Isprobajte:** [Jedna ili dvije kratke radnje koje pokazuju funkcionalan korisnički tijek.]
@@ -32,8 +30,6 @@ Aplikacija je postavljena na Azure virtualnoj mašini s Ubuntu 24.04 LTS OS-om.
 
 <a id="quick-start"></a>
 ## Brzi početak / instalacija
-
-<!-- Obavezno od Demo 1 nadalje. Zamijenite mjesta za unos naredbama koje je drugi član tima uspješno izvršio nakon čistog kloniranja repozitorija. Detaljne upute za administraciju držite u projektnoj dokumentaciji u direktoriju docs/. -->
 
 **Preduvjeti:** Git, docker i docker compose
 
@@ -58,36 +54,18 @@ docker compose -f docker-compose-prod.yaml up --build
 
 **Adresa:** https://artconnect.austriaeast.cloudapp.azure.com/
 
-**Konfiguracija:** Postaviti .env prema primjeru .env.example. Konfigurirati Google OAuth na Google Cloud Console te unijeti Client ID i Secret.
+**Konfiguracija:** Postaviti .env prema primjeru .env.example. Konfigurirati potrebne vanjske servise (Google OAuth, Maps i Calendar) te upisati odgovarajuće ključeve i tajne.
 
-[Dodajte kratak korak provjere, primjerice koja se stranica treba otvoriti ili koja naredba pokreće osnovnu provjeru.] Za detaljno postavljanje pogledajte [projektnu dokumentaciju].
+Pri navigaciji na web-stranicu, trebala bi se otvoriti stranica gdje se korisnik treba prijaviti sa svojim Google računom.
 
 ## Tehnologije
 
-Navedite nekoliko tehnologija i vanjskih usluga koje bitno određuju kako vaša aplikacija radi. Za svaku navedite njezinu konkretnu ulogu i jedan razlog ili ograničenje važno za projekt. Alat za razvoj ili ispitivanje uključite samo ako je njegova uloga važna za razumijevanje načina na koji je projekt izrađen ili provjeren. Nemojte prepisivati popis ovisnosti (engl. dependencies), statistiku programskih jezika ni popis razvojnih okruženja i komunikacijskih alata. Tablicu provjerite prema stvarnom repozitoriju i pokrenutoj aplikaciji; potrebne verzije i konfiguraciju dokumentirajte u vodiču za instalaciju.
-
 | Tehnologija ili alat | Uloga u ovom projektu | Razlog uporabe ili važno ograničenje |
 | --- | --- | --- |
-| Django | Backend |  |
-| React / TypeScript | Frontend | |
-| PostgreSQL | Baza podataka |  |
-| Docker | Pokretanje aplikacije u kontejneru |  |
-| GitHub Actions | Testovi kod pull requestova |  |
-
-<details>
-<summary><strong>Primjer: objašnjenje ključnih tehnoloških odluka</strong></summary>
-
-**Primjer — CrisisMap:**
-
-| Tehnologija ili alat | Uloga u ovom projektu | Razlog uporabe ili važno ograničenje |
-| --- | --- | --- |
-| React | Prikazuje obrazac za prijavu i kartu kriznih događaja u pregledniku. | Karta i poslane prijave mogu se ažurirati bez ponovnog učitavanja cijele stranice. |
-| PostgreSQL | Pohranjuje prijave, lokacije i njihove odnose. | Zapisi o prijavama moraju ostati povezani s autorima i lokacijama; promjene sheme zahtijevaju migracije baze podataka (engl. database migrations). |
-| Usluga kartografskih pločica (engl. map tile service) | Omogućuje prikaz karte u pregledniku. | Karta ovisi o vanjskoj usluzi; slanje prijave mora imati definirano ponašanje i kada kartografske pločice nisu dostupne. |
-
-**Analiza primjera:** Svaki redak opisuje ulogu ili posljedicu konkretne tehnologije u ovoj aplikaciji. Verzije paketa pripadaju datotekama s ovisnostima projekta; verzije izvršnog okruženja i konfiguracija važna za postavljanje pripadaju vodiču za instalaciju. Važne kompromise u oblikovanju (engl. design trade-offs) objasnite na stranici arhitekture u direktoriju `docs/` umjesto da ovdje ponavljate cijeli zapis odluke. Navodite samo usluge koje vaš tim stvarno integrira.
-
-</details>
+| Django | Komunikacija s bazom podataka i poslovna logika | Lak pristup bazi podataka te mnoštvo middleware-ova spremnih za upotrebu |
+| React | Prikazuje korisničko sučelje | Iste komponente se koriste na više mjesta |
+| PostgreSQL | Pohranjuje korisnike, njihove podatke i prilike | Podaci su relacijski; promjene sheme zahtjevaju migraciju |
+| Docker | Pokretanje aplikacije u lokalnom i produkcijskom okruženju | Jednostavnost pokretanja aplikacije te jednako okruženje kod svih članova tima |
 
 <a id="team-members"></a>
 ## Članovi tima
@@ -104,7 +82,7 @@ Navedite nekoliko tehnologija i vanjskih usluga koje bitno određuju kako vaša 
 
 ## Doprinos projektu
 
-[Ako je primjenjivo, u dvije rečenice opišite kako se predlaže zadatak ili prijavljuje nedostatak, kako se pregledava promjena koda i gdje se nalazi aktualna evidencija zadataka. Ako tim održava `CONTRIBUTING.md`, ovdje postavite poveznicu umjesto ponavljanja pravila. Nemojte stvarati tu datoteku samo zato da biste popunili ovaj odjeljak.]
+Za doprinos projektu otvaraju se pull requestovi s jasnim objašnjenjem što se u kodu mijenja i zašto.
 
 <a id="license"></a>
 ## Licenca [![CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
@@ -113,7 +91,7 @@ Navedite nekoliko tehnologija i vanjskih usluga koje bitno određuju kako vaša 
 
 Dokumentacijski predložak kolegija sadrži otvorene obrazovne sadržaje (engl. Open Educational Resources, OER) i licenciran je licencom Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International.
 
-Kod trećih strana, skupovi podataka, slike, ikone i ostali sadržaji zadržavaju vlastite licence i zahtjeve za navođenje izvora. [Po potrebi postavite poveznicu na dodatne zahvale i izvore.]
+Kod trećih strana, skupovi podataka, slike, ikone i ostali sadržaji zadržavaju vlastite licence i zahtjeve za navođenje izvora.
 
 <a id="ai-usage"></a>
 ## Uporaba umjetne inteligencije [![AI Usage: Disclosed](https://img.shields.io/badge/AI%20Usage-Disclosed-blue.svg)](https://www.fer.unizg.hr/_download/repository/Policy%20on%20the%20appropriate%20use%20of%20artificial%20intelligence%20at%20the%20faculty%20of%20electrical%20engineering%20and%20computing%5B1%5D.pdf)
