@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { LayoutDashboard, Sparkles, Palette, FileText, User, Sun, Moon } from 'lucide-react'; 
-import '../../pages/artist/artist.css';
+import '../../styles/artist.css';
 
 const NAV = [
   { to: '/umjetnik', label: 'Pregled', icon: <LayoutDashboard size={20} />, end: true },
