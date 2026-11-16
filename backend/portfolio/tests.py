@@ -10,6 +10,9 @@ from .models import ArtField, Artwork, ArtworkFile, PastExhibition
 
 # GET /api/portfolio/art-fields/
 class ArtFieldListTests(APITestCase):
+    def setUp(self):
+        ArtField.objects.all().delete()
+        
     def test_is_public_sorted_and_only_active(self):
         ArtField.objects.create(name="Sculpting")
         ArtField.objects.create(name="Painting")
