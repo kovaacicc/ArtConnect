@@ -43,7 +43,7 @@ export default function OrganizerLayout() {
             </NavLink>
       
           ))}
-            <NavLink to="/" state={{ home: true }} end>
+            <NavLink to="/" end>
             <House size={20} />
             <span>Početna</span>
           </NavLink>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import ThemeToggle from './components/ThemeToggle'
 import OrganizerLayout from './components/organizer/organizerLayout'
 import Home from './pages/Home'
@@ -18,7 +18,6 @@ import { getMe, loginWithGoogle, logout, type User } from './services/auth'
 function Start() {
   const [user, setUser] = useState<User | null | undefined>(undefined)
   const [offline, setOffline] = useState(false)
-   const wantsHome = (useLocation().state as { home?: boolean } | null)?.home === true
 
   function loadUser() {
     setOffline(false)
@@ -58,8 +57,6 @@ function Start() {
     screen = <Login />
   } else if (!user.registration_complete) {
     screen = <Register user={user} onDone={setUser} onSwitchAccount={switchAccount} />
-  } else if (user.role === 'organizer' && !wantsHome) {
-    return <Navigate to="/organizator" replace />
   } else {
     screen = <Home user={user} onLogout={handleLogout} />
   }
