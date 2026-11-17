@@ -25,6 +25,8 @@ services:
     build:
       context: .
       dockerfile: ./nginx/Dockerfile
+      args:
+        VITE_GOOGLE_MAPS_API_KEY: ${VITE_GOOGLE_MAPS_API_KEY}
     ports:
       - 80:80
       - 443:443
