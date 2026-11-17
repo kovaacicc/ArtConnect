@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
-import { ChartColumn, CirclePlus, FolderOpen, LayoutDashboard,  Moon, Sparkles, Sun } from 'lucide-react'
+import { ChartColumn, CirclePlus, FolderOpen, House, LayoutDashboard,  Moon, Sparkles, Sun } from 'lucide-react'
 import Logo from '../Logo'
 import '../../pages/artist/artist.css'
 import '../../opportunities.css'
@@ -41,7 +41,12 @@ export default function OrganizerLayout() {
               {n.icon}
               <span>{n.label}</span>
             </NavLink>
+      
           ))}
+            <NavLink to="/" state={{ home: true }} end>
+            <House size={20} />
+            <span>Početna</span>
+          </NavLink>
         </nav>
 
         <button className="ac-icon-btn ac-theme" onClick={toggleTheme} aria-label="Promijeni temu">
