@@ -8,14 +8,17 @@
 
 **PlantUML izvor:** [izvor](./puml/3-1-artconnect-use-cases.puml)
 
-**Opis dijagrama:** Dijagram prikazuje granicu sustava ArtConnect, tri primarna aktera (umjetnik, organizator i administrator) te tri sekundarna aktera (pružatelj identiteta OAuth 2.0, kartografski servis Google Maps API i kalendarski servis Google Calendar). Primarni akteri imaju različite ovlasti: umjetnik upravlja portfoliom te pretražuje prilike i prijavljuje se na njih, organizator objavljuje prilike i odlučuje o prijavama, a administrator upravlja korisnicima, sadržajem, kategorijama i postavkama sustava.
+**Opis dijagrama:** Dijagram prikazuje granicu sustava ArtConnect, tri primarna aktera (umjetnik, organizator i administrator) te tri sekundarna aktera (pružatelj identiteta OAuth 2.0, kartografski servis Google Maps API i kalendarski servis Google Calendar). Primarni akteri su specijalizacije apstraktnog aktera Korisnik, koji predstavlja mogućnosti zajedničke svim ulogama: prijavu i odjavu (UC-02) te pregled javnog portfolija umjetnika (UC-04). Uz to, primarni akteri imaju različite ovlasti: umjetnik upravlja portfoliom te pretražuje prilike i prijavljuje se na njih, organizator objavljuje prilike i odlučuje o prijavama, a administrator upravlja korisnicima, sadržajem, kategorijama i postavkama sustava. Prikaz lokacije na karti nije zaseban obrazac, nego dio objave prilike (UC-05).
 
-Relacije `<<extend>>` koriste se za dijelove koji se događaju samo u nekim slučajevima:
+Relacije `<<extend>>` koriste se za ponašanje koje se događa samo u nekim slučajevima:
 
-- UC-06 (Prikaz lokacije na karti) proširuje UC-08 i UC-05 kad prilika ima fizičku lokaciju.
-- UC-13 (Dostava dopune prijave) proširuje UC-10 kad je status prijave „potrebna dopuna".
-- UC-14 (Dodavanje događaja u kalendar) proširuje UC-10 kad je umjetnik prihvaćen.
-- UC-12 (Zatraživanje dopune prijave) proširuje UC-11 kad organizator traži dopunu.
+- UC-01 (Registracija računa) proširuje UC-02 (Prijava i odjava) kad korisnik još nema račun.
+- UC-06 (Upravljanje prilikom) proširuje UC-05 (Objava prilike) nakon objave prilike.
+- UC-08 (Prijava na priliku) proširuje UC-07 (Pretraživanje i pregled prilika) kad se umjetnik odluči prijaviti na odabranu priliku.
+- UC-11 (Zatraživanje dopune prijave) proširuje UC-10 (Pregled i odlučivanje o prijavama) kad organizator traži dopunu.
+- UC-12 (Dostava dopune prijave) proširuje UC-09 (Praćenje statusa prilike) kad je status prijave „potrebna dopuna".
+- UC-13 (Dodavanje događaja u kalendar) proširuje UC-09 (Praćenje statusa prilike) kad je umjetnik prihvaćen.
+- UC-15 (Objava rezultata i označavanje sudionika) proširuje UC-05 (Objava prilike) nakon što je prilika završena.
 
 ## 3.2 Specifikacije obrazaca uporabe
 
