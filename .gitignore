@@ -94,3 +94,5 @@ media/
 staticfiles/
 .ruff_cache/
 db.sqlite3
+
+nginx/certbot/

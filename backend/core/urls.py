@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('users/', include('users.urls'))
+    path("admin/", admin.site.urls),
+    path("oauth/", include("allauth.urls")), 
+    path("api/users/", include("users.urls")),
+    path("api/portfolio/", include("portfolio.urls")),
+    path("api/opportunities/", include("opportunities.urls")),
 ]

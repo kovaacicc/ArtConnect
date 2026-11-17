@@ -44,12 +44,33 @@ class Opportunity(models.Model):
         max_length=20, choices=Status.choices, default=Status.PREPARATION
     )
     results = models.TextField(blank=True)
- 
+
+    # F-010: obrisana objavljena prilika se ne briše iz baze da se sačuva obrazloženje
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    deletion_reason = models.TextField(blank=True)
+
     class Meta:
         verbose_name_plural = "opportunities"   # kojim imenom će model biti displayan na Django Admin
  
     def __str__(self):
         return self.title
+
+    # F-009: dopušteni prijelazi statusa (trenutni status -> statusi u koje smije ići)
+    ALLOWED_TRANSITIONS = {
+        Status.PREPARATION: {Status.OPEN},
+        Status.OPEN: {Status.CLOSED, Status.SELECTION},
+        Status.CLOSED: {Status.OPEN, Status.SELECTION},
+        Status.SELECTION: {Status.FINISHED},
+        Status.FINISHED: set(),
+    }
+
+    def can_transition_to(self, new_status):
+        return new_status in self.ALLOWED_TRANSITIONS[self.status]
+
+    @property
+    def is_published(self):
+        """Objavljena = izašla iz pripreme."""
+        return self.status != self.Status.PREPARATION
 
 class Application(models.Model):
     class Status(models.TextChoices):
