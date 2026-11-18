@@ -22,7 +22,7 @@
 ' Model uspostavlja funkcionalnu osnovu aplikacije definiranjem:
 ' - Primarnih i sekundarnih aktera koji komuniciraju sa sustavom.
 ' - Osnovnih funkcionalnih zahtjeva grupiranih po ciljevima korisnika.
-' - Granica sustava i relacija proširenja (extend).
+' - Granica sustava te relacija generalizacije i proširenja (extend).
 ' - Razdvajanja ovlasti umjetnika, organizatora i administratora.
 '
 ' Author(s): Lara Glavinić 
@@ -42,7 +42,7 @@
 ' Diagram type:  Use Case Diagram
 ' ==============================================================================
 
-@startuml
+@startuml 3-1-artconnect-use-cases
 
 left to right direction
 
@@ -68,10 +68,14 @@ skinparam usecase {
 ' Primarni akteri
 ' ==============================================================================
 
-actor Umjetnik 
-actor Organizator 
+actor "//Korisnik//" as Korisnik
+actor Umjetnik
+actor Organizator
 actor Administrator
 
+Umjetnik --|> Korisnik
+Organizator --|> Korisnik
+Administrator --|> Korisnik
 
 ' Relacije za raspored dijagrama.
 Umjetnik -[hidden]down-> Organizator
@@ -105,82 +109,70 @@ rectangle "ArtConnect" as ArtConnect{
     (UC-04 Pregled javnog portfolija umjetnika) as UC_PregledUmjetnika
 
     ' Prilike: pretraživanje i prijava (umjetnik)
-    (UC-08 Pretraživanje i pregled prilika) as UC_PregledPrilika
-    (UC-09 Prijava na priliku) as UC_PrijavaPrilika
-    (UC-10 Praćenje statusa prilike) as UC_Status
-    (UC-13 Dostava dopune prijave) as UC_DopunaUmjetnik
-    (UC-14 Dodavanje događaja u kalendar) as UC_Kalendar
+    (UC-07 Pretraživanje i pregled prilika) as UC_PregledPrilika
+    (UC-08 Prijava na priliku) as UC_PrijavaPrilika
+    (UC-09 Praćenje statusa prilike) as UC_Status
+    (UC-12 Dostava dopune prijave) as UC_DopunaUmjetnik
+    (UC-13 Dodavanje događaja u kalendar) as UC_Kalendar
 
     ' Prilike: objava i odlučivanje (organizator)
     (UC-05 Objava prilike) as UC_ObjavaPrilike
-    (UC-07 Upravljanje prilikom) as UC_UpravljanjePrilikom
-    (UC-11 Pregled i odlučivanje o prijavama) as UC_PregledPrijave
-    (UC-12 Zatraživanje dopune prijave) as UC_DopunaOrganizator
-    (UC-15 Pregled statistike) as UC_Statistika
-    (UC-16 Objava rezultata i označavanje sudionika) as UC_Rezultati
-
-    ' Karta 
-    (UC-06 Prikaz lokacije na karti) as UC_Karta
+    (UC-06 Upravljanje prilikom) as UC_UpravljanjePrilikom
+    (UC-10 Pregled i odlučivanje o prijavama) as UC_PregledPrijave
+    (UC-11 Zatraživanje dopune prijave) as UC_DopunaOrganizator
+    (UC-14 Pregled statistike) as UC_Statistika
+    (UC-15 Objava rezultata i označavanje sudionika) as UC_Rezultati
 
     ' Administracija
-    (UC-17 Upravljanje korisnicima i sadržajem) as UC_AdmKorisnici
-    (UC-18 Upravljanje kategorijama i postavkama) as UC_AdmKategorije
-    (UC-19 Pregled mjesečnih izvještaja) as UC_Izvjestaj
-
+    (UC-16 Upravljanje korisnicima i sadržajem) as UC_AdmKorisnici
+    (UC-17 Upravljanje kategorijama i postavkama) as UC_AdmKategorije
+    (UC-18 Pregled mjesečnih izvještaja) as UC_Izvjestaj
 }
 
 ' ==============================================================================
 ' Asocijacije aktera i obrazaca uporabe
 ' ==============================================================================
 
+' Zajedničke mogućnosti svih korisnika
+Korisnik -- UC_PrijavaOdjava
+Korisnik -- UC_PregledUmjetnika
+
 ' Mogućnosti umjetnika
-Umjetnik -- UC_Registracija
-Umjetnik -- UC_PrijavaOdjava
 Umjetnik -- UC_Portfolio
-Umjetnik -- UC_PregledUmjetnika
 Umjetnik -- UC_PregledPrilika
-Umjetnik -- UC_PrijavaPrilika
 Umjetnik -- UC_Status
-Umjetnik -- UC_DopunaUmjetnik
 
 ' Mogućnosti organizatora
-Organizator -- UC_Registracija
-Organizator -- UC_PrijavaOdjava
-Organizator -- UC_PregledUmjetnika
 Organizator -- UC_ObjavaPrilike
-Organizator -- UC_UpravljanjePrilikom
 Organizator -- UC_PregledPrijave
-Organizator -- UC_DopunaOrganizator
 Organizator -- UC_Statistika
-Organizator -- UC_Rezultati
 
 ' Mogućnosti administratora
-Administrator -- UC_PrijavaOdjava
 Administrator -- UC_AdmKorisnici
 Administrator -- UC_AdmKategorije
 Administrator -- UC_Izvjestaj
+
 ' ==============================================================================
 ' UML relacije
 ' ==============================================================================
 
-UC_PregledPrilika <.. UC_Karta : <<extend>>
-UC_ObjavaPrilike <.. UC_Karta : <<extend>>
+UC_PrijavaOdjava <.. UC_Registracija : <<extend>>
+UC_PregledPrilika <.. UC_PrijavaPrilika : <<extend>>
 UC_Status <.. UC_DopunaUmjetnik : <<extend>>
 UC_Status <.. UC_Kalendar : <<extend>>
+UC_ObjavaPrilike <.. UC_UpravljanjePrilikom : <<extend>>
 UC_PregledPrijave <.. UC_DopunaOrganizator : <<extend>>
-
-' Autentifikacija se namjerno NE modelira kao <<include>> za ostale obrasce
-' uporabe. Svi korisnici platforme (umjetnik, organizator, administrator)
-' moraju biti prijavljeni prije njihova pokretanja, pa se prijava (UC-02)
-' tretira kao preduvjet, a ne kao dio svakog pojedinog obrasca uporabe.
+UC_ObjavaPrilike <.. UC_Rezultati : <<extend>>
 
 ' ==============================================================================
 ' Interakcije sekundarnih aktera
 ' ==============================================================================
 
-UC_Registracija -right- OAuth
+' OAuth pokriva i registraciju, jer UC-01 proširuje UC-02.
 UC_PrijavaOdjava -right- OAuth
-UC_Karta -right- Maps
+
+UC_ObjavaPrilike -right- Maps
+
 UC_Kalendar -right- Cal
 
 @enduml

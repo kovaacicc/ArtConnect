@@ -107,7 +107,7 @@ Dijagram prikazuje važne pohranjene entitete platforme ArtConnect, njihove iden
 
 Dijagram prikazuje redoslijed poruka pri prijavi umjetnika na umjetničku priliku i odgovore sustava kada prijava nije moguća.
 
-**Scenarij:** Prijava na priliku (UC-09)
+**Scenarij:** Prijava na priliku (UC-08)
 
 **sekvencijski dijagram:**
 
