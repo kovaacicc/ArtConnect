@@ -1,5 +1,6 @@
 import Logo from '../components/Logo'
 import { greetingName, type User } from '../services/auth'
+import { Link } from 'react-router-dom'
 
 type Props = {
   user: User
@@ -20,6 +21,7 @@ export default function Home({ user, onLogout }: Props) {
       </header>
       <main className="home-main">
         <h1>Dobar dan, {greetingName(user)}.</h1>
+                {user.role === 'organizer' && <Link to="/organizator" className="link">Organizatorski dio →</Link>}
         {waitingForApproval && <p className="home-note">Vaš račun organizatora čeka odobrenje administratora.</p>}
       </main>
     </div>

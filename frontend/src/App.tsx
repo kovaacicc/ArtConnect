@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import ThemeToggle from './components/ThemeToggle'
 import OrganizerLayout from './components/organizer/organizerLayout'
 import Home from './pages/Home'
@@ -57,8 +57,6 @@ function Start() {
     screen = <Login />
   } else if (!user.registration_complete) {
     screen = <Register user={user} onDone={setUser} onSwitchAccount={switchAccount} />
-  } else if (user.role === 'organizer') {
-    return <Navigate to="/organizator" replace />
   } else {
     screen = <Home user={user} onLogout={handleLogout} />
   }
