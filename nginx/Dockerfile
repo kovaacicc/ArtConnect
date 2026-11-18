@@ -6,6 +6,7 @@ COPY ./frontend/package.json ./
 COPY ./frontend/package-lock.json ./
 RUN npm ci --silent
 COPY ./frontend/ ./
+ARG VITE_GOOGLE_MAPS_API_KEY
 RUN npm run build
 
 # kopiranje React fajlova

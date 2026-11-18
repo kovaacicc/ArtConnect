@@ -1,8 +1,11 @@
 import { useState } from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
-import { ChartColumn, CirclePlus, FolderOpen, LayoutDashboard,  Moon, Sparkles, Sun } from 'lucide-react'
+import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { ChartColumn, CirclePlus, FolderOpen, House, LayoutDashboard,  Moon, Sparkles, Sun } from 'lucide-react'
 import Logo from '../Logo'
+<<<<<<< HEAD
+import { logout } from '../../services/auth'
 import '../../styles/artist.css'
+>>>>>>> origin/main
 import '../../opportunities.css'
 
 const NAV = [
@@ -15,6 +18,13 @@ const NAV = [
 
 export default function OrganizerLayout() {
   const [light, setLight] = useState(document.documentElement.dataset.theme === 'light')
+
+  const navigate = useNavigate()
+
+  async function handleLogout() {
+    await logout().catch(() => {})
+    navigate('/', { replace: true })
+  }
 
   function toggleTheme() {
     const next = light ? 'dark' : 'light'
@@ -41,14 +51,22 @@ export default function OrganizerLayout() {
               {n.icon}
               <span>{n.label}</span>
             </NavLink>
+      
           ))}
+            <NavLink to="/" end>
+              <House size={20} />
+              <span>Početna</span>
+          </NavLink>
         </nav>
 
         <button className="ac-icon-btn ac-theme" onClick={toggleTheme} aria-label="Promijeni temu">
           {light ? <Moon size={20} /> : <Sun size={20} />}
         </button>
       </aside>
-      <main className="ac-main">
+        <main className="ac-main">
+        <div className="ac-topbar">
+          <button type="button" className="logout" onClick={handleLogout}>Odjava</button>
+        </div>
         <Outlet />
       </main>
     </div>

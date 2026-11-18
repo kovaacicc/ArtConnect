@@ -1,21 +1,5 @@
 # 4. Arhitektura i oblikovanje
 
-**Cilj:** Definirati arhitekturni stil, dekompoziciju programa na podsustave i module, organizaciju podataka te dinamičko ponašanje tijekom izvođenja. Arhitektura predstavlja temelj za implementaciju i ažurira se pri svakoj važnijoj promjeni projektnih odluka.
-
-| Arhitekturni pogled      | Ključno inženjersko pitanje                           | Primijenjeni model ili dijagram    |
-| :----------------------- | :---------------------------------------------------- | :--------------------------------- |
-| **Strategija rješenja**  | Koji stil i temeljne odluke određuju program?         | Tablica odluka (odjeljak 4.1)      |
-| **Struktura podsustava** | Koji su glavni dijelovi i kako komuniciraju?          | Dijagram komponenata               |
-| **Model podataka**       | Kako su strukturirani trajni podaci programa?         | Relacijski ER dijagram             |
-| **Struktura koda**       | Kako su dodijeljene odgovornosti i ključne klase?     | Reprezentativni dijagram razreda   |
-| **Dinamičko ponašanje**  | Kako moduli surađuju pri obradi ključnih transakcija? | sekvencijski dijagram              |
-| **Stanja sustava**       | Kako ključni domenski objekt mijenja svoja stanja?    | Dijagram stanja                    |
-| **Fizički razmještaj**   | Na kojim se izvršnim čvorovima program izvodi?        | Dijagram razmještaja (poglavlje 6) |
-
----
-
-Za svaki UML dijagram čuvajte čitljivu sliku i PlantUML izvor, kako je opisano na stranici [Home](./Home.md). U dovršenoj stranici koristite vlastite projektne odluke i modele.
-
 ## 4.1 Strategija rješenja
 
 **Cilj:** Objasniti nekoliko arhitekturnih odluka koje najviše utječu na rješenje i navesti njihove projektno specifične razloge.
@@ -107,7 +91,7 @@ Dijagram prikazuje važne pohranjene entitete platforme ArtConnect, njihove iden
 
 Dijagram prikazuje redoslijed poruka pri prijavi umjetnika na umjetničku priliku i odgovore sustava kada prijava nije moguća.
 
-**Scenarij:** Prijava na priliku (UC-09)
+**Scenarij:** Prijava na priliku (UC-08)
 
 **sekvencijski dijagram:**
 
