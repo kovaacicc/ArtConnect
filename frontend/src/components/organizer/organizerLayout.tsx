@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { ChartColumn, CirclePlus, FolderOpen, LayoutDashboard,  Moon, Sparkles, Sun } from 'lucide-react'
 import Logo from '../Logo'
-import '../../pages/artist/artist.css'
+import '../../styles/artist.css'
 import '../../opportunities.css'
 
 const NAV = [

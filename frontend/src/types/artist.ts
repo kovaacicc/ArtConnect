@@ -7,15 +7,17 @@ export const ART_FIELDS = [
 ] as const;
 export type ArtField = (typeof ART_FIELDS)[number];
 
-export type OpportunityStatus = 'priprema' | 'otvoreno' | 'zatvoreno' | 'odabir' | 'zavrseno';
+export type OpportunityType = 'exhibition' | 'competition' | 'workshop' | 'other'
+export type OpportunityStatus = 'preparation' | 'open' | 'closed' | 'selection' | 'finished'
+
 export type ApplicationStatus = 'predana' | 'u_pregledu' | 'potrebna_dopuna' | 'prihvacena' | 'odbijena';
 
 export const OPPORTUNITY_STATUS_LABEL: Record<OpportunityStatus, string> = {
-  priprema: 'Priprema',
-  otvoreno: 'Otvoreno za prijave',
-  zatvoreno: 'Prijave zatvorene',
-  odabir: 'U procesu odabira',
-  zavrseno: 'Završeno',
+  preparation: 'Priprema',
+  open: 'Otvoreno za prijave',
+  closed: 'Prijave zatvorene',
+  selection: 'U procesu odabira',
+  finished: 'Završeno',
 };
 
 export const APPLICATION_STATUS_LABEL: Record<ApplicationStatus, string> = {
@@ -53,24 +55,28 @@ export interface ArtistProfile {
   statement: string;
   website: string;
   social: string;
-  exhibitions: Exhibition[];
   avatarUrl?: string;
-  
+  exhibitions: Exhibition[];
 }
 
 export interface Opportunity {
-  id: string;
+  id: number;
+  type: OpportunityType;
   title: string;
   description: string;
-  organizer: string;
-  field: ArtField;
-  deadline: string; 
-  eventDate: string; 
-  city: string;
-  address?: string; 
-  ageCriteria?: string;
-  reward?: string;
+  field: number;
+  field_name: string;
+  organizer_name: string;
+  deadline: string | null;
+  address: string;
+  latitude: string | null;
+  longitude: string | null;
+  starts_at: string | null;
+  ends_at: string | null;
+  age_criteria: string;
+  reward: string;
   status: OpportunityStatus;
+  created_at: string;
 }
 
 export interface Application {

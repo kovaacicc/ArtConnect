@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import ThemeToggle from './components/ThemeToggle'
 import OrganizerLayout from './components/organizer/organizerLayout'
 import Home from './pages/Home'
@@ -20,6 +20,7 @@ import Opportunities from './pages/artist/Opportunities';
 import ArtistOpportunityDetail from './pages/artist/OpportunityDetail';
 import Applications from './pages/artist/Applications';
 import ArtistProfile from './pages/artist/ArtistProfile';
+
 
 function Start() {
   const [user, setUser] = useState<User | null | undefined>(undefined)
@@ -63,10 +64,6 @@ function Start() {
     screen = <Login />
   } else if (!user.registration_complete) {
     screen = <Register user={user} onDone={setUser} onSwitchAccount={switchAccount} />
-  } else if (user.role === 'organizer') {
-    return <Navigate to="/organizator" replace />
-  } else if (user.role === 'artist') {
-    return <Navigate to="/umjetnik" replace />
   } else {
     screen = <Home user={user} onLogout={handleLogout} />
   }
@@ -78,6 +75,7 @@ function Start() {
     </>
   )
 }
+
 
 function UnauthorizedRedirect() {
   const navigate = useNavigate()
@@ -94,6 +92,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Start />} />
         
+        {}
         <Route path="/organizator" element={<OrganizerLayout />}>
           <Route index element={<OrganizerHome />} />
           <Route path="moje" element={<MyOpportunities />} />
@@ -104,6 +103,7 @@ export default function App() {
           <Route path="statistika" element={<OrganizerStats />} />
         </Route>
 
+        {}
         <Route path="/umjetnik" element={<ArtistLayout />}>
           <Route index element={<ArtistDashboard />} />
           <Route path="prilike" element={<Opportunities />} />
@@ -111,7 +111,8 @@ export default function App() {
           <Route path="prijave" element={<Applications />} />
           <Route path="profil" element={<ArtistProfile />} />
         </Route>
-
+        {}
+        
       </Routes>
     </BrowserRouter>
   )

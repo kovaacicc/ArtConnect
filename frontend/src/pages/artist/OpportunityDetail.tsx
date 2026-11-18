@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { opportunitiesApi } from '../../services/opportunitiesApi';
 import { artistApi, formatDate } from '../../services/artistApi';
 import type { Application, Artwork, Opportunity } from '../../types/artist';
 import { ApplicationBadge, Empty, Loading, Modal, OpportunityBadge } from '../../components/artist/ui';
@@ -13,33 +14,45 @@ export default function OpportunityDetail() {
   const [applying, setApplying] = useState(false);
 
   useEffect(() => {
-    Promise.all([artistApi.getOpportunity(id), artistApi.getArtworks(), artistApi.getApplications()]).then(([o, a, apps]) => {
-      setOpp(o); setArtworks(a); setExisting(apps.find((x) => x.opportunityId === id));
-    });
+    const numericId = Number(id);
+    if (isNaN(numericId)) {
+      setOpp(null);
+      return;
+    }
+
+    Promise.all([
+      opportunitiesApi.get(numericId),
+      artistApi.getArtworks(),
+      artistApi.getApplications()
+    ]).then(([o, a, apps]) => {
+      setOpp(o);
+      setArtworks(a);
+      setExisting(apps.find((x) => x.opportunityId === id));
+    }).catch(() => setOpp(null));
   }, [id]);
 
   if (opp === undefined) return <Loading />;
   if (opp === null) return <Empty title="Prilika nije pronađena" action={<Link className="ac-btn" to="/umjetnik/prilike">Natrag na prilike</Link>} />;
 
-  const canApply = opp.status === 'otvoreno' && !existing;
+  const canApply = opp.status === 'open' && !existing;
 
   return (
     <>
       <Link to="/umjetnik/prilike" className="ac-back">← Sve prilike</Link>
       <header className="ac-page-head">
-        <div className="ac-row"><span className="ac-chip">{opp.field}</span><OpportunityBadge status={opp.status} /></div>
+        <div className="ac-row"><span className="ac-chip">{opp.field_name}</span><OpportunityBadge status={opp.status} /></div>
         <h1>{opp.title}</h1>
-        <p className="ac-muted">{opp.organizer}</p>
+        <p className="ac-muted">{opp.organizer_name}</p>
       </header>
 
       <div className="ac-cols ac-cols--detail">
         <section>
           <p className="ac-prose">{opp.description}</p>
           <dl className="ac-meta ac-meta--stack">
-            <div><dt>Rok za prijavu</dt><dd>{formatDate(opp.deadline)}</dd></div>
-            <div><dt>Događanje</dt><dd>{formatDate(opp.eventDate)}</dd></div>
-            <div><dt>Mjesto</dt><dd>{opp.address ?? opp.city}</dd></div>
-            {opp.ageCriteria && <div><dt>Dob</dt><dd>{opp.ageCriteria}</dd></div>}
+            <div><dt>Rok za prijavu</dt><dd>{opp.deadline ? formatDate(opp.deadline) : 'Nema roka'}</dd></div>
+            <div><dt>Događanje</dt><dd>{opp.starts_at ? formatDate(opp.starts_at) : 'Nije definirano'}</dd></div>
+            <div><dt>Mjesto</dt><dd>{opp.address}</dd></div>
+            {opp.age_criteria && <div><dt>Dob</dt><dd>{opp.age_criteria}</dd></div>}
             {opp.reward && <div><dt>Nagrada / naknada</dt><dd>{opp.reward}</dd></div>}
           </dl>
 
@@ -89,7 +102,7 @@ function ApplyModal({ opp, artworks, onClose, onDone }: { opp: Opportunity; artw
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
-    await artistApi.createApplication({ opportunityId: opp.id, artworkIds: selected, message, materialsUrl: url || undefined });
+    await artistApi.createApplication({ opportunityId: String(opp.id), artworkIds: selected, message, materialsUrl: url || undefined });
     onDone();
   };
 

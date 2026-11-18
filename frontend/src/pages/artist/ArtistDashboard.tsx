@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { opportunitiesApi } from '../../services/opportunitiesApi';
 import { artistApi, daysLeft, formatDate, googleCalendarUrl } from '../../services/artistApi';
 import type { Application, ArtistProfile, Opportunity } from '../../types/artist';
 import { ApplicationBadge, Empty, Loading } from '../../components/artist/ui';
@@ -11,18 +12,27 @@ export default function ArtistDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([artistApi.getProfile(), artistApi.getOpportunities(), artistApi.getApplications()])
-      .then(([p, o, a]) => { setProfile(p); setOpps(o); setApps(a); })
+    Promise.all([
+      artistApi.getProfile(),
+      opportunitiesApi.list(),
+      artistApi.getApplications()
+    ])
+      .then(([p, o, a]) => {
+        setProfile(p);
+        setOpps(o);
+        setApps(a);
+      })
+      .catch((err) => console.error(err))
       .finally(() => setLoading(false));
   }, []);
 
   if (loading || !profile) return <Loading />;
 
-  const open = opps.filter((o) => o.status === 'otvoreno');
-  const closingSoon = [...open].sort((a, b) => a.deadline.localeCompare(b.deadline)).slice(0, 3);
+  const open = opps.filter((o) => o.status === 'open');
+  const closingSoon = [...open].sort((a, b) => (a.deadline || '9999').localeCompare(b.deadline || '9999')).slice(0, 3);
   const accepted = apps.filter((a) => a.status === 'prihvacena');
   const needsAction = apps.filter((a) => a.status === 'potrebna_dopuna');
-  const oppById = (id: string) => opps.find((o) => o.id === id);
+  const oppById = (id: string) => opps.find((o) => String(o.id) === id);
 
   return (
     <>
@@ -57,9 +67,11 @@ export default function ArtistDashboard() {
                 <li key={o.id}>
                   <Link to={`/umjetnik/prilike/${o.id}`} className="ac-list__main">
                     <strong>{o.title}</strong>
-                    <span className="ac-muted">{o.organizer} · {o.city}</span>
+                    <span className="ac-muted">{o.organizer_name} · {o.address}</span>
                   </Link>
-                  <span className="ac-deadline">{daysLeft(o.deadline) <= 0 ? 'Danas' : `još ${daysLeft(o.deadline)} d`}</span>
+                  <span className="ac-deadline">
+                    {o.deadline ? (daysLeft(o.deadline) <= 0 ? 'Danas' : `još ${daysLeft(o.deadline)} d`) : 'Bez roka'}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -78,9 +90,11 @@ export default function ArtistDashboard() {
                   <li key={a.id}>
                     <div className="ac-list__main">
                       <strong>{a.opportunityTitle}</strong>
-                      <span className="ac-muted">{o ? formatDate(o.eventDate) : ''}</span>
+                      <span className="ac-muted">{o && o.starts_at ? formatDate(o.starts_at) : ''}</span>
                     </div>
-                    {o && <a className="ac-btn ac-btn--small" href={googleCalendarUrl(o)} target="_blank" rel="noreferrer">Dodaj u kalendar</a>}
+                    {o && o.starts_at && (
+                      <a className="ac-btn ac-btn--small" href={googleCalendarUrl(o)} target="_blank" rel="noreferrer">Dodaj u kalendar</a>
+                    )}
                   </li>
                 );
               })}
