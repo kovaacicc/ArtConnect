@@ -131,7 +131,7 @@ Arhitekturna realizacija koristi nazive komponenata iz [odjeljka 4.2](4-Arhitekt
 | F-010 | UC-06 Upravljanje prilikom | Web-klijent; Modul za prilike (`opportunities`) | CT-45 – CT-49, CT-51 – CT-60 |
 | F-011 | UC-07 Pretraživanje i pregled prilika | Web-klijent; Modul za prilike (`opportunities`) | CT-28, CT-29, CT-33 (pregled); pretraživanje i filtriranje: _na čekanju_ (nije ostvareno) |
 | F-012 | UC-08 Prijava na priliku | Modul za prijave (`opportunities`, model `Application`) | _Na čekanju_ (nije ostvareno) |
-| F-013 | UC-09 Praćenje statusa prilike | Modul za prijave (`opportunities`) | _Na čekanju_ (nije ostvareno) |
+| F-013 | UC-09 Praćenje statusa prijave | Modul za prijave (`opportunities`) | _Na čekanju_ (nije ostvareno) |
 | F-014 | UC-10 Pregled i odlučivanje o prijavama | Modul za prijave (`opportunities`) | _Na čekanju_ (nije ostvareno) |
 | F-015 | UC-11 Zatraživanje dopune prijave; UC-12 Dostava dopune prijave | Modul za prijave (`opportunities`, model `ApplicationMaterial`) | _Na čekanju_ (nije ostvareno) |
 | F-016 | UC-13 Dodavanje događaja u kalendar | Modul za prijave (`opportunities`, model `CalendarEntry`); Google Calendar API | _Na čekanju_ (nije ostvareno) |

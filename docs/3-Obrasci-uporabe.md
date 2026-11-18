@@ -123,7 +123,7 @@ Specifikacije opisuju ponašanje aplikacije kakvo jest u trenutačnoj implementa
 | **Alternativni tokovi / Iznimke** | **1a — Prilika nije otvorena za prijave:** aplikacija ne dopušta prijavu.<br>**3a — Neispravan prilog (vrsta ili veličina datoteke izvan NF-04):** aplikacija odbija prilog s porukom. |
 | **Posljedice (ishod)**            | Prijava je evidentirana sa statusom „predana” i vidljiva organizatoru prilike. |
 
-### UC-09: Praćenje statusa prilike
+### UC-09: Praćenje statusa prijave
 
 > **_Trenutačno oblikovanje_:** ponašanje još nije ostvareno.
 
@@ -269,10 +269,10 @@ Provjera uspoređuje dijagram (3.1), specifikacije (3.2), zahtjeve i aktere (2.1
 - Popunjena je matrica sljedivosti u 2.6.
 - U 5.2 dodani su ispitni slučajevi CT-61 – CT-106 za portfolio, koji su postojali u kodu, ali ne u dokumentaciji.
 - Napisane su specifikacije UC-01 – UC-18 u 3.2.
+- UC-09 preimenovan je iz „Praćenje statusa prilike” u „Praćenje statusa prijave”, jer se F-013 i proširenja UC-12 i UC-13 odnose na status prijave.
 
 **Otvorena pitanja:**
 
-- **Naziv UC-09.** Obrazac se zove „Praćenje statusa prilike”, ali F-013 i proširenja UC-12 i UC-13 odnose se na status **prijave**. Naziv treba uskladiti u dijagramu, 3.1 i 3.2.
 - **Ponašanje bez ispitnog slučaja.** Odobravanje organizatora (F-007.1), prikaz karte (F-008) i upravljanje korisnicima (F-019) ostvareni su ili djelomično ostvareni, ali nemaju ispitni slučaj.
 
 Provjeru treba ponoviti kad se ostvare obrasci označeni kao _trenutačno oblikovanje_.
