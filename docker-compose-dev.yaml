@@ -25,15 +25,17 @@ services:
 
   nginx: 
     build:
-        context: .
-        dockerfile: ./nginx/Dockerfile
+      context: .
+      dockerfile: ./nginx/Dockerfile
+      args:
+        VITE_GOOGLE_MAPS_API_KEY: ${VITE_GOOGLE_MAPS_API_KEY}
     ports:
         - 80:80
     volumes:
-        - django_static:/backend/staticfiles:ro
-        - ./nginx/dev:/etc/nginx/conf.d
+      - django_static:/backend/staticfiles:ro
+      - ./nginx/dev:/etc/nginx/conf.d
     depends_on: 
-        - backend
+      - backend
    
 volumes:
   postgres_data:
