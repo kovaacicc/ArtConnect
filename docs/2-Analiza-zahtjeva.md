@@ -55,9 +55,9 @@ Primjeri koriste temu projekta CrisisMap. Neki namjerno sadrže korisne nedostat
 
 |**ID**|**Uloga**|**Odnos prema sustavu**|**Obuhvaćeni**<br>**funkcijski**<br>**zahtjevi**|
 |---|---|---|---|
-|A-01|Umjetnik|Može se prijavit u<br>sustav, može mijenjat<br>svoj profil i portfolio,<br>može objaviti svoj<br>sadržaj, može se<br>prijavit i gledat status<br>eventa|F-001<br>F-002<br>F-003<br>F-004<br>F-005<br>F-006<br>F-007<br>F-008<br>F-010<br>F-013<br>F-014<br>F-015<br>F-018|
-|A-02|Organizator|Može se prijavit u<br>sustav.<br>Može objaviti i upravljat<br>statusom natječaja te<br>pregledati predane<br>prijave te po potrebi<br>zatražiti dodatne<br>informacije od<br>umjetnika, može<br>gledati rezultate te ih<br>objaviti|F-001<br>F-002<br>F-003<br>F-008<br>F-009<br>F-010<br>F-011<br>F-012<br>F-016<br>F-017<br>F-019<br>F-020|
-|A-03|Administrator platforme|upravlja korisnicima,<br>objavljenim sadržajem<br>i organizatorima.<br>Također može<br>upravljati kategorijama<br>umjetnosti, kriterijima<br>za pretraživanje i<br>osnovnim postavkama<br>sustava. Pregledava<br>mjesečne izvještaje|F-003<br>F-021<br>F-022|
+|A-01|Umjetnik|Može se prijavit u<br>sustav, može mijenjat<br>svoj profil i portfolio,<br>može objaviti svoj<br>sadržaj, može se<br>prijavit i gledat status<br>eventa|F-001<br>F-001.1<br>F-002<br>F-003<br>F-004<br>F-005<br>F-006<br>F-011<br>F-012<br>F-013<br>F-015<br>F-016|
+|A-02|Organizator|Može se prijavit u<br>sustav.<br>Može objaviti i upravljat<br>statusom natječaja te<br>pregledati predane<br>prijave te po potrebi<br>zatražiti dodatne<br>informacije od<br>umjetnika, može<br>gledati rezultate te ih<br>objaviti|F-001<br>F-001.1<br>F-006<br>F-007<br>F-007.1<br>F-008<br>F-009<br>F-010<br>F-014<br>F-015<br>F-017<br>F-018|
+|A-03|Administrator platforme|upravlja korisnicima,<br>objavljenim sadržajem<br>i organizatorima.<br>Također može<br>upravljati kategorijama<br>umjetnosti, kriterijima<br>za pretraživanje i<br>osnovnim postavkama<br>sustava. Pregledava<br>mjesečne izvještaje|F-001<br>F-006<br>F-007.1<br>F-019<br>F-020|
 
 
 ## 2.4 Ograničenja i pretpostavke
@@ -113,26 +113,32 @@ Ograničenje je uvjet koji tim mora poštovati; pretpostavka je uvjet na koji se
 
 ## 2.6 Sljedivost zahtjeva
 
-**Cilj:** Osigurati dvosmjernu sljedivost — povezati zahtjeve s opisanim ponašanjem, dijelovima sustava koji ih ostvaruju te ispitivanjem ili drugom provjerom.
+Arhitekturna realizacija koristi nazive komponenata iz [odjeljka 4.2](4-Arhitektura-i-oblikovanje.md#42-gradivni-blokovi-i-uml-dijagram-komponenata); u zagradi je Django aplikacija u `backend/` u kojoj je ponašanje ostvareno. Ispitni slučajevi opisani su u [odjeljku 5.2](5-Ispitivanje.md#52-ispitni-slučajevi). _Na čekanju_ znači da ponašanje još nije ostvareno ili nema provjeru.
 
-| ID zahtjeva | Obrazac uporabe / modul | Arhitekturna realizacija                         | Ispitivanje ili provjera          |
-| ----------- | ----------------------- | ------------------------------------------------ | --------------------------------- |
-| F-001       | [UC-001]                | [Komponenta, modul ili drugo mjesto realizacije] | [ST-01, CT-01 ili druga provjera] |
-|             |                         |                                                  |                                   |
-
-<details>
-<summary><strong>Povezivanje zahtjeva, slučajeva uporabe i ispitivanja</strong></summary>
-
-**Primjer — poveznice zahtjeva CrisisMapa:**
-
-| ID zahtjeva | Obrazac uporabe / ponašanje                | Arhitekturna realizacija                                          | Ispitivanje / provjera                                                                 |
-| ----------- | ------------------------------------------ | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| F-004       | UC-002 Podnošenje prijave kriznog događaja | Web-klijent; API za prijave; usluga za prijave                    | T-01 Valjana prijava; T-02 Nedostaje lokacija; T-03 Odbijeno dopuštenje za geolokaciju |
-| F-001       | UC-001 Registracija računa                 | [Odgovarajući dio sustava u projektu koji uključuje registraciju] | T-04 Valjana registracija; T-05 Postojeća adresa e-pošte                               |
-
-**Pokrivenost i dokazi:** Svaki redak pokazuje gdje je zahtjev opisan kao ponašanje, gdje je ostvaren u sustavu i gdje se nalazi dokaz njegove provjere. Zahtjev ne mora imati zaseban obrazac uporabe ako ne opisuje korisničku interakciju; tada navedite relevantno ponašanje, arhitekturni element ili drugi prikladan način realizacije. U svojem projektu koristite stvarne nazive komponenata, modula i provjera iz dokumentacije i implementacije. Nedostajuću poveznicu ostavite praznom ili označite kao _na čekanju_ uz kratak razlog. Stvarni rezultati ispitivanja bilježe se uz ispitne slučajeve; ova tablica pokazuje gdje ih pronaći.
-
-</details>
+| ID zahtjeva | Obrazac uporabe / modul | Arhitekturna realizacija | Ispitivanje ili provjera |
+| ----------- | ----------------------- | ------------------------ | ------------------------ |
+| F-001 | UC-01 Registracija računa; UC-02 Prijava i odjava | Web-klijent; Modul za korisnike i autentifikaciju (`users`); OAuth 2.0 pružatelj identiteta | CT-01 – CT-03, CT-13, CT-14, CT-18, CT-19; ST-01 |
+| F-001.1 | UC-01 Registracija računa | Modul za korisnike i autentifikaciju (`users`) | CT-04, CT-05, CT-08, CT-09 |
+| F-002 | UC-01 Registracija računa | Modul za korisnike i autentifikaciju (`users`); Modul za portfolije (`portfolio`, popis područja) | CT-04, CT-06, CT-07, CT-10 – CT-12, CT-20, CT-21, CT-66 – CT-68 |
+| F-003 | UC-03 Upravljanje portfoliom | Modul za portfolije (`portfolio`) | CT-61 – CT-64, CT-69, CT-70, CT-87 – CT-91, CT-103 |
+| F-004 | UC-03 Upravljanje portfoliom | Modul za portfolije (`portfolio`) | CT-71 – CT-76, CT-80 – CT-83 |
+| F-005 | UC-03 Upravljanje portfoliom | Modul za portfolije (`portfolio`) | CT-75, CT-77 – CT-79, CT-84 – CT-86, CT-92 |
+| F-006 | UC-04 Pregled javnog portfolija umjetnika | Modul za portfolije (`portfolio`) | CT-65, CT-92, CT-93, CT-98 – CT-105 |
+| F-007 | UC-05 Objava prilike | Web-klijent; Modul za prilike (`opportunities`) | CT-22 – CT-24, CT-26 – CT-36 |
+| F-007.1 | UC-05 Objava prilike; UC-16 Upravljanje korisnicima i sadržajem | Modul za prilike (`opportunities`); Modul za administraciju i izvještaje (Django administracijsko sučelje) | CT-05, CT-42; odobravanje organizatora od strane administratora: _na čekanju_ (nema ispitnog slučaja) |
+| F-008 | UC-05 Objava prilike | Web-klijent (prikaz karte); Modul za prilike (`opportunities`); Google Maps API | CT-46 (spremanje adrese i koordinata); prikaz karte: _na čekanju_ (nema ispitnog slučaja) |
+| F-009 | UC-06 Upravljanje prilikom | Web-klijent; Modul za prilike (`opportunities`) | CT-25, CT-37 – CT-44, CT-50 |
+| F-010 | UC-06 Upravljanje prilikom | Web-klijent; Modul za prilike (`opportunities`) | CT-45 – CT-49, CT-51 – CT-60 |
+| F-011 | UC-07 Pretraživanje i pregled prilika | Web-klijent; Modul za prilike (`opportunities`) | CT-28, CT-29, CT-33 (pregled); pretraživanje i filtriranje: _na čekanju_ (nije ostvareno) |
+| F-012 | UC-08 Prijava na priliku | Modul za prijave (`opportunities`, model `Application`) | _Na čekanju_ (nije ostvareno) |
+| F-013 | UC-09 Praćenje statusa prilike | Modul za prijave (`opportunities`) | _Na čekanju_ (nije ostvareno) |
+| F-014 | UC-10 Pregled i odlučivanje o prijavama | Modul za prijave (`opportunities`) | _Na čekanju_ (nije ostvareno) |
+| F-015 | UC-11 Zatraživanje dopune prijave; UC-12 Dostava dopune prijave | Modul za prijave (`opportunities`, model `ApplicationMaterial`) | _Na čekanju_ (nije ostvareno) |
+| F-016 | UC-13 Dodavanje događaja u kalendar | Modul za prijave (`opportunities`, model `CalendarEntry`); Google Calendar API | _Na čekanju_ (nije ostvareno) |
+| F-017 | UC-14 Pregled statistike | Web-klijent (`/organizator/statistika`); Modul za administraciju i izvještaje | _Na čekanju_ (nije ostvareno) |
+| F-018 | UC-15 Objava rezultata i označavanje sudionika | Modul za prijave (`opportunities`, oznaka `participated`); Modul za portfolije (prikaz na profilu) | CT-106 (prikaz na profilu); objava rezultata: _na čekanju_ (nije ostvareno) |
+| F-019 | UC-16 Upravljanje korisnicima i sadržajem | Modul za administraciju i izvještaje (Django administracijsko sučelje) | CT-96, CT-97 (portfolio deaktiviranog korisnika nije vidljiv); ostalo: _na čekanju_ (nema ispitnog slučaja) |
+| F-020 | UC-17 Upravljanje kategorijama i postavkama; UC-18 Pregled mjesečnih izvještaja | Modul za administraciju i izvještaje (`administration`, Django administracijsko sučelje); Modul za portfolije (`ArtField`) | CT-11, CT-20, CT-68, CT-94, CT-95 (neaktivna područja); mjesečni izvještaji: _na čekanju_ (nije ostvareno) |
 
 ---
 
