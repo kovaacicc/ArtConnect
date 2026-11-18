@@ -25,14 +25,19 @@ import ArtistProfile from './pages/artist/ArtistProfile';
 function Start() {
   const [user, setUser] = useState<User | null | undefined>(undefined)
   const [offline, setOffline] = useState(false)
+  const [offlineMsg, setOfflineMsg] = useState('')
 
   function loadUser() {
     setOffline(false)
     getMe()
       .then(setUser)
       .catch((error) => {
+        console.error('getMe nije uspio:', error)
         if (error instanceof ApiError && error.status === 401) setUser(null)
-        else setOffline(true)
+        else {
+          setOfflineMsg(error instanceof ApiError ? `${error.status}: ${error.message}` : String(error))
+          setOffline(true)
+        }
       })
   }
 
@@ -55,6 +60,7 @@ function Start() {
     screen = (
       <main className="loading">
         <p>Poslužitelj nije dostupan.</p>
+        <p style={{ opacity: 0.7, fontSize: 14 }}>{offlineMsg}</p>
         <button type="button" className="link" onClick={loadUser}>Pokušaj ponovno</button>
       </main>
     )

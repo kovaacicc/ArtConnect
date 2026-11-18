@@ -1,3 +1,14 @@
+/* =========================================================
+   ARTIST.CSS – kompletan stil umjetničkog dijela ArtConnecta
+   Sadržaj:
+   1. Tema i varijable        6. Gumbi, inputi, bedževi
+   2. Reset i tipografija     7. Kartice, filteri, popisi
+   3. Layout i sidebar        8. Profil i prijave (accordion)
+   4. Glavni sadržaj          9. Modali i forme
+   5. Dashboard              10. Responzivnost
+   ========================================================= */
+
+/* --- 1. TEMA I VARIJABLE --- */
 .ac {
   --ac-bg: #131418;
   --ac-panel: #1e1f23;
@@ -16,6 +27,7 @@
   background: var(--ac-bg);
   min-height: 100vh;
 }
+
 :root[data-theme='light'] .ac {
   --ac-bg: #f6f5f2;
   --ac-panel: #ffffff;
@@ -29,50 +41,122 @@
   --ac-bad: #c93636;
 }
 
+/* --- 2. RESET I TIPOGRAFIJA --- */
 .ac *, .ac *::before, .ac *::after { box-sizing: border-box; }
 .ac h1, .ac h2, .ac h3, .ac p { margin: 0; }
 .ac h1 { font-size: clamp(1.9rem, 4vw, 2.8rem); font-weight: 500; letter-spacing: -0.02em; line-height: 1.1; }
-.ac h2 { font-size: 1.3rem; font-weight: 500; margin: 2rem 0 0.9rem; }
+.ac h2 { font-size: 1.3rem; font-weight: 500; margin: 0; }
 .ac h3 { font-size: 1.08rem; font-weight: 500; }
-.ac a { color: inherit; }
+.ac a { color: inherit; text-decoration: none; }
 .ac :focus-visible { outline: 2px solid var(--ac-blue-soft); outline-offset: 2px; }
 .ac-muted { color: var(--ac-muted); }
 .ac-small { font-size: 0.85rem; }
 .ac-accent { color: var(--ac-orange); }
 
-.ac-shell { display: grid; grid-template-columns: 240px 1fr; }
+/* --- 3. GLAVNI LAYOUT I SIDEBAR --- */
+.ac-shell { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+
 .ac-side {
   position: sticky; top: 0; height: 100vh; padding: 1.5rem 1rem;
-  display: flex; flex-direction: column; gap: 2rem;
+  display: flex; flex-direction: column;
   background: var(--ac-panel); border-right: 1px solid var(--ac-line);
 }
-.ac-brand { display: flex; align-items: center; gap: 0.6rem; font-size: 1.15rem; font-weight: 500; padding: 0 0.5rem; }
 
-.ac-nav { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 0.75rem; 
-  margin-top: auto;   
-  margin-bottom: auto; 
+.ac-brand {
+  display: flex; align-items: center; gap: 0.75rem;
+  font-size: 1.25rem; font-weight: 600;
+  padding: 0 0.5rem; margin-bottom: 2rem;
+}
+
+/* Navigacija popunjava prostor između loga i gumba za temu, gumbi su centrirani */
+.ac-nav {
+  display: flex; flex-direction: column; gap: 0.25rem;
+  flex: 1;
+  justify-content: center;
 }
 
 .ac-nav a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%; 
-  text-decoration: none; 
-  color: var(--ac-muted);
+  display: flex; align-items: center; justify-content: flex-start;
+  gap: 0.8rem; padding: 0.8rem 1rem;
+  border-radius: 999px;
+  color: var(--ac-muted); font-weight: 500;
   transition: all 0.2s;
 }
+.ac-nav a:hover { background: var(--ac-panel-2); color: var(--ac-text); }
+.ac-nav a.is-active { background: var(--ac-blue); color: #fff; }
 
-.ac-nav a:hover { background: var(--ac-panel-2); color: var(--ac-text); transform: scale(1.05); }
-.ac-nav a.is-active { background: var(--ac-blue); color: #fff; box-shadow: 0 4px 12px rgba(51, 80, 255, 0.4); }
-.ac-theme { margin-top: auto; align-self: flex-start; }
-.ac-main { padding: 2.5rem clamp(1rem, 4vw, 3.5rem) 4rem; max-width: 1180px; width: 100%; }
+/* Gumb za temu na dnu */
+.ac-theme { margin-bottom: 1rem; margin-left: 0.5rem; align-self: flex-start; }
 
+/* --- 4. GLAVNI SADRŽAJ I GORNJA TRAKA (Odjava) --- */
+.ac-main {
+  display: flex; flex-direction: column;
+  padding: 1.5rem 2.5rem 3rem;
+  min-width: 0;
+}
+
+.ac-top-bar { display: flex; justify-content: flex-end; margin-bottom: 1.5rem; }
+
+.ac-logout-btn {
+  display: flex; align-items: center; gap: 0.5rem;
+  background: transparent; border: none;
+  color: var(--ac-muted); font-size: 0.95rem; font-family: inherit;
+  cursor: pointer; transition: color 0.2s;
+}
+.ac-logout-btn:hover { color: var(--ac-text); }
+
+/* Naslov stranice */
+.ac-page-head { display: grid; gap: 0.5rem; margin-bottom: 2rem; }
+.ac-page-head h1 { font-size: clamp(2rem, 4vw, 2.8rem); }
+.ac-page-head p { font-size: 1.05rem; max-width: 60ch; }
+.ac-back { display: inline-block; margin-bottom: 1rem; color: var(--ac-muted); }
+.ac-back:hover { color: var(--ac-text); }
+.ac-prose { line-height: 1.65; max-width: 62ch; margin-bottom: 1.5rem; }
+
+/* Pomoćne klase za raspored */
+.ac-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+.ac-row--end { justify-content: flex-end; margin-top: 1rem; }
+.ac-grow { flex: 1 1 180px; }
+
+/* --- 5. DASHBOARD --- */
+.ac-dashboard { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.ac-hero { display: flex; flex-direction: column; gap: 1rem; }
+.ac-hero h1 { font-size: 2.2rem; font-weight: 500; margin: 0; }
+
+.ac-alert {
+  background: rgba(255, 92, 58, 0.1); border: 1px solid rgba(255, 92, 58, 0.2);
+  border-radius: 12px; padding: 1rem 1.5rem; color: var(--ac-text); font-size: 0.95rem;
+}
+.ac-alert a { color: var(--ac-text); text-decoration: underline; font-weight: 500; }
+
+.ac-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.ac-stat-card {
+  background: var(--ac-panel); border: 1px solid var(--ac-line);
+  border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.25rem;
+}
+.ac-stat-card b { font-size: 2.2rem; font-weight: 500; line-height: 1; }
+.ac-stat-card span { color: var(--ac-muted); font-size: 0.95rem; }
+.ac-stat-card:nth-child(1) b { color: var(--ac-blue-soft); }
+.ac-stat-card:nth-child(3) b { color: var(--ac-good); }
+
+.ac-activities { display: flex; flex-direction: column; gap: 1rem; }
+.ac-activities h2 { font-size: 1.25rem; font-weight: 500; margin: 0; }
+.ac-activities .ac-card {
+  border-radius: 12px; padding: 1.5rem 2rem;
+  display: flex; flex-direction: column; gap: 1.5rem;
+}
+.ac-activity-group h3 { font-size: 1.1rem; font-weight: 500; margin-bottom: 0.75rem; color: var(--ac-text); }
+
+.ac-list { list-style: none; padding: 0; margin: 0; }
+.ac-list li { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--ac-line); }
+.ac-list li:last-child { border-bottom: none; }
+.ac-list__main { display: flex; flex-direction: column; gap: 0.2rem; }
+.ac-list__main strong { font-weight: 500; font-size: 1rem; }
+.ac-list__main span { font-size: 0.85rem; color: var(--ac-muted); }
+.ac-deadline { color: var(--ac-orange); font-weight: 500; white-space: nowrap; }
+
+/* --- 6. GUMBI, INPUTI I BEDŽEVI --- */
 .ac-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
   padding: 0.75rem 1.4rem; border-radius: 999px; border: 1px solid var(--ac-blue);
@@ -87,11 +171,13 @@
 .ac-btn--ghost { border-color: var(--ac-line); color: var(--ac-text); }
 .ac-btn--danger { border-color: transparent; color: var(--ac-bad); }
 .ac-btn--small { padding: 0.4rem 0.9rem; font-size: 0.88rem; }
+
 .ac-icon-btn {
   width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--ac-line);
   background: transparent; color: var(--ac-text); cursor: pointer; font-size: 1rem;
   display: flex; align-items: center; justify-content: center;
 }
+
 .ac-input {
   width: 100%; padding: 0.75rem 1rem; border-radius: 14px; border: 1px solid var(--ac-line);
   background: var(--ac-bg); color: var(--ac-text); font: inherit;
@@ -104,84 +190,106 @@ textarea.ac-input { resize: vertical; }
 .ac-check--block { display: flex; padding: 0.35rem 0; }
 .ac-label { display: block; margin-bottom: 0.5rem; color: var(--ac-muted); }
 
-.ac-row { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
-.ac-row--end { justify-content: flex-end; margin-top: 1rem; }
-.ac-grow { flex: 1 1 180px; }
-.ac-stack { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }
-.ac-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-.ac-cols--detail { grid-template-columns: 1.1fr 1fr; align-items: start; margin-top: 1.5rem; }
-.ac-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1rem; }
-.ac-grid--works { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
-
-.ac-page-head { display: grid; gap: 0.5rem; margin-bottom: 1.75rem; }
-.ac-page-head--row { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; }
-.ac-back { display: inline-block; margin-bottom: 1rem; color: var(--ac-muted) !important; text-decoration: none; }
-.ac-prose { line-height: 1.65; max-width: 62ch; margin-bottom: 1.5rem; }
-
-.ac-hero { display: grid; gap: 1.5rem; padding: 0.5rem 0 2rem; }
-.ac-hero h1 { font-size: clamp(2.3rem, 6vw, 4rem); }
-.ac-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem; }
-.ac-stats div { background: var(--ac-panel); border-radius: 20px; padding: 1.25rem 1.5rem; display: grid; gap: 0.2rem; }
-.ac-stats b { font-size: 2.4rem; font-weight: 500; line-height: 1; }
-.ac-stats span { color: var(--ac-muted); }
-.ac-stats div:first-child b { color: var(--ac-blue-soft); }
-.ac-stats div:last-child b { color: var(--ac-orange); }
-
-.ac-card { background: var(--ac-panel); border-radius: 20px; padding: 1.4rem; display: grid; gap: 0.7rem; }
-.ac-card--link { text-decoration: none; transition: background 0.15s; }
-.ac-card--link:hover { background: var(--ac-panel-2); }
-.ac-card__top { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; flex-wrap: wrap; }
-.ac-meta { margin: 0.4rem 0 0; display: grid; gap: 0.35rem; }
-.ac-meta div { display: flex; gap: 0.6rem; font-size: 0.92rem; }
-.ac-meta dt { color: var(--ac-muted); min-width: 64px; }
-.ac-meta dd { margin: 0; }
-.ac-meta--stack { margin-bottom: 1.75rem; }
-.ac-meta--stack dt { min-width: 150px; }
-
-.ac-list { list-style: none; margin: 0; padding: 0; display: grid; }
-.ac-list li { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.9rem 0; border-bottom: 1px solid var(--ac-line); }
-.ac-list__main { display: grid; gap: 0.15rem; text-decoration: none; }
-.ac-deadline { color: var(--ac-orange); font-weight: 500; white-space: nowrap; }
-
-.ac-chip { padding: 0.2rem 0.75rem; border-radius: 999px; background: var(--ac-panel-2); font-size: 0.82rem; }
 .ac-badge { padding: 0.25rem 0.8rem; border-radius: 999px; font-size: 0.82rem; font-weight: 500; white-space: nowrap; background: var(--ac-panel-2); }
-
-/* Ažurirane klase za bedževe (engleski statusi) */
 .ac-badge--predana, .ac-badge--opp-preparation, .ac-badge--opp-finished { color: var(--ac-muted); }
 .ac-badge--u_pregledu, .ac-badge--opp-selection { color: var(--ac-blue-soft); background: rgba(51, 80, 255, 0.18); }
 .ac-badge--potrebna_dopuna { color: var(--ac-warn); background: rgba(245, 185, 66, 0.16); }
 .ac-badge--prihvacena, .ac-badge--opp-open { color: var(--ac-good); background: rgba(62, 207, 142, 0.16); }
 .ac-badge--odbijena, .ac-badge--opp-closed { color: var(--ac-bad); background: rgba(255, 107, 107, 0.16); }
 
-.ac-alert { background: rgba(255, 92, 58, 0.14); border-radius: 16px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
-.ac-note { border-radius: 14px; padding: 0.9rem 1.1rem; display: grid; gap: 0.4rem; justify-items: start; }
-.ac-note--good { background: rgba(62, 207, 142, 0.12); }
-.ac-note--warn { background: rgba(245, 185, 66, 0.12); }
-.ac-note--bad { background: rgba(255, 107, 107, 0.12); }
+/* --- 7. KARTICE, FILTERI, POPISI --- */
+.ac-filters {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem;
+  padding: 1rem; margin-bottom: 2rem;
+  background: var(--ac-panel); border: 1px solid var(--ac-line); border-radius: 20px;
+}
+.ac-filters .ac-input { width: auto; flex: 0 1 190px; padding: 0.65rem 1rem; border-radius: 999px; }
+.ac-filters .ac-input--grow { flex: 1 1 260px; }
+.ac-filters select.ac-input { cursor: pointer; }
+.ac-filters .ac-check {
+  padding: 0.65rem 1rem; border: 1px solid var(--ac-line); border-radius: 999px;
+  font-size: 0.92rem; user-select: none; transition: background 0.15s;
+}
+.ac-filters .ac-check:hover { background: var(--ac-panel-2); }
+.ac-filters .ac-check input { accent-color: var(--ac-blue); width: 16px; height: 16px; }
 
-.ac-filters { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-bottom: 1.5rem; }
-.ac-filters select.ac-input { width: auto; }
-.ac-tabs { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-.ac-tabs button { padding: 0.45rem 1rem; border-radius: 999px; border: 1px solid var(--ac-line); background: transparent; color: var(--ac-muted); font: inherit; cursor: pointer; }
-.ac-tabs button.is-active { background: var(--ac-text); color: var(--ac-bg); border-color: var(--ac-text); }
+.ac-card {
+  background: var(--ac-panel); border: 1px solid var(--ac-line);
+  border-radius: 20px; padding: 1.4rem; display: grid; gap: 0.7rem; align-content: start;
+}
+.ac-card--link { transition: transform 0.15s, border-color 0.15s, background 0.15s; }
+.ac-card--link:hover { transform: translateY(-3px); border-color: var(--ac-blue-soft); background: var(--ac-panel-2); }
+.ac-card h3 { font-size: 1.2rem; line-height: 1.25; }
+.ac-card__top { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; flex-wrap: wrap; }
+.ac-chip { padding: 0.25rem 0.8rem; border-radius: 999px; background: var(--ac-panel-2); font-size: 0.82rem; }
 
-.ac-steps { list-style: none; margin: 0.3rem 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; }
-.ac-steps li { padding-top: 0.6rem; border-top: 4px solid var(--ac-line); font-size: 0.85rem; color: var(--ac-muted); }
-.ac-steps li.is-done { border-color: var(--ac-blue); color: var(--ac-text); }
+.ac-meta { margin: 0.5rem 0 0; padding-top: 0.8rem; border-top: 1px solid var(--ac-line); display: grid; gap: 0.4rem; }
+.ac-meta div { display: flex; gap: 0.6rem; font-size: 0.92rem; }
+.ac-meta dt { color: var(--ac-muted); min-width: 64px; }
+.ac-meta dd { margin: 0; }
+.ac-meta--stack { margin-bottom: 1.75rem; }
+.ac-meta--stack dt { min-width: 150px; }
 
-.ac-map { width: 100%; height: 360px; border: 0; border-radius: 20px; background: var(--ac-panel); }
+.ac-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1rem; }
+.ac-grid--works { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+.ac-stack { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
 
 .ac-work { background: var(--ac-panel); border-radius: 20px; overflow: hidden; }
-.ac-work__img {
-  position: relative; aspect-ratio: 4 / 3; background: var(--ac-blue) center / cover; display: grid; place-items: center;
-  font-size: 4rem; font-weight: 500; color: rgba(255, 255, 255, 0.85);
-}
+.ac-work__img { position: relative; aspect-ratio: 4 / 3; background: var(--ac-blue) center / cover; display: grid; place-items: center; font-size: 4rem; font-weight: 500; color: rgba(255, 255, 255, 0.85); }
 .ac-work:nth-child(3n + 2) .ac-work__img { background-color: var(--ac-orange); }
 .ac-work:nth-child(3n) .ac-work__img { background-color: var(--ac-panel-2); color: var(--ac-muted); }
 .ac-work__body { padding: 1rem 1.1rem 1.2rem; display: grid; gap: 0.5rem; }
 .ac-pill { position: absolute; top: 0.7rem; left: 0.7rem; font-size: 0.78rem; padding: 0.2rem 0.65rem; border-radius: 999px; background: rgba(19, 20, 24, 0.8); color: #f5f5f5; }
 .ac-pill.is-public { background: var(--ac-orange); color: #fff; }
+.ac-preview { width: 100%; max-height: 220px; object-fit: cover; border-radius: 14px; }
 
+.ac-note { border-radius: 14px; padding: 0.9rem 1.1rem; display: grid; gap: 0.4rem; justify-items: start; }
+.ac-note strong { font-weight: 600; }
+.ac-note--good { background: rgba(62, 207, 142, 0.12); border: 1px solid rgba(62, 207, 142, 0.3); }
+.ac-note--warn { background: rgba(245, 185, 66, 0.12); border: 1px solid rgba(245, 185, 66, 0.3); }
+.ac-note--bad { background: rgba(255, 107, 107, 0.12); border: 1px solid rgba(255, 107, 107, 0.3); }
+
+.ac-empty {
+  text-align: center; padding: 3rem 1rem; border: 1px dashed var(--ac-line);
+  border-radius: 20px; display: grid; gap: 0.6rem; justify-items: center;
+}
+.ac-empty p { color: var(--ac-muted); }
+
+/* Detalj prilike */
+.ac-cols--detail { display: grid; grid-template-columns: 1.1fr 1fr; gap: 2rem; align-items: start; margin-top: 1.5rem; }
+.ac-map { width: 100%; height: 360px; border: 0; border-radius: 20px; background: var(--ac-panel); }
+
+/* --- 8. PROFIL I PRIJAVE (accordion) --- */
+.ac-profile-header { display: flex; align-items: center; gap: 2.5rem; margin-bottom: 3rem; padding: 1rem 0; }
+.ac-avatar-wrapper { position: relative; width: 150px; height: 150px; border-radius: 50%; cursor: pointer; flex-shrink: 0; overflow: hidden; border: 2px solid var(--ac-line); background: var(--ac-panel-2); }
+.ac-avatar-img { width: 100%; height: 100%; object-fit: cover; }
+.ac-avatar-placeholder { width: 100%; height: 100%; display: grid; place-items: center; font-size: 4rem; font-weight: 500; color: var(--ac-muted); }
+.ac-avatar-overlay { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.6); color: white; display: grid; place-items: center; font-size: 0.85rem; font-weight: 500; opacity: 0; transition: opacity 0.2s; }
+.ac-avatar-wrapper:hover .ac-avatar-overlay { opacity: 1; }
+.ac-profile-info { display: flex; flex-direction: column; gap: 0.5rem; }
+.ac-profile-stats { display: flex; gap: 1.5rem; margin: 0.5rem 0; font-size: 0.95rem; }
+.ac-profile-stats strong { font-weight: 600; color: var(--ac-text); }
+.ac-bio { margin: 0; font-size: 0.95rem; line-height: 1.4; white-space: pre-wrap; }
+.ac-profile-actions { display: flex; gap: 1rem; margin-top: 1rem; margin-bottom: 2.5rem; width: 100%; }
+.ac-btn--block { width: 100%; background: var(--ac-panel-2); border: 1px solid var(--ac-line); color: var(--ac-text); font-weight: 600; padding: 0.8rem 1rem; font-size: 1rem; border-radius: 999px; cursor: pointer; transition: background 0.15s; }
+.ac-btn--block:hover { background: var(--ac-line); }
+
+/* Accordion za prijave */
+.ac-card--collapsible { padding: 0; overflow: hidden; gap: 0; }
+.ac-card--collapsible h3 { margin: 0; }
+.ac-card__header-click { padding: 1.4rem; cursor: pointer; display: flex; flex-direction: column; gap: 0.7rem; transition: background 0.15s; }
+.ac-card__header-click:hover { background: var(--ac-panel-2); }
+.ac-card__details { padding: 1.4rem; border-top: 1px dashed var(--ac-line); display: flex; flex-direction: column; gap: 0.75rem; animation: slideDown 0.2s ease-out; }
+.ac-card__details p { margin: 0; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Tabovi za prijave */
+.ac-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.ac-tabs button { padding: 0.5rem 1rem; border-radius: 999px; border: 1px solid var(--ac-line); background: transparent; color: var(--ac-muted); font: inherit; cursor: pointer; transition: all 0.2s; }
+.ac-tabs button:hover { background: var(--ac-panel-2); }
+.ac-tabs button.is-active { background: var(--ac-text); color: var(--ac-bg); border-color: var(--ac-text); }
+
+/* --- 9. MODALI I FORME --- */
 .ac-overlay { position: fixed; inset: 0; z-index: 50; background: rgba(0, 0, 0, 0.6); display: grid; place-items: center; padding: 1rem; overflow-y: auto; }
 .ac-modal { width: min(560px, 100%); max-height: 92vh; overflow-y: auto; background: var(--ac-panel); border-radius: 24px; padding: 1.5rem; }
 .ac-modal__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
@@ -191,46 +299,24 @@ textarea.ac-input { resize: vertical; }
 .ac-form label.ac-check { display: inline-flex; color: var(--ac-text); }
 .ac-form fieldset { border: 1px solid var(--ac-line); border-radius: 16px; padding: 0.75rem 1rem 1rem; margin: 0; }
 .ac-form legend { padding: 0 0.5rem; color: var(--ac-muted); }
-.ac-preview { width: 100%; max-height: 220px; object-fit: cover; border-radius: 14px; }
 
-.ac-empty { text-align: center; padding: 2.5rem 1rem; border: 1px dashed var(--ac-line); border-radius: 20px; display: grid; gap: 0.6rem; justify-items: center; }
-
+/* --- 10. RESPONZIVNOST --- */
 @media (max-width: 860px) {
   .ac-shell { grid-template-columns: 1fr; }
   .ac-side { position: static; height: auto; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-right: 0; border-bottom: 1px solid var(--ac-line); }
-  .ac-nav { flex-direction: row; overflow-x: auto; order: 3; width: 100%; margin: 0; justify-content: center; }
-  .ac-nav a { white-space: nowrap; padding: 0.5rem 0.9rem; width: 46px; height: 46px; }
+  .ac-brand { margin-bottom: 0; }
+  .ac-nav { flex: none; justify-content: flex-start; flex-direction: row; overflow-x: auto; width: 100%; margin: 0; }
+  .ac-nav a { white-space: nowrap; padding: 0.5rem 0.9rem; }
   .ac-theme { margin: 0 0 0 auto; }
-  .ac-cols, .ac-cols--detail { grid-template-columns: 1fr; }
-  .ac-stats { grid-template-columns: 1fr; }
-}
 
-.ac-profile-header { display: flex; align-items: center; gap: 2.5rem; margin-bottom: 3rem; padding: 1rem 0; }
-.ac-avatar-wrapper { position: relative; width: 150px; height: 150px; border-radius: 50%; cursor: pointer; flex-shrink: 0; overflow: hidden; border: 2px solid var(--ac-line); background: var(--ac-panel-2); }
-.ac-avatar-img { width: 100%; height: 100%; object-fit: cover; }
-.ac-avatar-placeholder { width: 100%; height: 100%; display: grid; place-items: center; font-size: 4rem; font-weight: 500; color: var(--ac-muted); }
-.ac-avatar-overlay { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.6); color: white; display: grid; place-items: center; font-size: 0.85rem; font-weight: 500; opacity: 0; transition: opacity 0.2s; }
-.ac-avatar-wrapper:hover .ac-avatar-overlay { opacity: 1; }
-.ac-profile-info { display: flex; flex-direction: column; gap: 0.5rem; }
-.ac-profile-title h2 { font-size: 1.5rem; font-weight: 500; margin: 0; }
-.ac-profile-stats { display: flex; gap: 1.5rem; margin: 0.5rem 0; font-size: 0.95rem; }
-.ac-profile-stats strong { font-weight: 600; color: var(--ac-text); }
-.ac-bio { margin: 0; font-size: 0.95rem; line-height: 1.4; white-space: pre-wrap; }
-.ac-link { color: var(--ac-blue-soft); text-decoration: none; font-size: 0.95rem; font-weight: 500; }
-.ac-link:hover { text-decoration: underline; }
+  .ac-main { padding: 1rem; }
+  .ac-top-bar { margin-bottom: 1rem; }
 
-@media (max-width: 600px) {
+  .ac-filters .ac-input { flex: 1 1 100%; }
+  .ac-cols--detail { grid-template-columns: 1fr; }
+  .ac-stats-grid { grid-template-columns: 1fr; }
   .ac-profile-header { flex-direction: column; text-align: center; gap: 1.5rem; }
-  .ac-profile-stats { justify-content: center; }
-  .ac-profile-title { justify-content: center; }
+  .ac-profile-stats, .ac-profile-title { justify-content: center; }
 }
 
-.ac-profile-actions { display: flex; gap: 1rem; margin-top: 1rem; margin-bottom: 2.5rem; width: 100%; }
-.ac-btn--block { width: 100%; background: var(--ac-panel-2); border: 1px solid var(--ac-line); color: var(--ac-text); font-weight: 600; padding: 0.8rem 1rem; font-size: 1rem; border-radius: 999px; cursor: pointer; transition: background 0.15s; }
-.ac-btn--block:hover { background: var(--ac-line); }
-
-.ac-card--collapsible { padding: 0; overflow: hidden; }
-.ac-card__header-click { padding: 1.4rem; cursor: pointer; display: flex; flex-direction: column; gap: 0.7rem; transition: background 0.15s; }
-.ac-card__header-click:hover { background: var(--ac-panel-2); }
-.ac-card__details { padding: 0 1.4rem 1.4rem 1.4rem; border-top: 1px dashed var(--ac-line); margin-top: 0.5rem; padding-top: 1.4rem; display: flex; flex-direction: column; gap: 0.75rem; animation: slideDown 0.2s ease-out; }
-@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .ac * { transition: none !important; animation: none !important; } }
