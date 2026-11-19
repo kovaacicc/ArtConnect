@@ -57,50 +57,22 @@
 
 | ID    | Tip          | Opis ograničenja ili pretpostavke               | Izvor               | Inženjerska posljedica / Provjera        |
 | ----- | ------------ | ----------------------------------------------- | ------------------- | ---------------------------------------- |
-| C-01  | Ograničenje  | [Fiksni tehnički ili procesni uvjet]            | [Zadatak / Pravila] | [Utjecaj na arhitekturu i oblikovanje]   |
-| AS-01 | Pretpostavka | [Očekivani uvjet (npr. o podacima ili okolini)] | [Procjena tima]     | [Kako i kada će se provjeriti valjanost] |
-|       |              |                                                 |                     |
-
-<details>
-<summary><strong>Ograničenja nasuprot pretpostavkama</strong></summary>
-
-Ograničenje je uvjet koji tim mora poštovati; pretpostavka je uvjet na koji se tim oslanja i koji treba ponovno provjeravati.
-
-**Primjer — projektni kontekst CrisisMapa:**
-
-| ID    | Ograničenje ili pretpostavka                                                                 | Izvor                   | Posljedica ili način provjere                                                                                             |
-| ----- | -------------------------------------------------------------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| C-01  | Odobreni zadatak zahtijeva OAuth prijavu u sustav za uređivanje vlastitih prijava korisnika. | Odobreni zadatak        | Zaštićeno uređivanje projektirati oko odabranog pružatelja identiteta; provjeriti autorizirane i neautorizirane zahtjeve. |
-| AS-01 | Prijave koje se prikazuju na karti imaju uporabive koordinate.                               | Pretpostavka o podacima | Pregledati ogledne i uvezene prijave; planirati prikaz prijava bez valjanih koordinata.                                   |
-
-**Ograničenje nasuprot pretpostavci:** C-01 navodi obvezujuću odluku i njezin arhitekturni učinak; AS-01 je moguće provjeriti i može se pokazati netočnim. Nemojte kopirati C-01 ako OAuth nije dio stvarnog odobrenog zadatka. Projektni odgovor objasnite u arhitekturi bez prepisivanja ove tablice.
-
-</details>
-
----
+| C-01  | Ograničenje  | Registracija i prijava ostvaruju se isključivo putem Google OAuth. | Zadatak | Prijava preko django-allauth, bez korisničkih lozinki. Provjera: testovi registracije i prijave. |
+| C-02  | Ograničenje  | Sav promet u produkciji ide preko HTTPS-a. Google OAuth prihvaća `http://` samo za `localhost`. | Pravila Googlea | nginx server s Let's Encrypt certifikatom. Odvojene Docker Compose konfiguracije za razvoj (HTTP) i produkciju (HTTPS). |
+| C-03  | Ograničenje  | Frontend i API moraju dijeliti isti izvor jer autentifikacija koristi sesijski kolačić i CSRF zaglavlje. | Tehnička odluka | nginx poslužuje frontend i prosljeđuje `/api`, `/admin` i `/oauth` na Django backend. Frontend šalje `X-CSRFToken`. Provjera: testovi s uključenom CSRF provjerom. |
+| C-04  | Ograničenje  | Google Maps JavaScript API učitava se u pregledniku pa je API ključ javno vidljiv. | Ograničenje Google API-ja | Ključ ograničiti po referreru i API-jima, zasebni ključevi za produkciju i lokalno okruženje. |
+| AS-01 | Pretpostavka | Korisnik ima jednu ulogu (umjetnik ili organizator) i ne mijenja je nakon registracije. | Odluka tima | Ponovna registracija vraća 409, ulogu mijenja samo administrator. Provjera: test ponovne registracije. |
+| AS-02 | Pretpostavka | Organizator može izrađivati pripreme, ali objaviti priliku tek nakon odobrenja administratora. | Odluka tima | `approved=false` po zadanom, otvaranje prilike vraća 403 dok organizator nije odobren od strane administratora. Provjera: test objave neodobrenog organizatora. |
+| AS-03 | Pretpostavka | Google vraća verificiranu e-poštu prilikom registracije | Procjena tima | E-pošta se ne verificira zasebno. |
+| AS-04 | Pretpostavka | Adrese prilika mogu se geokodirati. | Procjena o podacima | Koordinate su opcionalne, a karta se skriva bez njih. Provjera: ručni test s neuobičajenim adresama. |
+| AS-05 | Pretpostavka | Jedna VM s Gunicornom podnosi 100 istodobnih korisnika uz odziv ispod 2 s. | Procjena tima | Provjera: test opterećenja. |
 
 ## 2.5 Značajne promjene zahtjeva
-
-**Cilj:** Sačuvati razlog promjena koje mijenjaju dogovoreni opseg, prioritet ili kriterije prihvaćanja, uz istodobno održavanje prethodnih zahtjeva ažurnima.
 
 | Datum | ID zahtjeva | Promjena i razlog | Dogovoreno s / dokaz |
 | ----- | ----------- | ----------------- | -------------------- |
 |       |             |                   |                      |
 
-<details>
-<summary><strong>Bilježenje značajne promjene</strong></summary>
-
-**Primjer scenarija — odluka tijekom pregleda CrisisMapa:**
-
-| Datum            | ID zahtjeva  | Promjena i razlog                                                                                                                                    | Dogovoreno s / dokaz                                      |
-| ---------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| [Datum pregleda] | F-004, NF-01 | Dodati ručni odabir lokacije kada korisnik odbije geolokaciju preglednika; bez toga građanin ne može podnijeti prijavu kriznog događaja s lokacijom. | [Poveznica na stvarnu bilješku pregleda ili zadatak tima] |
-
-**Razlog promjene:** Zapis navodi zahvaćene stavke i objašnjava razlog iz perspektive korisnika, a zatim upućuje na dokaz odluke. Nakon stvarne odluke ažurirajte trenutačne zahtjeve; stilska izmjena teksta ne zahtijeva zapis u dnevniku promjena. Trenutačni red zadataka držite u alatu za praćenje zadataka.
-
-</details>
-
----
 
 ## 2.6 Sljedivost zahtjeva
 
