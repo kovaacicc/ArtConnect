@@ -1,0 +1,184 @@
+' ==============================================================================
+' @file 4-3-artconnect-portfolio-CD.puml
+' @brief Structural class diagram of the artist portfolio, representative part.
+'
+' @details
+' This artifact models the core responsibilities, entity relationships and access
+' control rules for the representative portfolio operations: edditing one's own portfolio,
+' adding artworks and displaying a public portfolio to other users. It enforces strict 
+' ownership and visibility rules by defining the one-to-many relationship between a portfolio 
+' and its artworks and specifying where access constraints are applied.
+'
+' Architectural Scope & Rationale:
+' This model is explicitly scoped to the structural design of the portfolio domain. 
+' It establishes clear architectural boundaries by categorizing components 
+' into the Application Layer (views, serializers, and permissions that orchestrate
+' workflows and enforce rules) and the Domain Layer (data-holding entities). 
+' Persistence is delegated directly to the Django ORM rather than an abstracted repository interface.
+' Only elements essential to these responsibilities are shown, as secondary views, serializers,
+' artwork files, and exhibitions adhere to the same pattern, with full data persistence
+' covered in the ER diagram (4.2).
+'
+' System Requirements Addressed:
+' This model dictates the software implementation by defining:
+' - The core profile and portfolio update workflows.
+' - The visibility rules for adding artworks and managing their public or private status.
+' - The structural filtering constraints required to display exclusively public artworks 
+' on the public portfolio interface.
+'
+' Author(s): Klara Vlašić
+' Context: Software Engineering Course
+'
+' AI Usage Disclosure:
+' Designed by Klara Vlašić. AI-assisted revision and documentation comments were
+' reviewed by the author, who is responsible for the final content.
+'
+' Traceability Note:
+' The structural properties, methods, and relationships defined herein must 
+' strictly map to the finalized object-oriented source code. Any deviations 
+' introduced during development must be retroactively updated in this model 
+' to maintain evidence chain completeness.
+'
+' Diagram level: Structural / Domain Design
+' Diagram type:  Class Diagram
+' ==============================================================================
+@startuml
+skinparam linetype ortho
+skinparam nodesep 40
+skinparam ranksep 40
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam packageStyle rectangle
+
+' ==============================================================================
+' Application Layer 
+' Orchestrates use cases and delegates to the domain.
+' ==============================================================================
+package "Application Layer" {
+
+  class IsArtist <<Permission>> {
+    +has_permission(request, view): boolean
+  }
+
+  class MyPortfolioView <<View>> {
+    +get_object(): ArtistProfile
+    +get(): Response
+    +patch(data): Response
+  }
+
+  class ArtworkListCreateView <<View>> {
+    +get_queryset(): Artwork[0..*]
+    +perform_create(serializer): void
+  }
+
+  class PublicArtistView <<View>> {
+    +get_queryset(): ArtistProfile[0..*]
+    +get(): Response
+  }
+
+  class MyPortfolioSerializer <<Serializer>> {
+    +get_participations(profile): List
+  }
+
+  class PublicArtistSerializer <<Serializer>> {
+    +get_art_fields(profile): ArtField[0..*]
+    +get_artworks(profile): Artwork[0..*]
+    +get_participations(profile): List
+  }
+
+}
+
+' ==============================================================================
+' Domain Layer 
+' Encapsulates core business state, rules, and logic.
+' ==============================================================================
+package "Domain Layer" {
+
+  class User <<Entity>> {
+    +role: Role
+    +is_active: boolean
+  }
+
+  class ArtistProfile <<Entity>> <<Portfolio>> {
+    +portfolio_public: boolean
+  }
+
+  class Artwork <<Entity>> {
+    +title: String
+    +is_public: boolean
+  }
+
+  class ArtField <<Entity>> {
+    +name: String
+    +active: boolean
+  }
+
+  class ArtistField <<Association>>
+
+}
+
+' ==============================================================================
+' Structural Relationships & Multiplicities
+' ==============================================================================
+
+' Domain: one portfolio has many artworks (deleting the owner deletes the artworks)
+User "1" -- "0..1" ArtistProfile : is >
+ArtistProfile "1" *-- "0..*" Artwork : portfolio contains >
+
+' Many-to-many between artists and art fields through ArtistField
+ArtistProfile "1" -- "0..*" ArtistField : works in >
+ArtField "1" -- "0..*" ArtistField : groups >
+
+' Application Layer: a view uses a serializer and is guarded by a permission
+MyPortfolioView "1" --> "1" MyPortfolioSerializer : serializes with >
+PublicArtistView "1" --> "1" PublicArtistSerializer : serializes with >
+MyPortfolioView ..> IsArtist : requires >
+ArtworkListCreateView ..> IsArtist : requires >
+
+' Application Layer dependencies on the Domain
+MyPortfolioView ..> ArtistProfile : edits own >
+ArtworkListCreateView ..> Artwork : lists / creates own >
+PublicArtistView ..> ArtistProfile : reads public >
+PublicArtistView ..> User : filters is_active >
+MyPortfolioSerializer ..> ArtistProfile
+PublicArtistSerializer ..> ArtistProfile
+PublicArtistSerializer "1" ..> "0..*" Artwork : shows public >
+PublicArtistSerializer "1" ..> "0..*" ArtField : shows active >
+
+' ==============================================================================
+'  Constraints
+' ==============================================================================
+
+note left of ArtistProfile
+  Portfolio:
+  in the code the portfolio is represented by ArtistProfile.
+  One portfolio has 0..* Artwork.
+  portfolio_public makes the whole portfolio visible,
+  is_public does the same for a single artwork.
+end note
+
+note right of PublicArtistView
+  Visibility rules:
+  - only logged-in users
+  - profile visible only if
+    portfolio_public = true AND user.is_active = true
+  - artworks shown only if is_public = true
+    (filtered in PublicArtistSerializer.get_artworks)
+  - art fields shown only if active = true
+    (filtered in PublicArtistSerializer.get_art_fields)
+end note
+
+note bottom of ArtworkListCreateView
+  Ownership:
+  - get_queryset returns only the logged-in artist's artworks
+  - perform_create sets the artist from the login
+end note
+
+note left of MyPortfolioView
+  PATCH only (no PUT).
+  Works while portfolio_public = false;
+  the artist publishes the portfolio here.
+end note
+
+
+@enduml

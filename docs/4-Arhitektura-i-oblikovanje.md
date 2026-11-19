@@ -49,8 +49,6 @@ Dijagram prikazuje logičku podjelu ArtConnecta na komponente, njihove veze i va
 
 ## 4.3 Podaci i detaljno oblikovanje
 
-**Cilj:** Objasniti važne informacije koje aplikacija pohranjuje i jedno reprezentativno područje oblikovanja na razini razreda. Model podataka i UML dijagram razreda odgovaraju na različita pitanja; jedno ne zamjenjuje drugo.
-
 ### 4.3.1 ER dijagram i model podataka
 
 Dijagram prikazuje važne pohranjene entitete platforme ArtConnect, njihove identifikatore i veze te dovoljno atributa za razumijevanje podataka aplikacije.
@@ -60,30 +58,19 @@ Dijagram prikazuje važne pohranjene entitete platforme ArtConnect, njihove iden
 **Slika 4.2. ER dijagram podataka za ArtConnect**
 
 **Izvor dijagrama:** [izvor](./puml/4-2-artconnect-data-ERD.puml)  
-**Implementacija:** [Navedite gdje je odgovarajući model podataka definiran u projektu.]
+**Implementacija:** Entiteti su implementirani kao Django modeli u `models.py` datotekama pojedinih aplikacija:
+- [users/models.py](../backend/users/models.py): `User`, `ArtistProfile`, `OrganizerProfile`
+- [portfolio/models.py](../backend/portfolio/models.py): `Artwork`, `ArtworkFile`, `PastExhibition`,`ArtField`, `ArtistField`
+- [opportunities/models.py](../backend/opportunities/models.py): `Opportunity`, `Application`, `ApplicationArtwork`, `ApplicationMaterial`, `CalendarEntry`
+- [administration/models.py](../backend/administration/models.py): `SystemSetting`, `SearchCriterion`
 
 ### 4.3.2 Reprezentativni UML dijagram razreda
 
-**Cilj:** Prije implementacije reprezentativnog dijela sustava modelirati i prikazati razrede ili sučelja potrebna za dodjelu odgovornosti, operacija i veza. Oblikovanje ažurirajte kada se te odluke promijene.
+Dijagram prikazuje odgovornosti za uređivanje vlastitog portfolija, dodavanje djela i javni prikaz portfolija. Pravila o tome tko što smije raditi i što se prikazuje drugim korisnicima podijeljena su između komponenti Permission, View i Serializer.
 
-**Dijagram razreda:** [Ugradite čitljiv UML dijagram razreda za reprezentativni dio oblikovanja.]  
-**PlantUML izvor:** [Poveznica na odgovarajuću `.puml` datoteku.]  
-**Referenca na kod pri završnom pregledu:** [Poveznica na odgovarajuću implementaciju.]
-
-<details>
-<summary><strong>Oblikovanje odgovornosti prijave i dopuštenih promjena</strong></summary>
-
-**Primjer — CrisisMap:** Prijava sadrži pravila za promjenu vlastitog statusa. Razred tijeka rada koordinira podnošenje i pregled, dok sučelje repozitorija opisuje potrebne operacije trajne pohrane. Dijagram predlaže te odgovornosti prije implementacije.
-
-![Dijagram razreda za obradu prijava kriznih događaja](./assets/diagrams/4-3-crisismap-domain-CD.svg)
-
-**Slika 4.3. Dijagram razreda za obradu prijava kriznih događaja**
-
-**PlantUML izvor:** [izvor](./puml/4-3-crisismap-domain-CD.puml)
-
-**Analiza primjera:** `DisasterReport` sadrži dopuštena pravila promjene stanja pa tijek rada ne može prešutno odobriti već odbijenu prijavu. `ReportWorkflow` koordinira operaciju bez preuzimanja pravila prijelaza stanja same prijave; `ReportRepository` definira potrebne operacije pohrane. Kompozicija `Location` i odabrani tipovi prikazuju veze korisne za oblikovanje. Dijagram namjerno izostavlja stupce baze podataka i nepovezane razrede: ER model objašnjava pohranjene podatke, dok ovaj dijagram dodjeljuje programske odgovornosti i operacije. Ti su razredi odluka oblikovanja, a ne obavezni slojevi za svaki tim. Završnu implementaciju usporedite s početnim oblikovanjem i ažurirajte dijagram tamo gdje su se odluke promijenile; generiranje dijagrama iz koda tek na kraju ne može zamijeniti ovo početno modeliranje.
-
-</details>
+**Dijagram razreda:** ![Dijagram razreda portfolija](./assets/diagrams/4-3-artconnect-portfolio-CD.svg)
+**PlantUML izvor:** [izvor](./puml/4-3-artconnect-portfolio-CD.puml) 
+**Referenca na kod pri završnom pregledu:** [views.py](../backend/portfolio/views.py), [serializers.py](../backend/portfolio/serializers.py), [permissions.py](../backend/portfolio/permissions.py), [models.py](../backend/portfolio/models.py), [users/models.py](../backend/users/models.py)
 
 ## 4.4 Ponašanje tijekom izvođenja
 
