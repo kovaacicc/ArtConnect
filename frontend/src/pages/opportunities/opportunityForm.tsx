@@ -66,7 +66,7 @@ function toInput(v: Values): OpportunityInput {
     age_criteria: v.age_criteria.trim(),
     reward: v.reward.trim(),
   }
-  if (v.deadline) input.deadline = v.deadline
+  input.deadline = v.deadline || null
   return input
 }
 
@@ -118,7 +118,9 @@ export default function OpportunityForm() {
     if (deadlineChanged && values.deadline && values.deadline < todayIso()) {
       e.deadline = 'Rok ne može biti u prošlosti.'
     }
-    if (original?.deadline && !values.deadline) e.deadline = 'Rok se ne može ukloniti, samo promijeniti.'
+    if (published && original?.deadline && !values.deadline) {
+      e.deadline = 'Rok se nakon objave ne može ukloniti, samo promijeniti.'
+    }
     const now = nowDateTimeLocal()
     const startsChanged = values.starts_at !== toDateTimeLocal(original?.starts_at ?? null)
     const endsChanged = values.ends_at !== toDateTimeLocal(original?.ends_at ?? null)
