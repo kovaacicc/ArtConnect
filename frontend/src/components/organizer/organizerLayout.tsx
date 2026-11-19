@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { ChartColumn, CirclePlus, FolderOpen, House, LayoutDashboard,  Moon, Sparkles, Sun } from 'lucide-react'
 import Logo from '../Logo'
-import { logout } from '../../services/auth'
+import { getMe, logout } from '../../services/auth'
 import '../../pages/artist/artist.css'
 import '../../opportunities.css'
 
@@ -19,6 +19,17 @@ export default function OrganizerLayout() {
 
   const navigate = useNavigate()
 
+  const [allowed, setAllowed] = useState(false)
+
+  useEffect(() => {
+    getMe()
+      .then((user) => {
+        if (user.role === 'organizer') setAllowed(true)
+        else navigate('/', { replace: true })   
+      })
+      .catch(() => navigate('/', { replace: true })) 
+  }, [navigate])
+
   async function handleLogout() {
     await logout().catch(() => {})
     navigate('/', { replace: true })
@@ -34,6 +45,8 @@ export default function OrganizerLayout() {
     }
     setLight(!light)
   }
+
+    if (!allowed) return <main className="loading" aria-busy="true" />
 
   return (
     <div className="ac ac-shell">
