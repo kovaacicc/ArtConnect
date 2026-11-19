@@ -24,7 +24,7 @@ Odaberite normalne slučajeve, granične vrijednosti i neuspjehe koji otkrivaju 
 ## 5.2 Ispitni slučajevi
 
  
-Slučajevi CT-01 do CT-60 su automatizirani; u zagradi uz korake naveden je test u repozitoriju koji ih izvodi (CT-01 do CT-19 nalaze se u `users/tests.py`, CT-20 i CT-21 u `portfolio/tests.py`, CT-22 do CT-60 u `opportunities/tests.py`). Slučaj ST-01 izvodi se ručno.
+Slučajevi CT-01 do CT-69 su automatizirani; u zagradi uz korake naveden je test u repozitoriju koji ih izvodi (CT-01 do CT-19 nalaze se u `users/tests.py`, CT-20 i CT-21 u `portfolio/tests.py`, CT-22 do CT-69 u `opportunities/tests.py`). Slučaj ST-01 izvodi se ručno.
  
 | ID ispitnog slučaja | Scenarij ispitivanja | Ulazni podaci | Očekivani rezultat | Stvarni rezultat | Ishod | Koraci ispitivanja |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -88,6 +88,15 @@ Slučajevi CT-01 do CT-60 su automatizirani; u zagradi uz korake naveden je test
 | CT-58 | Komponenta: obrisanu priliku nije moguće ponovno obrisati (F-010) | Već obrisana prilika; novi DELETE. | Odgovor 404. | Kao očekivano. | Prošlo | Obrisati priliku; poslati DELETE ponovno; provjeriti status 404. (`DeleteOpportunityTests.test_deleted_cannot_be_deleted_again`) |
 | CT-59 | Komponenta: tuđu priliku ne može obrisati (F-010) | Prilika prvog organizatora; prijavljen drugi organizator šalje DELETE s obrazloženjem. | 404; prilika nije obrisana. | Kao očekivano. | Prošlo | Prijaviti drugog organizatora; poslati DELETE; provjeriti status 404; ponovno učitati priliku i provjeriti da je `deleted_at` prazan. (`DeleteOpportunityTests.test_other_organizer_gets_404`) |
 | CT-60 | Komponenta: umjetnik ne može brisati prilike (F-010) | Prijavljeni umjetnik šalje DELETE s obrazloženjem. | Odgovor 403. | Kao očekivano. | Prošlo | Prijaviti umjetnika; poslati DELETE; provjeriti status 403. (`DeleteOpportunityTests.test_artist_gets_403`) |
+| CT-61 | Komponenta: prilika bez roka dopuštena kao nacrt (F-007) | POST s valjanim podacima i `deadline: null`. | 201; prilika je spremljena kao nacrt. | Kao očekivano. | Prošlo | Poslati priliku s `deadline` null; provjeriti status 201. (`CreateOpportunityTests.test_null_deadline_is_accepted_for_draft`) |
+| CT-62 | Komponenta: početak događaja u prošlosti (F-007) | Valjani podaci s `starts_at` od jučer. | 400 s porukom uz `starts_at`. | Kao očekivano. | Prošlo | Poslati priliku s jučerašnjim `starts_at`; provjeriti status 400 i poruku uz `starts_at`. (`CreateOpportunityTests.test_starts_at_in_past_returns_400`) |
+| CT-63 | Komponenta: završetak događaja u prošlosti (F-007) | Valjani podaci s `ends_at` od jučer. | 400 s porukom uz `ends_at`. | Kao očekivano. | Prošlo | Poslati priliku s jučerašnjim `ends_at`; provjeriti status 400 i poruku uz `ends_at`. (`CreateOpportunityTests.test_ends_at_in_past_returns_400`) |
+| CT-64 | Komponenta: vrijeme događaja u budućnosti (F-007) | Valjani podaci s `starts_at` za 40 dana i `ends_at` dva sata kasnije. | Odgovor 201. | Kao očekivano. | Prošlo | Poslati priliku s budućim početkom i završetkom; provjeriti status 201. (`CreateOpportunityTests.test_future_event_time_is_accepted`) |
+| CT-65 | Komponenta: izmjena roka u prošlost (F-010) | Prilika `open`; PATCH s `deadline` od jučer. | 400 s porukom uz `deadline`. | Kao očekivano. | Prošlo | Poslati PATCH s jučerašnjim rokom; provjeriti status 400 i poruku uz `deadline`. (`UpdateOpportunityTests.test_patch_deadline_to_past_returns_400`) |
+| CT-66 | Komponenta: nepromijenjen istekli rok nije greška (F-010) | Prilika `open` s rokom od prije 5 dana; PATCH s istim rokom i novom `address`. | Odgovor 200. | Kao očekivano. | Prošlo | Poslati PATCH s postojećim rokom i novom adresom; provjeriti status 200. (`UpdateOpportunityTests.test_patch_unchanged_expired_deadline_is_accepted`) |
+| CT-67 | Komponenta: objavljenoj prilici se rok ne može ukloniti (F-010) | Prilika `open`; PATCH s `deadline: null`. | 400 s porukom uz `deadline`. | Kao očekivano. | Prošlo | Poslati PATCH s `deadline` null; provjeriti status 400 i poruku uz `deadline`. (`UpdateOpportunityTests.test_published_deadline_cannot_be_removed`) |
+| CT-68 | Komponenta: nacrtu se rok može ukloniti (F-010) | Nacrt s rokom; PATCH s `deadline: null`. | Odgovor 200. | Kao očekivano. | Prošlo | Poslati PATCH s `deadline` null; provjeriti status 200. (`UpdateOpportunityTests.test_draft_deadline_can_be_removed`) |
+| CT-69 | Komponenta: izmjena početka događaja u prošlost (F-010) | Nacrt; PATCH sa `starts_at` od jučer. | 400 s porukom uz `starts_at`. | Kao očekivano. | Prošlo | Poslati PATCH s jučerašnjim `starts_at`; provjeriti status 400 i poruku uz `starts_at`. (`UpdateOpportunityTests.test_patch_event_time_to_past_returns_400`) |
 | ST-01 | Sustav: prijava putem Googlea i dovršetak registracije u pokrenutoj aplikaciji | Prijava Google računom s popisa testnih korisnika; zatim registracija umjetnika. | Nakon povratka, `/api/users/me/` vraća korisnika s `registration_complete: false`; nakon registracije `true`; nakon odjave 401. | Nije pokrenuto. | Nije pokrenuto | Otvoriti `/oauth/google/login/`; prijaviti se; otvoriti `/api/users/me/`; poslati registraciju kroz DRF sučelje; ponovno otvoriti `me`; odjaviti se; ponovno otvoriti `me`. |
 
 
@@ -201,7 +210,7 @@ const assert = require('assert');
 
 **Cilj:** Navesti reviziju aplikacije, okruženje i dokaze potrebne za tumačenje stvarnih rezultata u tablici ispitnih slučajeva. Dodajte kratak zapis izvođenja kada te podatke nije moguće jasno prenijeti poveznicom na kod ispitivanja ili CI izvođenje.
 
-**Najnovije izvođenje ili dokaz:** Najnovije izvođenje: 15. 11. 2026., lokalno u Docker okruženju (Django u kontejneru backend, PostgreSQL 18 u kontejneru db), naredba docker compose run --rm --build backend python3 manage.py test. Rezultat: pronađeno i izvedeno 60 testova, svi prošli (OK), provjera sustava bez primjedbi. Revizija aplikacije: commit ea44017.
+**Najnovije izvođenje ili dokaz:** Najnovije izvođenje: 19. 11. 2026., lokalno u Docker okruženju (Django u kontejneru backend, PostgreSQL 18 u kontejneru db), naredba docker compose -f docker-compose-dev.yaml run --rm --build backend python3 manage.py test. Rezultat: pronađeno i izvedeno 115 testova, svi prošli (OK), provjera sustava bez primjedbi. Revizija aplikacije: commit 34923d1.
 
 Izvođenje u GitHub Actionsu (ci.yml) uspješno.
 

@@ -75,6 +75,31 @@ class CreateOpportunityTests(APITestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIn("deadline", response.data)
 
+    def test_null_deadline_is_accepted_for_draft(self):
+        response = self.post(self.payload(deadline=None))
+        self.assertEqual(response.status_code, 201)
+
+    def test_starts_at_in_past_returns_400(self):
+        past = (timezone.now() - timedelta(days=1)).isoformat()
+        response = self.post(self.payload(starts_at=past))
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("starts_at", response.data)
+
+    def test_ends_at_in_past_returns_400(self):
+        past = (timezone.now() - timedelta(days=1)).isoformat()
+        response = self.post(self.payload(ends_at=past))
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("ends_at", response.data)
+
+    def test_future_event_time_is_accepted(self):
+        start = timezone.now() + timedelta(days=40)
+        response = self.post(self.payload(
+            starts_at=start.isoformat(),
+            ends_at=(start + timedelta(hours=2)).isoformat(),
+        ))
+        self.assertEqual(response.status_code, 201)
+
+
 class ListOpportunitiesTests(APITestCase):
     def setUp(self):
         field = ArtField.objects.create(name="Painting")
@@ -284,6 +309,37 @@ class UpdateOpportunityTests(APITestCase):
         opportunity.refresh_from_db()
         self.assertEqual(opportunity.address, "Nova adresa 5")
         self.assertEqual(opportunity.deadline.isoformat(), new_deadline)
+
+    def test_patch_deadline_to_past_returns_400(self):
+        opportunity = self.make_opportunity(status="open")
+        past = (timezone.localdate() - timedelta(days=1)).isoformat()
+        response = self.patch(opportunity, {"deadline": past})
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("deadline", response.data)
+
+    def test_patch_unchanged_expired_deadline_is_accepted(self):
+        past = timezone.localdate() - timedelta(days=5)
+        opportunity = self.make_opportunity(status="open", deadline=past)
+        response = self.patch(opportunity, {"deadline": past.isoformat(), "address": "Nova"})
+        self.assertEqual(response.status_code, 200)
+
+    def test_published_deadline_cannot_be_removed(self):
+        opportunity = self.make_opportunity(status="open")
+        response = self.patch(opportunity, {"deadline": None})
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("deadline", response.data)
+
+    def test_draft_deadline_can_be_removed(self):
+        opportunity = self.make_opportunity()
+        response = self.patch(opportunity, {"deadline": None})
+        self.assertEqual(response.status_code, 200)
+
+    def test_patch_event_time_to_past_returns_400(self):
+        opportunity = self.make_opportunity()
+        past = (timezone.now() - timedelta(days=1)).isoformat()
+        response = self.patch(opportunity, {"starts_at": past})
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("starts_at", response.data)
 
     def test_published_rejects_other_fields(self):
         opportunity = self.make_opportunity(status="open")

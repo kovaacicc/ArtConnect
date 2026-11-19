@@ -55,6 +55,14 @@ class OpportunitySerializer(serializers.ModelSerializer):
         read_only_fields = ("status", "created_at")
 
     def validate_deadline(self, value):
+        if value is None:
+            # u pripremi rok smije biti prazan, ali objavljenoj prilici ga ne smije se maknuti
+            if self.instance is not None and self.instance.is_published:
+                raise serializers.ValidationError("Deadline cannot be removed after publishing.")
+            return value
+        # nepromijenjen rok se ne provjerava (npr. prilika čiji je rok već istekao)
+        if self.instance is not None and value == self.instance.deadline:
+            return value
         if value < timezone.localdate():
             raise serializers.ValidationError("Deadline cannot be in the past.")
         return value
@@ -70,6 +78,18 @@ class OpportunitySerializer(serializers.ModelSerializer):
             return getattr(self.instance, name, None)
 
         starts_at, ends_at = value("starts_at"), value("ends_at")
+
+        # vrijeme održavanja ne smije biti u prošlosti (samo ako se zadaje ili mijenja)
+        now = timezone.now()
+        for name in ("starts_at", "ends_at"):
+            new_value = attrs.get(name)
+            if new_value is None:
+                continue
+            if self.instance is not None and new_value == getattr(self.instance, name):
+                continue
+            if new_value < now:
+                raise serializers.ValidationError({name: "Cannot be in the past."})
+
         if starts_at and ends_at and ends_at < starts_at:
             raise serializers.ValidationError(
                 {"ends_at": "Event cannot end before it starts."}
