@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { fromDateTimeLocal, toDateTimeLocal, todayIso } from '../../components/opportunities/format'
+import { fromDateTimeLocal, nowDateTimeLocal, toDateTimeLocal, todayIso } from '../../components/opportunities/format'
 import { ApiError, type FieldErrors } from '../../services/api'
 import { geocodeAddress, mapsAvailable } from '../../services/googleMaps'
 import { opportunitiesApi } from '../../services/opportunitiesApi'
@@ -119,7 +119,15 @@ export default function OpportunityForm() {
       e.deadline = 'Rok ne može biti u prošlosti.'
     }
     if (original?.deadline && !values.deadline) e.deadline = 'Rok se ne može ukloniti, samo promijeniti.'
-    if (values.starts_at && values.ends_at && values.ends_at < values.starts_at) {
+    const now = nowDateTimeLocal()
+    const startsChanged = values.starts_at !== toDateTimeLocal(original?.starts_at ?? null)
+    const endsChanged = values.ends_at !== toDateTimeLocal(original?.ends_at ?? null)
+    if (startsChanged && values.starts_at && values.starts_at < now) {
+      e.starts_at = 'Početak ne može biti u prošlosti.'
+    }
+    if (endsChanged && values.ends_at && values.ends_at < now) {
+      e.ends_at = 'Završetak ne može biti u prošlosti.'
+    } else if (values.starts_at && values.ends_at && values.ends_at < values.starts_at) {
       e.ends_at = 'Završetak ne može biti prije početka.'
     }
     return e
@@ -259,10 +267,10 @@ export default function OpportunityForm() {
 
         <div className="ac-cols">
           {field('starts_at', 'Početak (neobavezno)', (
-            <input {...common('starts_at')} type="datetime-local" value={values.starts_at} onChange={(e) => set('starts_at', e.target.value)} />
+            <input {...common('starts_at')} type="datetime-local" min={nowDateTimeLocal()} value={values.starts_at} onChange={(e) => set('starts_at', e.target.value)} />
           ))}
           {field('ends_at', 'Završetak (neobavezno)', (
-            <input {...common('ends_at')} type="datetime-local" value={values.ends_at} onChange={(e) => set('ends_at', e.target.value)} />
+            <input {...common('ends_at')} type="datetime-local" min={values.starts_at || nowDateTimeLocal()} value={values.ends_at} onChange={(e) => set('ends_at', e.target.value)} />
           ))}
         </div>
 
