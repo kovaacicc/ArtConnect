@@ -256,7 +256,7 @@ const assert = require('assert');
 
 **Cilj:** Navesti reviziju aplikacije, okruženje i dokaze potrebne za tumačenje stvarnih rezultata u tablici ispitnih slučajeva. Dodajte kratak zapis izvođenja kada te podatke nije moguće jasno prenijeti poveznicom na kod ispitivanja ili CI izvođenje.
 
-**Najnovije izvođenje ili dokaz:** Najnovije izvođenje: 19. 11. 2026., lokalno u Docker okruženju (Django u kontejneru backend, PostgreSQL 18 u kontejneru db), naredba docker compose -f docker-compose-dev.yaml run --rm --build backend python3 manage.py test. Rezultat: pronađeno i izvedeno 115 testova, svi prošli (OK), provjera sustava bez primjedbi. Revizija aplikacije: commit 34923d1.
+**Najnovije izvođenje ili dokaz:** Najnovije izvođenje: 19. 11. 2026., lokalno u Docker okruženju (Django u kontejneru backend, PostgreSQL 18 u kontejneru db), naredba docker compose -f docker-compose-dev.yaml run --rm --build backend python3 manage.py test. Rezultat: pronađeno i izvedeno 115 testova, svi prošli (OK), provjera sustava bez primjedbi. Revizija aplikacije: commit 91376c2.
 
 Izvođenje u GitHub Actionsu (ci.yml) uspješno.
 

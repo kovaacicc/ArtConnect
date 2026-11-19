@@ -82,16 +82,16 @@ Arhitekturna realizacija koristi nazive komponenata iz [odjeljka 4.2](4-Arhitekt
 | ----------- | ----------------------- | ------------------------ | ------------------------ |
 | F-001 | UC-01 Registracija računa; UC-02 Prijava i odjava | Web-klijent; Modul za korisnike i autentifikaciju (`users`); OAuth 2.0 pružatelj identiteta | CT-01 – CT-03, CT-13, CT-14, CT-18, CT-19; ST-01 |
 | F-001.1 | UC-01 Registracija računa | Modul za korisnike i autentifikaciju (`users`) | CT-04, CT-05, CT-08, CT-09 |
-| F-002 | UC-01 Registracija računa | Modul za korisnike i autentifikaciju (`users`); Modul za portfolije (`portfolio`, popis područja) | CT-04, CT-06, CT-07, CT-10 – CT-12, CT-20, CT-21, CT-66 – CT-68 |
-| F-003 | UC-03 Upravljanje portfoliom | Modul za portfolije (`portfolio`) | CT-61 – CT-64, CT-69, CT-70, CT-87 – CT-91, CT-103 |
-| F-004 | UC-03 Upravljanje portfoliom | Modul za portfolije (`portfolio`) | CT-71 – CT-76, CT-80 – CT-83 |
-| F-005 | UC-03 Upravljanje portfoliom | Modul za portfolije (`portfolio`) | CT-75, CT-77 – CT-79, CT-84 – CT-86, CT-92 |
-| F-006 | UC-04 Pregled javnog portfolija umjetnika | Modul za portfolije (`portfolio`) | CT-65, CT-92, CT-93, CT-98 – CT-105 |
-| F-007 | UC-05 Objava prilike | Web-klijent; Modul za prilike (`opportunities`) | CT-22 – CT-24, CT-26 – CT-36 |
+| F-002 | UC-01 Registracija računa | Modul za korisnike i autentifikaciju (`users`); Modul za portfolije (`portfolio`, popis područja) | CT-04, CT-06, CT-07, CT-10 – CT-12, CT-20, CT-21, CT-75 – CT-77 |
+| F-003 | UC-03 Upravljanje portfoliom | Modul za portfolije (`portfolio`) | CT-70 – CT-73, CT-78, CT-79, CT-96 – CT-100, CT-112 |
+| F-004 | UC-03 Upravljanje portfoliom | Modul za portfolije (`portfolio`) | CT-80 – CT-85, CT-89 – CT-92 |
+| F-005 | UC-03 Upravljanje portfoliom | Modul za portfolije (`portfolio`) | CT-84, CT-86 – CT-88, CT-93 – CT-95, CT-101 |
+| F-006 | UC-04 Pregled javnog portfolija umjetnika | Modul za portfolije (`portfolio`) | CT-74, CT-101, CT-102, CT-107 – CT-114 |
+| F-007 | UC-05 Objava prilike | Web-klijent; Modul za prilike (`opportunities`) | CT-22 – CT-24, CT-26 – CT-36, CT-61 – CT-64 |
 | F-007.1 | UC-05 Objava prilike; UC-16 Upravljanje korisnicima i sadržajem | Modul za prilike (`opportunities`); Modul za administraciju i izvještaje (Django administracijsko sučelje) | CT-05, CT-42; odobravanje organizatora od strane administratora: _na čekanju_ (nema ispitnog slučaja) |
 | F-008 | UC-05 Objava prilike | Web-klijent (prikaz karte); Modul za prilike (`opportunities`); Google Maps API | CT-46 (spremanje adrese i koordinata); prikaz karte: _na čekanju_ (nema ispitnog slučaja) |
 | F-009 | UC-06 Upravljanje prilikom | Web-klijent; Modul za prilike (`opportunities`) | CT-25, CT-37 – CT-44, CT-50 |
-| F-010 | UC-06 Upravljanje prilikom | Web-klijent; Modul za prilike (`opportunities`) | CT-45 – CT-49, CT-51 – CT-60 |
+| F-010 | UC-06 Upravljanje prilikom | Web-klijent; Modul za prilike (`opportunities`) | CT-45 – CT-49, CT-51 – CT-60, CT-65 – CT-69 |
 | F-011 | UC-07 Pretraživanje i pregled prilika | Web-klijent; Modul za prilike (`opportunities`) | CT-28, CT-29, CT-33 (pregled); pretraživanje i filtriranje: _na čekanju_ (nije ostvareno) |
 | F-012 | UC-08 Prijava na priliku | Modul za prijave (`opportunities`, model `Application`) | _Na čekanju_ (nije ostvareno) |
 | F-013 | UC-09 Praćenje statusa prijave | Modul za prijave (`opportunities`) | _Na čekanju_ (nije ostvareno) |
@@ -99,9 +99,9 @@ Arhitekturna realizacija koristi nazive komponenata iz [odjeljka 4.2](4-Arhitekt
 | F-015 | UC-11 Zatraživanje dopune prijave; UC-12 Dostava dopune prijave | Modul za prijave (`opportunities`, model `ApplicationMaterial`) | _Na čekanju_ (nije ostvareno) |
 | F-016 | UC-13 Dodavanje događaja u kalendar | Modul za prijave (`opportunities`, model `CalendarEntry`); Google Calendar API | _Na čekanju_ (nije ostvareno) |
 | F-017 | UC-14 Pregled statistike | Web-klijent (`/organizator/statistika`); Modul za administraciju i izvještaje | _Na čekanju_ (nije ostvareno) |
-| F-018 | UC-15 Objava rezultata i označavanje sudionika | Modul za prijave (`opportunities`, oznaka `participated`); Modul za portfolije (prikaz na profilu) | CT-106 (prikaz na profilu); objava rezultata: _na čekanju_ (nije ostvareno) |
-| F-019 | UC-16 Upravljanje korisnicima i sadržajem | Modul za administraciju i izvještaje (Django administracijsko sučelje) | CT-96, CT-97 (portfolio deaktiviranog korisnika nije vidljiv); ostalo: _na čekanju_ (nema ispitnog slučaja) |
-| F-020 | UC-17 Upravljanje kategorijama i postavkama; UC-18 Pregled mjesečnih izvještaja | Modul za administraciju i izvještaje (`administration`, Django administracijsko sučelje); Modul za portfolije (`ArtField`) | CT-11, CT-20, CT-68, CT-94, CT-95 (neaktivna područja); mjesečni izvještaji: _na čekanju_ (nije ostvareno) |
+| F-018 | UC-15 Objava rezultata i označavanje sudionika | Modul za prijave (`opportunities`, oznaka `participated`); Modul za portfolije (prikaz na profilu) | CT-115 (prikaz na profilu); objava rezultata: _na čekanju_ (nije ostvareno) |
+| F-019 | UC-16 Upravljanje korisnicima i sadržajem | Modul za administraciju i izvještaje (Django administracijsko sučelje) | CT-105, CT-106 (portfolio deaktiviranog korisnika nije vidljiv); ostalo: _na čekanju_ (nema ispitnog slučaja) |
+| F-020 | UC-17 Upravljanje kategorijama i postavkama; UC-18 Pregled mjesečnih izvještaja | Modul za administraciju i izvještaje (`administration`, Django administracijsko sučelje); Modul za portfolije (`ArtField`) | CT-11, CT-20, CT-77, CT-103, CT-104 (neaktivna područja); mjesečni izvještaji: _na čekanju_ (nije ostvareno) |
 
 ---
 
