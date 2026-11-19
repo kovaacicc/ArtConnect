@@ -9,9 +9,20 @@
 >Definirati prije prve uporabe:
 `[Inicijali/Kratica] = [Ime i prezime]` (npr. *AK = Ana Kovač; LM = Luka Marić; EP = Ema Petrović; NK = Nika Kralj*).																														
 
+Kratice članova tima: LG = Lara Glavinić, KV = Klara Vlašić, LU = Luka Uremović, KK = Karlo Kovačić, PS = Petar Stojnić, LŠR = Lara Šare, LŠT = Lovro Štefanec
 | Datum i sudionici | Glavna tema | Donesena odluka ili zadatak  | Poveznica na zadatak ili  rezultat, ako postoji |
 | --- | --- | --- | --- |
-|  |  |  |  |
+| 12.10.2026; LG, KV, LŠR, LŠT | upoznavanje i naziv tima | Tim nazvan Računala |  |
+| 16.10.2026; LG, KV, LŠR, LŠT, LU, KK, PS | Dodjela zadataka | obje Lare, Petar i Lovro rade frontend, Klara radi baze te Lula i Karlo će raditi backend | |
+| 19.10.2026; LU, KK, LŠT | Upit vezan za funkcijske i nefunkcijske zahtjeve | Karlo i Luka će raditi nefunkcijske zahtjeve, Lare i Lovro funkcijske, a Petar će raditi na poglavljima 1.3 i 1.4  | Zadatci 2, 4, 5, 9, 11|
+| 22.10.2026; LG, LŠR, LŠT| spremanje funkcijskih zahtjeva | Određivanje funkcijskih zahtjeva koje ćemo dodati u dokument te njihov stupanj prioriteta | Zadatci 4, 5 |
+| 26.10.2026; LG, KV, LU, LŠT | Provjera funkcijskih i nefunkcijskih zahtjeva na labosu | U 1.3 i 1.4 izbacit template tekstove (tj. njihove primjere i ciljeve). u 1.4 razraditi postojanje sličnih aplikacija (tj. opisati ih pa usporediti s našom, npr. po čemu je naša drugačija/bolja, dala je neki primjer kao instagram za umjetnike pa kolko je to slično našem). Funkcijski zahtjevi (2.1) spojiti F-001 i F-003, a F-002 staviti kao npr. F-001.1 | Zadatci 11 i 5 |
+| 27.10.2026; LG, KV, LŠR, LŠT, LU, KK, PS | podjela daljnih uloga | Lare, Petar i Lovro trebaju napraviti frontend dio, Luka i Karlo backend te s Klarom povezati baze, također je svatko dobio neku individualni zadatak | Zadatak 17, 19, 20 |
+| 29.10.2026; LU, KK | Incijalizacija Django projekta | Incijalizirati startproject i prvi app  | Zadatak 18 |
+| 30.10.2026; LG, PS, LŠR, LŠT | Stvaranje fontenda | Napravljena početna stranica sa sign in i register gumbima | Zadatak 17 |
+| 5.11.2026; KK, PS, LŠR, KV, LŠT| Dogovor za daljnju raspodjelu posla | Podijelit ćemo frontend u dijelove te će se jedna osoba s fronta spariti s osobom koja radi backend. Klara i Lovro rade umjetnički dio, Karlo i Luka i Petar rade login i ostale zajedničke funkcije, a Lare će raditi za organizatore dio. | |
+| 16.11.2026; LG, KV, LŠR, LŠT, LU, KK, PS | Provjera rada na labosu uživo | Treba popraviti 3.1 UML dijagrame, dodati i veze generalizacije npr, napravit globalnog aktor korisnik i razdvojit ga na umjetnik, organizator, admin i onda njih povezivat. Dalje, objava prilike, upravljanje prilikom je npr include/extend veza. Detaljnost je dobra, ali treba izmjeniti veze i drugačije povezat. uc5 i uc07 npr nece uc07 ici na organizatora nego extend na uc05. uc06 sadržano u obrascu objava prilike i netreba nam. Treba zasebna admin stranica (kao za organizatora i artista, on tamo approvea organizatora). Treba popraviti na organizator frontu, /organizator -> / da se može ići na home page. Treba 4.3.2. za predaju do 20.11 -> razlikuje se od dijagrama razreda. npr u dijagramu razreda imamo umjetnik razred na kojeg je vezan razred portfolio i na portfolio razred djelo. Sad je važno da se vidi jedan portfolio ima više djela itd takva pravila. | |
+
 
 Za svaki relevantan sastanak ili zapis tjedne koordinacije upišite jedan sažet redak. Dodijeljeni zadatak treba imati odgovornu osobu; za neriješeno pitanje treba navesti tko će ga dalje obraditi. Sam naslov sastanka ne pokazuje što se promijenilo. U ovu evidenciju nemojte kopirati cijeli popis issuea ni prijepis razgovora.
 
