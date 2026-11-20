@@ -22,102 +22,257 @@ Relacije `<<extend>>` koriste se za ponašanje koje se događa samo u nekim slu�
 
 ## 3.2 Specifikacije obrazaca uporabe
 
-**Cilj:** Za svaki obrazac uporabe iz dijagrama objasniti cilj aktera, uobičajenu interakciju s aplikacijom i važne alternative. Jednostavne obrasce uporabe opišite kratko; proširite one kod kojih alternative, vanjske ovisnosti ili posljedice zahtijevaju dodatno objašnjenje.
+Specifikacije opisuju ponašanje aplikacije kakvo jest u trenutačnoj implementaciji. Obrasci uporabe koji još nisu ostvareni označeni su kao **_Trenutačno oblikovanje_**: njihov opis izveden je iz zahtjeva i predstavlja planirano ponašanje, a ne ponašanje koje se već može demonstrirati.
 
-**Za svaki obrazac uporabe koristite jednu okomitu tablicu.** Navedite samo onoliko pojedinosti koliko interakcija zahtijeva; neprimjenjivu alternativu izostavite umjesto da je popunjavate samo radi forme.
+### UC-01: Registracija računa
 
-### UC-[ID]: [Naziv usmjeren na cilj]
+| Element specifikacije             | Opis |
+| :-------------------------------- | :--- |
+| **Primarni akter**                | Umjetnik ili organizator (novi korisnik) |
+| **Sekundarni akter**              | OAuth 2.0 pružatelj identiteta (Google) |
+| **Povezani zahtjevi**             | F-001, F-001.1, F-002 |
+| **Preduvjeti**                    | Korisnik se prvi put prijavio putem Googlea (UC-02) i još nema dovršenu registraciju. |
+| **Glavni uspješni tok**           | 1. Nakon prve prijave aplikacija prikazuje obrazac za dovršetak registracije.<br>2. Korisnik odabire ulogu umjetnika ili organizatora.<br>3. Umjetnik unosi ime, prezime, barem jedno područje umjetničkog djelovanja te, po želji, poveznice na web-stranicu ili društvene mreže; organizator unosi naziv i, po želji, vrstu organizacije.<br>4. Korisnik šalje obrazac; aplikacija provjerava podatke, sprema profil i dodjeljuje odabranu ulogu.<br>5. Aplikacija prikazuje početnu stranicu za odabranu ulogu. |
+| **Alternativni tokovi / Iznimke** | **4a — Nedostaju obavezni podaci:** aplikacija prikazuje poruku uz polje koje nedostaje (ime, prezime, područje ili naziv organizatora); profil se ne sprema.<br>**4b — Neispravna poveznica ili nepostojeće/neaktivno područje:** aplikacija odbija unos s porukom uz odgovarajuće polje.<br>**4c — Zatražena uloga administratora:** aplikacija odbija registraciju; ulogu administratora nije moguće odabrati samostalno.<br>**4d — Registracija je već dovršena:** aplikacija odbija ponovnu registraciju i postojeći profil ostaje nepromijenjen. |
+| **Posljedice (ishod)**            | Korisnik ima dovršen račun s ulogom umjetnika ili organizatora. Račun organizatora sprema se kao neodobren dok ga ne odobri administrator (UC-16). |
 
-| Element specifikacije             | Opis                                                                                                                                      |
-| :-------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
-| **Primarni akter**                | [Uloga definirana u analizi zahtjeva]                                                                                                     |
-| **Povezani zahtjevi**             | [Identifikatori funkcijskih zahtjeva, npr. F-001, F-004]                                                                                  |
-| **Preduvjeti**                    | [Stanje sustava koje mora biti zadovoljeno prije početka izvođenja]                                                                       |
-| **Glavni uspješni tok**           | 1. Akter pokreće akciju.<br>2. Program obrađuje unos i vraća povratnu informaciju.<br>3. [Koračni prikaz interakcije do ostvarenja cilja] |
-| **Alternativni tokovi / Iznimke** | **[Korak]a — [Naziv iznimke]:** [Uvjet nastanka, reakcija programa i nastavak toka]                                                       |
-| **Posljedice (ishod)**            | [Promjena stanja podataka ili potvrda nakon uspješnog završetka]                                                                          |
+### UC-02: Prijava i odjava
 
-<details>
-<summary><strong>Primjeri specifikacija: Registracija i prijava kriznog događaja</strong></summary>
+| Element specifikacije             | Opis |
+| :-------------------------------- | :--- |
+| **Primarni akter**                | Korisnik (umjetnik, organizator ili administrator) |
+| **Sekundarni akter**              | OAuth 2.0 pružatelj identiteta (Google) |
+| **Povezani zahtjevi**             | F-001 |
+| **Preduvjeti**                    | Korisnik ima Google račun. |
+| **Glavni uspješni tok**           | 1. Korisnik na početnoj stranici odabire prijavu putem Googlea.<br>2. Aplikacija ga preusmjerava pružatelju identiteta, gdje se korisnik prijavljuje.<br>3. Pružatelj identiteta vraća korisnika u aplikaciju, koja otvara sesiju.<br>4. Ako je registracija dovršena, aplikacija prikazuje početnu stranicu za ulogu korisnika.<br>5. Korisnik odabire odjavu; aplikacija završava sesiju i vraća ga na početnu stranicu. |
+| **Alternativni tokovi / Iznimke** | **4a — Registracija nije dovršena:** aplikacija nastavlja s UC-01.<br>**2a — Prijava kod pružatelja identiteta nije uspjela ili je otkazana:** korisnik ostaje neprijavljen i može ponovno pokušati prijavu. |
+| **Posljedice (ishod)**            | Korisnik je prijavljen i ima pristup mogućnostima svoje uloge; nakon odjave zaštićeni podaci više nisu dostupni. |
 
-**Primjer — CrisisMap:**
+### UC-03: Upravljanje portfoliom
 
-**UC-001: Registracija računa.** Ovaj kratki primjer odnosi se na projekt čiji odobreni zadatak uključuje račune s adresom e-pošte i lozinkom.
+> **_Trenutačno oblikovanje_ (korisničko sučelje):** ponašanje je ostvareno u pozadinskom sustavu i provjereno ispitnim slučajevima, ali stranice portfolija u web-klijentu još ne postoje.
 
-| Polje                                             | Opis                                                                                            |
-| ------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| Primarni akter                                    | Građanin (A-02 u primjeru)                                                                      |
-| ID zahtjeva                                       | F-001                                                                                           |
-| Preduvjeti, ako postoje                           | Nema.                                                                                           |
-| Glavni tijek                                      | Građanin unosi adresu e-pošte; aplikacija šalje poveznicu za potvrdu; građanin potvrđuje račun. |
-| Alternativni ili neuspješni tijekovi, ako postoje | Adresa e-pošte već postoji → aplikacija objašnjava zašto se registracija ne može nastaviti.     |
-| Rezultat                                          | Račun je aktivan nakon potvrde.                                                                 |
+| Element specifikacije             | Opis |
+| :-------------------------------- | :--- |
+| **Primarni akter**                | Umjetnik |
+| **Povezani zahtjevi**             | F-002, F-003, F-004, F-005 |
+| **Preduvjeti**                    | Umjetnik je prijavljen i ima dovršenu registraciju. |
+| **Glavni uspješni tok**           | 1. Umjetnik otvara svoj portfolio; aplikacija prikazuje profil, područja djelovanja, djela i prethodne izložbe, uključujući privatna djela.<br>2. Umjetnik mijenja biografiju, opis rada, područja djelovanja ili poveznice; aplikacija sprema samo promijenjene podatke.<br>3. Umjetnik dodaje djelo s nazivom te, po želji, godinom nastanka, tehnikom, dimenzijama, opisom i oznakom javnosti; zatim djelu dodaje datoteke (poveznice na slike ili dokumente).<br>4. Umjetnik dodaje prethodnu izložbu ili projekt s nazivom, godinom i opisom.<br>5. Umjetnik po potrebi uređuje ili briše djelo, datoteku ili izložbu te određuje je li djelo javno.<br>6. Umjetnik određuje je li cijeli portfolio javno vidljiv. |
+| **Alternativni tokovi / Iznimke** | **2a — Prazan popis područja, neaktivno područje ili prazno ime:** aplikacija odbija izmjenu i postojeći podaci ostaju nepromijenjeni.<br>**3a — Djelo bez naziva ili s godinom u budućnosti:** aplikacija odbija spremanje s porukom uz odgovarajuće polje.<br>**3b — Neispravna poveznica na datoteku:** aplikacija odbija datoteku s porukom.<br>**4a — Godina izložbe u budućnosti:** aplikacija odbija spremanje.<br>**5a — Pokušaj pristupa tuđem djelu, datoteci ili izložbi:** aplikacija se ponaša kao da zapis ne postoji i ne mijenja ga. |
+| **Posljedice (ishod)**            | Portfolio je ažuriran. Djela označena kao privatna, kao i cijeli portfolio označen kao privatan, nisu vidljiva drugim korisnicima. |
 
-Ako odobreni zadatak umjesto toga koristi isključivo OAuth prijavu, zamijenite ovaj primjer odgovarajućim ponašanjem prijave; nemojte dodavati registraciju lokalnom lozinkom samo radi podudaranja s primjerom.
+### UC-04: Pregled javnog portfolija umjetnika
 
-**UC-002: Podnošenje prijave kriznog događaja.** Ista polja mogu opisati dulji tijek u kojem odabir lokacije, provjera valjanosti i pohrana mogu ne uspjeti.
+> **_Trenutačno oblikovanje_ (korisničko sučelje):** ponašanje je ostvareno u pozadinskom sustavu i provjereno ispitnim slučajevima, ali stranica javnog portfolija u web-klijentu još ne postoji.
 
-| Polje                                             | Opis                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Primarni akter                                    | Građanin                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| ID zahtjeva                                       | F-004                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| Preduvjeti, ako postoje                           | Obrazac za prijavu dostupan je. Ako odobreni zadatak zahtijeva prijavu u sustav, građanin je prijavljen.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| Glavni tijek                                      | 1. Građanin otvara obrazac za prijavu; aplikacija prikazuje polja za vrstu kriznog događaja, razinu ozbiljnosti, opis i lokaciju.<br>2. Građanin unosi podatke i odabire lokaciju na karti ili drugim podržanim načinom.<br>3. Građanin podnosi obrazac; aplikacija provjerava obavezna polja i lokaciju.<br>4. Aplikacija pohranjuje prijavu i prikazuje potvrdu s referencom na nju.                                                                                                                                                                                                                                                                                                               |
-| Alternativni ili neuspješni tijekovi, ako postoje | **1a — Prijava u sustav nije uspjela:** Ako je prijava obavezna, a pružatelj identiteta je ne dovrši, prijava kriznog događaja ostaje nepodnesena i aplikacija objašnjava kako pokušati ponovno.<br>**2a — Odbijen pristup lokaciji:** Ako aplikacija nudi geolokaciju, ali je korisnik odbije, građanin ručno odabire lokaciju ako ta mogućnost postoji; tijek se nastavlja u koraku 3.<br>**3a — Nevaljana ili nedostajuća lokacija:** Aplikacija objašnjava problem, po mogućnosti zadržava unesene podatke i ne pohranjuje prijavu; građanin ispravlja lokaciju i ponavlja korak 3.<br>**3b — Pohrana nije uspjela:** Aplikacija prijavljuje neuspjeh i ne prikazuje lažnu potvrdu o podnošenju. |
-| Rezultat                                          | Aplikacija pohranjuje prijavu kriznog događaja i potvrđuje njezino podnošenje.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| Element specifikacije             | Opis |
+| :-------------------------------- | :--- |
+| **Primarni akter**                | Korisnik (umjetnik, organizator ili administrator) |
+| **Povezani zahtjevi**             | F-005, F-006, F-018 |
+| **Preduvjeti**                    | Korisnik je prijavljen. |
+| **Glavni uspješni tok**           | 1. Korisnik otvara profil umjetnika.<br>2. Aplikacija prikazuje ime, područja djelovanja, biografiju, javna djela s datotekama, prethodne izložbe i sudjelovanja na prilikama na kojima je umjetnik označen kao sudionik. |
+| **Alternativni tokovi / Iznimke** | **2a — Portfolio je privatan, račun umjetnika je deaktiviran ili umjetnik ne postoji:** aplikacija prikazuje da portfolio nije pronađen. |
+| **Posljedice (ishod)**            | Nema promjene podataka. Privatni podaci umjetnika (adresa e-pošte, uloga, privatna djela) nisu prikazani. |
 
-**Odabir razine detalja:** Oba primjera koriste ista polja. UC-001 je kratak jer je glavna iznimka jasna; UC-002 zahtijeva numerirane korake i alternative jer oni mijenjaju ishod i mogu usmjeravati ispitivanje. Uklonite grane prijave u sustav ili geolokacije koje ne postoje u stvarnoj aplikaciji tima. Obavještavanje spasilačkih timova, pokretanje akcije spašavanja ili dostavljanje povratnih informacija interventnih službi uvodi **zasebne mogućnosti s vanjskim posljedicama**; dokumentirajte ih samo ako ih odobreni zadatak i implementacija podržavaju. Oporavak lozinke odnosi se na račune s lokalnom lozinkom, a ne automatski na zadatak koji koristi isključivo OAuth. Pri prilagodbi primjera koristite ID-ove zahtjeva i ponašanje vlastite aplikacije.
+### UC-05: Objava prilike
 
-**UC-005: Moderiranje prijave kriznog događaja.** Ovaj primjer vrijedi samo za projekt u kojem odobreni opseg uključuje moderatorski pregled prijava.
+| Element specifikacije             | Opis |
+| :-------------------------------- | :--- |
+| **Primarni akter**                | Organizator |
+| **Sekundarni akter**              | Kartografski servis (Google Maps API) |
+| **Povezani zahtjevi**             | F-007, F-007.1, F-008 |
+| **Preduvjeti**                    | Organizator je prijavljen i ima dovršenu registraciju. |
+| **Glavni uspješni tok**           | 1. Organizator otvara obrazac za novu priliku.<br>2. Unosi vrstu (izložba, natječaj, radionica ili drugo), naziv i područje umjetnosti te, po želji, opis, rok za prijavu, adresu i lokaciju, vrijeme održavanja, dobni ili drugi kriterij i nagradu. Opis i rok nisu obavezni za nacrt, ali jesu za objavu.<br>3. Aplikacija sprema priliku kao nacrt (status „priprema”).<br>4. Organizator objavljuje nacrt; aplikacija provjerava da prilika ima opis i rok te mijenja status u „otvoreno za prijave”.<br>5. Objavljena prilika postaje vidljiva umjetnicima; ako ima lokaciju, prikazuje se na karti. |
+| **Alternativni tokovi / Iznimke** | **3a — Nedostaje naziv ili su rok ili vrijeme održavanja u prošlosti:** aplikacija ne sprema priliku i prikazuje poruku uz polje.<br>**4a — Organizator nije odobren:** aplikacija odbija objavu s obavijesti da račun još nije odobren; nacrt ostaje spremljen i može se objaviti nakon odobrenja.<br>**4b — Nedostaje opis ili rok:** aplikacija odbija objavu s porukama uz polja koja nedostaju; prilika ostaje u pripremi.<br>**5a — Kartografski servis nije dostupan:** prilika se prikazuje bez karte, a ostatak stranice radi normalno (NF-07). |
+| **Posljedice (ishod)**            | Prilika je spremljena kao nacrt vidljiv samo organizatoru ili je objavljena i vidljiva umjetnicima. |
 
-| Polje                                             | Opis                                                                                                                                                                                                                                                              |
-| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Primarni akter                                    | Moderator (A-05 u primjeru)                                                                                                                                                                                                                                       |
-| ID zahtjeva                                       | F-008                                                                                                                                                                                                                                                             |
-| Preduvjeti, ako postoje                           | Moderator je prijavljen i ima moderatorske ovlasti; postoji prijava koja čeka pregled.                                                                                                                                                                            |
-| Glavni tijek                                      | 1. Moderator otvara prijavu koja čeka pregled.<br>2. Aplikacija prikazuje podatke prijave i dostupne moderatorske radnje.<br>3. Moderator odabire odobravanje ili odbijanje.<br>4. Aplikacija provjerava ovlasti, mijenja status prijave i prikazuje novi status. |
-| Alternativni ili neuspješni tijekovi, ako postoje | **3a — Radnja nije potvrđena:** Moderator odustaje od promjene i prijava ostaje nepromijenjena.<br>**4a — Ovlasti nisu valjane:** Aplikacija odbija promjenu i status prijave ostaje nepromijenjen.                                                               |
-| Rezultat                                          | Prijava ima novi status ako je moderatorska radnja uspješno provedena; inače ostaje nepromijenjena.                                                                                                                                                               |
+### UC-06: Upravljanje prilikom
 
-</details>
+| Element specifikacije             | Opis |
+| :-------------------------------- | :--- |
+| **Primarni akter**                | Organizator |
+| **Povezani zahtjevi**             | F-009, F-010 |
+| **Preduvjeti**                    | Organizator je prijavljen; prilika pripada njemu. |
+| **Glavni uspješni tok**           | 1. Organizator otvara popis svojih prilika, uključujući nacrte, i odabire priliku.<br>2. Organizator uređuje priliku; nacrt se može mijenjati bez ograničenja, a objavljenoj prilici mogu se mijenjati samo lokacija, rok za prijavu i vrijeme održavanja.<br>3. Organizator mijenja status prilike prema dopuštenom redoslijedu: otvoreno za prijave → prijave zatvorene ili u procesu odabira; prijave zatvorene → ponovno otvoreno ili u procesu odabira; u procesu odabira → završeno.<br>4. Aplikacija sprema promjenu i prikazuje novo stanje prilike. |
+| **Alternativni tokovi / Iznimke** | **1a — Tuđa prilika:** aplikacija se ponaša kao da prilika ne postoji.<br>**2a — Izmjena zaključanog polja objavljene prilike:** aplikacija odbija izmjenu s porukom uz polje.<br>**2b — Prilika je završena:** aplikacija ne dopušta nikakvu izmjenu.<br>**2c — Novi rok ili vrijeme održavanja u prošlosti:** aplikacija odbija izmjenu s porukom uz polje; rok koji je već istekao, a ostaje nepromijenjen, nije greška.<br>**2d — Uklanjanje roka:** nacrtu se rok može ukloniti, a objavljenoj prilici ne može.<br>**2e — Brisanje prilike:** umjesto izmjene organizator briše priliku; nacrt se briše odmah, a za objavljenu priliku aplikacija traži obrazloženje, sprema ga i skriva priliku svim korisnicima.<br>**2f — Brisanje objavljene prilike bez obrazloženja:** aplikacija odbija brisanje.<br>**3a — Nedopušten prijelaz statusa:** aplikacija odbija promjenu i status ostaje isti. |
+| **Posljedice (ishod)**            | Podaci ili status prilike promijenjeni su i promjena je odmah vidljiva umjetnicima; obrisana prilika više nije vidljiva, a obrazloženje brisanja ostaje spremljeno. |
+
+### UC-07: Pretraživanje i pregled prilika
+
+> **_Trenutačno oblikovanje_ (djelomično):** pregled objavljenih prilika i njihovih detalja je ostvaren; pretraživanje i filtriranje nisu.
+
+| Element specifikacije             | Opis |
+| :-------------------------------- | :--- |
+| **Primarni akter**                | Umjetnik |
+| **Povezani zahtjevi**             | F-011 |
+| **Preduvjeti**                    | Umjetnik je prijavljen. |
+| **Glavni uspješni tok**           | 1. Umjetnik otvara popis prilika; aplikacija prikazuje samo objavljene prilike.<br>2. Umjetnik zadaje kriterije: područje umjetnosti, lokaciju, rok za prijavu i druge kriterije; kriteriji se mogu kombinirati.<br>3. Aplikacija prikazuje samo prilike koje zadovoljavaju sve kriterije.<br>4. Umjetnik otvara detalje prilike. |
+| **Alternativni tokovi / Iznimke** | **3a — Nijedna prilika ne zadovoljava kriterije:** aplikacija prikazuje prazan popis s obavijesti.<br>**4a — Prilika je nacrt ili je obrisana:** aplikacija prikazuje da prilika nije pronađena.<br>**4b — Umjetnik se želi prijaviti:** nastavlja se UC-08. |
+| **Posljedice (ishod)**            | Nema promjene podataka; umjetnik je pronašao prilike koje ga zanimaju. |
+
+### UC-08: Prijava na priliku
+
+> **_Trenutačno oblikovanje_:** model podataka za prijave postoji, ali ponašanje još nije ostvareno.
+
+| Element specifikacije             | Opis |
+| :-------------------------------- | :--- |
+| **Primarni akter**                | Umjetnik |
+| **Povezani zahtjevi**             | F-012 |
+| **Preduvjeti**                    | Umjetnik je prijavljen i ima otvorene detalje prilike sa statusom „otvoreno za prijave” (UC-07). |
+| **Glavni uspješni tok**           | 1. Umjetnik odabire prijavu na priliku.<br>2. Odabire djela iz svog portfolija i prilaže dodatne materijale.<br>3. Umjetnik šalje prijavu; aplikacija je sprema sa statusom „predana”. |
+| **Alternativni tokovi / Iznimke** | **1a — Prilika nije otvorena za prijave:** aplikacija ne dopušta prijavu.<br>**3a — Neispravan prilog (vrsta ili veličina datoteke izvan NF-04):** aplikacija odbija prilog s porukom. |
+| **Posljedice (ishod)**            | Prijava je evidentirana sa statusom „predana” i vidljiva organizatoru prilike. |
+
+### UC-09: Praćenje statusa prijave
+
+> **_Trenutačno oblikovanje_:** ponašanje još nije ostvareno.
+
+| Element specifikacije             | Opis |
+| :-------------------------------- | :--- |
+| **Primarni akter**                | Umjetnik |
+| **Povezani zahtjevi**             | F-013 |
+| **Preduvjeti**                    | Umjetnik je prijavljen i ima barem jednu prijavu. |
+| **Glavni uspješni tok**           | 1. Umjetnik otvara popis svojih prijava.<br>2. Aplikacija za svaku prijavu prikazuje priliku i trenutačni status (predana, u pregledu, potrebna dopuna, prihvaćena, odbijena) te razlog odbijanja ako postoji. |
+| **Alternativni tokovi / Iznimke** | **2a — Status je „potrebna dopuna”:** umjetnik može nastaviti s UC-12.<br>**2b — Status je „prihvaćena”:** umjetnik može nastaviti s UC-13. |
+| **Posljedice (ishod)**            | Nema promjene podataka; umjetnik zna stanje svojih prijava. |
+
+### UC-10: Pregled i odlučivanje o prijavama
+
+> **_Trenutačno oblikovanje_:** ponašanje još nije ostvareno.
+
+| Element specifikacije             | Opis |
+| :-------------------------------- | :--- |
+| **Primarni akter**                | Organizator |
+| **Povezani zahtjevi**             | F-014 |
+| **Preduvjeti**                    | Organizator je prijavljen; na njegovu priliku pristigla je barem jedna prijava. |
+| **Glavni uspješni tok**           | 1. Organizator otvara prijave na svoju priliku.<br>2. Pregledava prijavu: portfolio umjetnika, odabrana djela i priložene materijale.<br>3. Organizator prihvaća ili odbija prijavu; pri odbijanju može unijeti razlog.<br>4. Aplikacija sprema odluku i mijenja status prijave. |
+| **Alternativni tokovi / Iznimke** | **3a — Potrebni su dodatni materijali:** organizator nastavlja s UC-11.<br>**1a — Prijava se odnosi na tuđu priliku:** aplikacija ne prikazuje prijavu. |
+| **Posljedice (ishod)**            | Prijava ima status „prihvaćena” ili „odbijena”; razlog odbijanja vidljiv je umjetniku. |
+
+### UC-11: Zatraživanje dopune prijave
+
+> **_Trenutačno oblikovanje_:** ponašanje još nije ostvareno.
+
+| Element specifikacije             | Opis |
+| :-------------------------------- | :--- |
+| **Primarni akter**                | Organizator |
+| **Povezani zahtjevi**             | F-015 |
+| **Preduvjeti**                    | Organizator pregledava prijavu u sklopu UC-10. |
+| **Glavni uspješni tok**           | 1. Organizator odabire zatraživanje dopune i opisuje što nedostaje.<br>2. Aplikacija mijenja status prijave u „potrebna dopuna”. |
+| **Posljedice (ishod)**            | Umjetnik u praćenju statusa vidi da se traži dopuna (UC-09). |
+
+### UC-12: Dostava dopune prijave
+
+> **_Trenutačno oblikovanje_:** model podataka za materijale prijave postoji, ali ponašanje još nije ostvareno.
+
+| Element specifikacije             | Opis |
+| :-------------------------------- | :--- |
+| **Primarni akter**                | Umjetnik |
+| **Povezani zahtjevi**             | F-015 |
+| **Preduvjeti**                    | Prijava umjetnika ima status „potrebna dopuna” (UC-09). |
+| **Glavni uspješni tok**           | 1. Umjetnik otvara prijavu i dodaje tražene materijale.<br>2. Umjetnik šalje dopunu; aplikacija sprema materijale i vraća prijavu u status „u pregledu”. |
+| **Alternativni tokovi / Iznimke** | **2a — Neispravan prilog:** aplikacija odbija prilog s porukom; status prijave se ne mijenja. |
+| **Posljedice (ishod)**            | Prijava je dopunjena i ponovno čeka odluku organizatora (UC-10). |
+
+### UC-13: Dodavanje događaja u kalendar
+
+> **_Trenutačno oblikovanje_:** model podataka za kalendarske zapise postoji, ali ponašanje još nije ostvareno.
+
+| Element specifikacije             | Opis |
+| :-------------------------------- | :--- |
+| **Primarni akter**                | Umjetnik |
+| **Sekundarni akter**              | Kalendarski servis (Google Calendar) |
+| **Povezani zahtjevi**             | F-016 |
+| **Preduvjeti**                    | Prijava umjetnika ima status „prihvaćena” (UC-09). |
+| **Glavni uspješni tok**           | 1. Umjetnik odabire dodavanje događanja u kalendar.<br>2. Aplikacija u kalendar umjetnika dodaje događaj s nazivom prilike, datumom i mjestom održavanja.<br>3. Aplikacija potvrđuje da je događaj dodan. |
+| **Alternativni tokovi / Iznimke** | **2a — Kalendarski servis nije dostupan ili pristup nije odobren:** aplikacija prikazuje poruku o neuspjehu; ostatak aplikacije radi normalno (NF-07). |
+| **Posljedice (ishod)**            | Događaj je dodan u kalendar umjetnika i zabilježen u aplikaciji. |
+
+### UC-14: Pregled statistike
+
+> **_Trenutačno oblikovanje_:** stranica statistike postoji u web-klijentu, ali prikazuje samo obavijest da statistika još nije dostupna.
+
+| Element specifikacije             | Opis |
+| :-------------------------------- | :--- |
+| **Primarni akter**                | Organizator |
+| **Povezani zahtjevi**             | F-017 |
+| **Preduvjeti**                    | Organizator je prijavljen. |
+| **Glavni uspješni tok**           | 1. Organizator otvara stranicu statistike.<br>2. Aplikacija za njegove prilike prikazuje broj prijava po području umjetnosti, broj prihvaćenih umjetnika i broj prijava po pojedinoj prilici. |
+| **Alternativni tokovi / Iznimke** | **2a — Organizator još nema prilika ni prijava:** aplikacija prikazuje nule ili praznu statistiku. |
+| **Posljedice (ishod)**            | Nema promjene podataka; prikazani brojevi odgovaraju stvarnim podacima. |
+
+### UC-15: Objava rezultata i označavanje sudionika
+
+> **_Trenutačno oblikovanje_ (djelomično):** prikaz sudjelovanja na profilu umjetnika je ostvaren; objava rezultata i označavanje sudionika nisu.
+
+| Element specifikacije             | Opis |
+| :-------------------------------- | :--- |
+| **Primarni akter**                | Organizator |
+| **Povezani zahtjevi**             | F-018 |
+| **Preduvjeti**                    | Prilika organizatora ima status „završeno”. |
+| **Glavni uspješni tok**           | 1. Organizator otvara završenu priliku i odabire objavu rezultata.<br>2. Označava umjetnike koji su sudjelovali.<br>3. Aplikacija objavljuje rezultate i sprema oznake sudjelovanja. |
+| **Posljedice (ishod)**            | Sudjelovanje se prikazuje na javnom profilu označenih umjetnika (UC-04); prilike koje su obrisane ne prikazuju se. |
+
+### UC-16: Upravljanje korisnicima i sadržajem
+
+> **_Trenutačno oblikovanje_ (djelomično):** administrator ove radnje trenutačno obavlja kroz Djangovo administracijsko sučelje (`/admin/`), a ne kroz web-klijent.
+
+| Element specifikacije             | Opis |
+| :-------------------------------- | :--- |
+| **Primarni akter**                | Administrator |
+| **Povezani zahtjevi**             | F-007.1, F-019 |
+| **Preduvjeti**                    | Administrator je prijavljen putem OAuth 2.0 servisa i ima ulogu administratora. |
+| **Glavni uspješni tok**           | 1. Administrator otvara popis korisnika, organizatora ili objavljenog sadržaja.<br>2. Pregledava zapis i odabire radnju: uređivanje, blokiranje ili uklanjanje korisnika ili sadržaja, odnosno odobravanje računa organizatora.<br>3. Aplikacija sprema promjenu. |
+| **Alternativni tokovi / Iznimke** | **2a — Blokiranje (deaktivacija) umjetnika:** njegov portfolio prestaje biti vidljiv drugim korisnicima; nakon ponovne aktivacije opet je vidljiv. |
+| **Posljedice (ishod)**            | Promjena je odmah vidljiva u sustavu; odobreni organizator može objavljivati prilike (UC-05). |
+
+### UC-17: Upravljanje kategorijama i postavkama
+
+> **_Trenutačno oblikovanje_ (djelomično):** administrator kategorije, kriterije pretraživanja i postavke trenutačno uređuje kroz Djangovo administracijsko sučelje (`/admin/`).
+
+| Element specifikacije             | Opis |
+| :-------------------------------- | :--- |
+| **Primarni akter**                | Administrator |
+| **Povezani zahtjevi**             | F-020 |
+| **Preduvjeti**                    | Administrator je prijavljen i ima ulogu administratora. |
+| **Glavni uspješni tok**           | 1. Administrator otvara kategorije umjetnosti, kriterije pretraživanja ili postavke sustava.<br>2. Dodaje, uređuje ili deaktivira stavku.<br>3. Aplikacija sprema promjenu. |
+| **Alternativni tokovi / Iznimke** | **2a — Deaktivacija područja koje umjetnici već koriste:** područje se više ne nudi pri registraciji i ne prikazuje na profilima, ali veze s postojećim umjetnicima ostaju spremljene. |
+| **Posljedice (ishod)**            | Kategorije, kriteriji i postavke ažurirani su i odmah se primjenjuju u aplikaciji. |
+
+### UC-18: Pregled mjesečnih izvještaja
+
+> **_Trenutačno oblikovanje_:** ponašanje još nije ostvareno.
+
+| Element specifikacije             | Opis |
+| :-------------------------------- | :--- |
+| **Primarni akter**                | Administrator |
+| **Povezani zahtjevi**             | F-020 |
+| **Preduvjeti**                    | Administrator je prijavljen i ima ulogu administratora. |
+| **Glavni uspješni tok**           | 1. Administrator otvara izvještaje i odabire mjesec.<br>2. Aplikacija prikazuje broj registriranih umjetnika, objavljenih prilika i predanih prijava u tom mjesecu. |
+| **Posljedice (ishod)**            | Nema promjene podataka; prikazani brojevi odgovaraju stvarnim podacima. |
 
 ---
 
 ## 3.3 Provjera dosljednosti obrazaca uporabe
 
-**Cilj:** Provjeriti međusobnu usklađenost obrazaca uporabe, aktera, zahtjeva i ispitnih slučajeva. Cjelovito mapiranje održava se isključivo u **[matrici sljedivosti zahtjeva](2-Analiza-zahtjeva.md#26-sljedivost-zahtjeva)**.
+Provjera uspoređuje dijagram (3.1), specifikacije (3.2), zahtjeve i aktere (2.1, 2.3), ispitne slučajeve (5.2) i implementaciju. Cjelovito mapiranje zahtjev → obrazac uporabe → ispitivanje nalazi se samo u [matrici sljedivosti](2-Analiza-zahtjeva.md#26-sljedivost-zahtjeva).
 
-| Provjera   | Pitanje za tim                                                                                                              |
-| ---------- | --------------------------------------------------------------------------------------------------------------------------- |
-| Zahtjev    | Je li svaki važan obrazac uporabe povezan s postojećim zahtjevom?                                                           |
-| Akter      | Odgovara li akter naveden ovdje prethodno utvrđenoj ulozi i dopuštenoj interakciji?                                         |
-| Aplikacija | Može li tim demonstrirati opisani glavni rezultat i važnu alternativu ili je opis jasno označen kao trenutačno oblikovanje? |
+| Provjera   | Pitanje                                                                                 | Nalaz |
+| ---------- | --------------------------------------------------------------------------------------- | ----- |
+| Zahtjev    | Je li svaki obrazac uporabe povezan s postojećim zahtjevom?                             | Da. Svaki od UC-01 – UC-18 navodi postojeće zahtjeve, a svaki zahtjev F-001 – F-020 pokriven je barem jednim obrascem. |
+| Akter      | Odgovara li akter utvrđenoj ulozi i dopuštenoj interakciji?                             | Da. Akteri u 3.2 odgovaraju tablici aktera u 2.3 i ulogama u aplikaciji; ulogu administratora nije moguće odabrati registracijom (CT-09), nego se dodjeljuje naknadno. |
+| Aplikacija | Može li se glavni rezultat demonstrirati ili je opis označen kao trenutačno oblikovanje? | Da. UC-01, UC-02, UC-05 i UC-06 mogu se demonstrirati; svi ostali obrasci u 3.2 označeni su kao _trenutačno oblikovanje_ uz kratko objašnjenje što nedostaje. |
 
----
+**Ispravke provedene tijekom provjere:**
 
-Povezivanje zahtjev → obrazac uporabe → ispitivanje održavajte **samo jednom, u [tablici sljedivosti zahtjeva](./2-Analiza-zahtjeva.md)**. Ovdje nemojte održavati drugu projektnu tablicu mapiranja ni stupac sa statusom implementacije. Ako važan zahtjev nema interakciju s ljudskim akterom, objasnite gdje se obrađuje umjesto izmišljanja aktera.
+- U 2.3 ispravljeni su popisi zahtjeva uz aktere (uklonjeni nepostojeći F-021 i F-022 te zahtjevi pogrešno dodijeljeni ulogama).
+- Popunjena je matrica sljedivosti u 2.6.
+- U 5.2 dodani su ispitni slučajevi CT-70 – CT-115 za portfolio, koji su postojali u kodu, ali ne u dokumentaciji.
+- Napisane su specifikacije UC-01 – UC-18 u 3.2.
+- UC-09 preimenovan je iz „Praćenje statusa prilike” u „Praćenje statusa prijave”, jer se F-013 i proširenja UC-12 i UC-13 odnose na status prijave.
 
-<details>
-<summary><strong>Provjera pokrivenosti zahtjeva</strong></summary>
+**Otvorena pitanja:**
 
-**Primjer — CrisisMap:** Tablica pokrivenosti obrazaca uporabe koju treba analizirati:
+- **Ponašanje bez ispitnog slučaja.** Odobravanje organizatora (F-007.1), prikaz karte (F-008) i upravljanje korisnicima (F-019) ostvareni su ili djelomično ostvareni, ali nemaju ispitni slučaj.
 
-| Broj obrasca uporabe | Naziv obrasca uporabe    | Obuhvaćeni funkcijski zahtjevi                  |
-| -------------------- | ------------------------ | ----------------------------------------------- |
-| UC-001               | Registracija računa      | F-001: Registracija računa putem e-pošte        |
-| UC-002               | Prijava kriznog događaja | F-022: Prijava i provjera kriznog događaja      |
-| UC-003               | Sustav upozorenja        | F-045: Slanje upozorenja korisnicima i timovima |
-| UC-004               | Koordinacija spašavanja  | F-067: Koordinacija s hitnim službama           |
-
----
-
-**Problemi pokrivenosti koje treba riješiti:**
-
-- **Pogrešan ID zahtjeva:** ova tablica povezuje UC-002 s F-022, dok se opis UC-002 u odjeljku 3.2 poziva na F-004, zahtjev za podnošenje prijave iz odjeljk1 2.1.
-- **Zahtjevi koji ne postoje:** F-022, F-045 i F-067 nisu definirani u oglednim zahtjevima u 2.1.
-- **Obrasci uporabe bez opisa:** UC-003 i UC-004 nemaju opis u 3.2. UC-004 (koordinacija s hitnim službama) ujedno je mogućnost s vanjskim posljedicama koju opseg dopušta samo ako je uključena u odobreni zadatak.
-- **Nesklad aktera:** primjer aktera u odjeljku 2.3 navodi da koordinator pomoći podnosi prijave (F-004), dok UC-002 kao primarnog aktera navodi građanina.
-
-</details>
-
-**Završna provjera:** Dijagram, specifikacije obrazaca uporabe i matrica sljedivosti međusobno su usklađeni. Svaki važan obrazac uporabe povezan je s postojećim zahtjevom, akteri odgovaraju stvarnim ulogama u aplikaciji, a opisani glavni i alternativni tijekovi odgovaraju ponašanju koje sustav stvarno podržava.
+Provjeru treba ponoviti kad se ostvare obrasci označeni kao _trenutačno oblikovanje_.

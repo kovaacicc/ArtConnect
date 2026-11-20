@@ -14,18 +14,30 @@ import OrganizerStats from './pages/organizer/organizerStats'
 import { ApiError, setUnauthorizedHandler } from './services/api'
 import { getMe, loginWithGoogle, logout, type User } from './services/auth'
 
+import ArtistLayout from './components/artist/ArtistLayout';
+import ArtistDashboard from './pages/artist/ArtistDashboard';
+import Opportunities from './pages/artist/Opportunities';
+import ArtistOpportunityDetail from './pages/artist/OpportunityDetail';
+import Applications from './pages/artist/Applications';
+import ArtistProfile from './pages/artist/ArtistProfile';
+
 
 function Start() {
   const [user, setUser] = useState<User | null | undefined>(undefined)
   const [offline, setOffline] = useState(false)
+  const [offlineMsg, setOfflineMsg] = useState('')
 
   function loadUser() {
     setOffline(false)
     getMe()
       .then(setUser)
       .catch((error) => {
+        console.error('getMe nije uspio:', error)
         if (error instanceof ApiError && error.status === 401) setUser(null)
-        else setOffline(true)
+        else {
+          setOfflineMsg(error instanceof ApiError ? `${error.status}: ${error.message}` : String(error))
+          setOffline(true)
+        }
       })
   }
 
@@ -48,6 +60,7 @@ function Start() {
     screen = (
       <main className="loading">
         <p>Poslužitelj nije dostupan.</p>
+        <p style={{ opacity: 0.7, fontSize: 14 }}>{offlineMsg}</p>
         <button type="button" className="link" onClick={loadUser}>Pokušaj ponovno</button>
       </main>
     )
@@ -84,6 +97,8 @@ export default function App() {
       <UnauthorizedRedirect />
       <Routes>
         <Route path="/" element={<Start />} />
+        
+        {}
         <Route path="/organizator" element={<OrganizerLayout />}>
           <Route index element={<OrganizerHome />} />
           <Route path="moje" element={<MyOpportunities />} />
@@ -93,6 +108,17 @@ export default function App() {
           <Route path="prilike/:id/uredi" element={<OpportunityForm />} />
           <Route path="statistika" element={<OrganizerStats />} />
         </Route>
+
+        {}
+        <Route path="/umjetnik" element={<ArtistLayout />}>
+          <Route index element={<ArtistDashboard />} />
+          <Route path="prilike" element={<Opportunities />} />
+          <Route path="prilike/:id" element={<ArtistOpportunityDetail />} />
+          <Route path="prijave" element={<Applications />} />
+          <Route path="profil" element={<ArtistProfile />} />
+        </Route>
+        {}
+        
       </Routes>
     </BrowserRouter>
   )

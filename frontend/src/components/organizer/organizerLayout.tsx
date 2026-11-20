@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { ChartColumn, CirclePlus, FolderOpen, House, LayoutDashboard,  Moon, Sparkles, Sun } from 'lucide-react'
 import Logo from '../Logo'
-import { getMe, logout } from '../../services/auth'
-import '../../pages/artist/artist.css'
+import { logout } from '../../services/auth'
+import '../../styles/artist.css'
 import '../../opportunities.css'
 
 const NAV = [
