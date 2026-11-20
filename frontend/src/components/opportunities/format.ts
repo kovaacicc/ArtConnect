@@ -37,3 +37,6 @@ export function todayIso(): string {
   return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`
 }
 
+export function nowDateTimeLocal(): string {
+  return toDateTimeLocal(new Date().toISOString())
+}

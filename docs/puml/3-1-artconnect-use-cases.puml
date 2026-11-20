@@ -111,7 +111,7 @@ rectangle "ArtConnect" as ArtConnect{
     ' Prilike: pretraživanje i prijava (umjetnik)
     (UC-07 Pretraživanje i pregled prilika) as UC_PregledPrilika
     (UC-08 Prijava na priliku) as UC_PrijavaPrilika
-    (UC-09 Praćenje statusa prilike) as UC_Status
+    (UC-09 Praćenje statusa prijave) as UC_Status
     (UC-12 Dostava dopune prijave) as UC_DopunaUmjetnik
     (UC-13 Dodavanje događaja u kalendar) as UC_Kalendar
 

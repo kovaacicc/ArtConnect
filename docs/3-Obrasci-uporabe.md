@@ -16,8 +16,8 @@ Relacije `<<extend>>` koriste se za ponašanje koje se događa samo u nekim slu�
 - UC-06 (Upravljanje prilikom) proširuje UC-05 (Objava prilike) nakon objave prilike.
 - UC-08 (Prijava na priliku) proširuje UC-07 (Pretraživanje i pregled prilika) kad se umjetnik odluči prijaviti na odabranu priliku.
 - UC-11 (Zatraživanje dopune prijave) proširuje UC-10 (Pregled i odlučivanje o prijavama) kad organizator traži dopunu.
-- UC-12 (Dostava dopune prijave) proširuje UC-09 (Praćenje statusa prilike) kad je status prijave „potrebna dopuna".
-- UC-13 (Dodavanje događaja u kalendar) proširuje UC-09 (Praćenje statusa prilike) kad je umjetnik prihvaćen.
+- UC-12 (Dostava dopune prijave) proširuje UC-09 (Praćenje statusa prijave) kad je status prijave „potrebna dopuna".
+- UC-13 (Dodavanje događaja u kalendar) proširuje UC-09 (Praćenje statusa prijave) kad je umjetnik prihvaćen.
 - UC-15 (Objava rezultata i označavanje sudionika) proširuje UC-05 (Objava prilike) nakon što je prilika završena.
 
 ## 3.2 Specifikacije obrazaca uporabe
