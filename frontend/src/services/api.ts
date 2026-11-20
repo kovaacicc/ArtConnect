@@ -55,7 +55,8 @@ const DEFAULT_MESSAGES: Record<number, string> = {
 
 export async function apiRequest<T>(method: string, url: string, data?: unknown): Promise<T> {
   const headers: Record<string, string> = { Accept: 'application/json' }
-  if (data !== undefined) headers['Content-Type'] = 'application/json'
+  const isForm = data instanceof FormData
+  if (data !== undefined && !isForm) headers['Content-Type'] = 'application/json'
   if (method !== 'GET') headers['X-CSRFToken'] = await ensureCsrfToken()
 
       let response: Response
@@ -64,7 +65,7 @@ export async function apiRequest<T>(method: string, url: string, data?: unknown)
       method,
       headers,
       credentials: 'include',
-      body: data !== undefined ? JSON.stringify(data) : undefined,
+      body: data === undefined ? undefined : isForm ? data : JSON.stringify(data),
     })
   } catch {
     throw new ApiError(0, 'Poslužitelj nije dostupan. Pokušajte ponovno.')

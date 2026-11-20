@@ -593,7 +593,7 @@ a {
   flex: 1;
   padding: 40px 16px 120px;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* DODANO: Ovo je falilo u root {.txt */
   align-items: center;
   justify-content: center;
 }
@@ -688,7 +688,7 @@ a {
   }
 }
 
-/* Promjena teme: nova tema se širi iz gumba (animacija je u ThemeToggle.tsx). */
+/* Promjena teme */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;

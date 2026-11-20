@@ -3,7 +3,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { ChartColumn, CirclePlus, FolderOpen, House, LayoutDashboard,  Moon, Sparkles, Sun } from 'lucide-react'
 import Logo from '../Logo'
 import { logout } from '../../services/auth'
-import '../../pages/artist/artist.css'
+import '../../styles/artist.css'
 import '../../opportunities.css'
 
 const NAV = [
