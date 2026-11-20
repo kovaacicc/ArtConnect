@@ -111,7 +111,7 @@ Arhitekturna realizacija koristi nazive komponenata iz [odjeljka 4.2](4-Arhitekt
 
 | Kontrolna točka                | Povratna informacija ili nalaz | Odluka o zahtjevu ili opsegu |
 | ------------------------------ | ------------------------------ | ---------------------------- |
-| Kontrolna točka 1 (7. tjedan)  | [Povratna informacija]         | [Odluka; vidi odjeljak 2.5]  |
+| Kontrolna točka 1 (7. tjedan)  | Tijekom demonstracije uočeno je da se u /artist podatci ne dohvaćaju s pravog poslužitelja, već se koriste "mock" podatci u memoriji.         |  Promijenjen način dohvaćanja podataka u skladu s F-002, time se sustav umjetnika u potpunosti prebacuje na baze podataka.  |
 | Demo 2 (11. tjedan)            | [Povratna informacija]         | [Odluka; vidi odjeljak 2.5]  |
 | Kontrolna točka 2 (14. tjedan) | [Povratna informacija]         | [Odluka; vidi odjeljak 2.5]  |
 
