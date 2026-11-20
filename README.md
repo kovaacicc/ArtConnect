@@ -20,11 +20,11 @@ Za potpuni opseg, zahtjeve, oblikovanje i dokaze ispitivanja pogledajte [docs](d
 
 **Javno dostupna aplikacija:** https://artconnect.austriaeast.cloudapp.azure.com/
 
-**Isprobajte:** [Jedna ili dvije kratke radnje koje pokazuju funkcionalan korisnički tijek.]
-
 **Demonstracija:** Pri otvaranju stranice klikne se gumb "Prijavi se putem Googlea", što korisnika zatim odvede na Google za prijavu. Ako se korisnik nije prethodno registrirao, treba upisati svoje podatke za registraciju, u suprotnom odmah dobiva pristup stranici.
 
-**Ograničenja:** [Kratko navedite ograničenja postavljene inačice ili postavite poveznicu na jedinstveno mjerodavno mjesto u dokumentaciji s poznatim problemima.]
+**Isprobajte:** Nakon prijave i registracije kao umjetnik, u kartici "Pregled" možete kliknuti na "Uredi portfolio" kako biste uredili svoj portfolio i dodali radove. Klikom na "Prilike" možete vidjeti sve objavljene prilike, te ih možete filtrirati.
+
+**Ograničenja:** [docs](./docs/2-Analiza-zahtjeva.md#24-ograničenja-i-pretpostavke)
 
 Aplikacija je postavljena na Azure virtualnoj mašini s Ubuntu 24.04 LTS OS-om.
 
@@ -41,7 +41,7 @@ cp .env.example .env # te urediti .env
 docker compose -f docker-compose-dev.yaml up --build
 ```
 
-**Adresa:** http://artconnect.austriaeast.cloudapp.azure.com/
+**Adresa:** http://localhost
 
 Produkcijsko pokretanje:
 ```bash
@@ -98,12 +98,12 @@ Kod trećih strana, skupovi podataka, slike, ikone i ostali sadržaji zadržavaj
 
 Ovaj projekt slijedi FER-ova [pravila o primjerenoj uporabi umjetne inteligencije](https://www.fer.unizg.hr/_download/repository/Policy%20on%20the%20appropriate%20use%20of%20artificial%20intelligence%20at%20the%20faculty%20of%20electrical%20engineering%20and%20computing%5B1%5D.pdf).
 
-**Izjava:** Tijekom razvoja koristimo alate umjetne inteligencije (primjerice Claude Code) isključivo kao pomoć i savjetodavni alat.. Svaki član tima pregledava sav kod i tekst prije nego što uđe u repozitorij te može objasniti vlastiti doprinos.
+**Izjava:** Tijekom razvoja koristimo alate umjetne inteligencije (primjerice Claude Code) isključivo kao pomoć i savjetodavni alat. Svaki član tima pregledava sav kod i tekst prije nego što uđe u repozitorij te može objasniti vlastiti doprinos.
 
 <a id="code-of-conduct-and-support"></a>
 ## Kodeks ponašanja i podrška [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
-Od članova tima očekuje se pridržavanje **Kodeksa ponašanja studenata** Fakulteta elektrotehnike i računarstva Sveučilišta u Zagrebu, pravila timskog rada na kolegiju i [Etičkog kodeksa IEEE-a](https://www.ieee.org/about/corporate/governance/p7-8.html). [Postavite poveznicu na `CODE_OF_CONDUCT.md` ako se ta datoteka koristi u vašem repozitoriju.]
+Od članova tima očekuje se pridržavanje **Kodeksa ponašanja studenata** Fakulteta elektrotehnike i računarstva Sveučilišta u Zagrebu, pravila timskog rada na kolegiju i [Etičkog kodeksa IEEE-a](https://www.ieee.org/about/corporate/governance/p7-8.html). [CODE OF CONDUCT](./CODE_OF_CONDUCT.md)
 
 ---
 

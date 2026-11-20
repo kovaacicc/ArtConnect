@@ -42,7 +42,7 @@ Predloženi klijentski dio gradi se kao statičko web-mjesto. Poslužiteljska we
 
 ## 6.2 Lokalna instalacija i konfiguracija
 
-Backend (Django) i baza (PostgreSQL) se pokreću u Docker kontejnerima definiranima u [compose.yaml](../compose.yaml). Naredbe za kloniranje, konfiguraciju i pokretanje nalaze se u [README-u](../README.md#quick-start).
+Backend (Django) i baza (PostgreSQL) se pokreću u Docker kontejnerima definiranima u [docker-compose-dev.yaml](../docker-compose-dev.yaml) za lokalno pokretanje te [docker-compose-prod.yaml](../docker-compose-prod.yaml) za pokretanje na produkcijskom serveru. Naredbe za kloniranje, konfiguraciju i pokretanje nalaze se u [README-u](../README.md#quick-start).
 
 1. **Preduvjeti i preuzimanje izvornog koda:**
    * Za preuzimanje i pokretanje projekta potrebni su git, docker i docker compose
