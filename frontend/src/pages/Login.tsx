@@ -49,10 +49,6 @@ export default function Login() {
               Prijavi se putem Googlea
             </button>
 
-            <p className="login-question">Nemate račun?</p>
-            <button type="button" className="btn btn-outline" onClick={() => loginWithGoogle(true)}>
-              Kreiraj novi korisnički račun
-            </button>
           </div>
 
           <p className="login-terms">

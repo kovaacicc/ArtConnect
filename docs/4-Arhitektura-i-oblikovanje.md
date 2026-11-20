@@ -2,27 +2,15 @@
 
 ## 4.1 Strategija rješenja
 
-**Cilj:** Objasniti nekoliko arhitekturnih odluka koje najviše utječu na rješenje i navesti njihove projektno specifične razloge.
+Tablica navodi arhitekturne odluke koje najviše određuju ArtConnect, alternative koje smo razmatrali i cijenu koju plaćamo za odabrano rješenje.
 
 | Odluka | Razmatrana alternativa | Projektno specifično obrazloženje i kompromis |
 | ------ | ---------------------- | --------------------------------------------- |
-|        |                        |                                               |
-
-Objasnite glavne arhitekturne odluke bez ponavljanja popisa tehnologija. Ako važna odluka ima ADR, dovoljno je u tablici navesti njegov ID.
-
-<details>
-<summary><strong>Objašnjenje odabira</strong></summary>
-
-**Primjer — CrisisMap:**
-
-| Odluka                                           | Razmatrana alternativa                           | Projektno specifično obrazloženje i kompromis                                                                                                                                                                                |
-| ------------------------------------------------ | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Klijent u pregledniku i jedan poslužiteljski API | Više zasebno postavljenih poslužiteljskih usluga | Klijent prikazuje kartu, dok poslužiteljski sustav provjerava i pohranjuje prijave. Jedan poslužiteljski sustav upravljiv je za ovaj opseg; njegov kvar može privremeno prekinuti rad s prijavama. Obrazloženje je u ADR-01. |
-| Relacijska pohrana prijava                       | Dokumentno orijentirana pohrana                  | Prijave imaju prepoznatljive veze s korisnicima i lokacijama. Relacijska shema te veze čini eksplicitnima, ali zahtijeva migracije kada se shema promijeni.                                                                  |
-
-**Analiza primjera:** Obje odluke navode razlog vezan uz aplikaciju za prijavljivanje kriznih događaja i priznaju kompromis. Odluka o poslužiteljskom sustavu upućuje na ADR-01 umjesto ponavljanja cijele usporedbe. Moduli unutar jedne aplikacije koja se postavlja kao cjelina nisu zasebne mikrousluge. U vlastitoj tablici navedite alternative koje je tim doista razmatrao.
-
-</details>
+| Web-klijent u pregledniku (React) i jedan Django REST API podijeljen na aplikacije `users`, `portfolio`, `opportunities` i `administration` | Zasebno postavljene usluge (mikroservisi) ili stranice koje generira sam Django | Umjetnik i organizator rade puno na jednom ekranu (filtriranje prilika, statusi prijava, obrasci s više koraka), pa ih klijent prikazuje bez ponovnog učitavanja stranice. Jedan backend s odvojenim aplikacijama tim može razviti i postaviti unutar semestra, a svaka aplikacija i dalje ima jasnu odgovornost (vidi 4.2). Kompromis: kvar backenda zaustavlja sve funkcionalnosti odjednom, a promjene API-ja moramo ručno uskladiti s klijentom. |
+| Registracija i prijava isključivo putem Google OAuth 2.0 (django-allauth); uloga i podaci profila unose se nakon prve prijave | Vlastiti korisnički računi s e-poštom i lozinkom | NF-09 traži prijavu isključivo putem OAuth 2.0. Google već potvrđuje adresu e-pošte, pa ne čuvamo lozinke i ne šaljemo poruke za potvrdu računa. Isti račun omogućit će i planiranu integraciju s Google Calendarom (F-016), zato se OAuth tokeni spremaju. Kompromis: bez Google računa nije moguće koristiti platformu, a prijava ovisi o dostupnosti Googlea. |
+| Prijava se pamti sesijskim kolačićem uz CSRF zaštitu (Django sesije) | JWT tokeni koje klijent sprema i šalje u zaglavlju svakog zahtjeva | Klijent i API dijele istu adresu iza nginxa, pa preglednik sam šalje kolačić koji JavaScript ne može pročitati, što smanjuje štetu od XSS-a (NF-03). Odjava odmah poništava sesiju na poslužitelju. Kompromis: svaki POST mora slati CSRF token, a lokalni razvoj traži proxy u Viteu kako bi klijent i API bili na istoj adresi. |
+| Relacijska baza PostgreSQL | Dokumentno orijentirana baza | Podaci su međusobno povezani: korisnik ima profil umjetnika ili organizatora, umjetnik ima djela, prilika ima prijave, a prijava priložena djela. Strani ključevi i ograničenja (npr. jedinstveni OAuth identitet korisnika) čuvaju dosljednost tih veza. Kompromis: svaka promjena modela traži migraciju, a CI provjerava da su sve migracije dodane u repozitorij. |
+| Cijeli sustav pokreće se u Docker Compose okruženju iza nginxa, koji poslužuje izgrađeni React i prosljeđuje `/api`, `/oauth` i `/admin` na Django (gunicorn) | Zasebni hosting klijenta i API-ja na različitim domenama (npr. Render) | Jedna domena znači da nema CORS-a ni kolačića između domena. Isto okruženje radi lokalno, u CI-ju (Selenium testovi) i na produkcijskom poslužitelju, gdje nginx s Let's Encrypt certifikatom osigurava HTTPS (NF-01). Nakon uspješnog CI-ja na grani `main` aplikacija se automatski postavlja. Kompromis: poslužitelj, certifikate i sigurnosne kopije održava sam tim, a jedan poslužitelj je jedna točka kvara. |
 
 ## 4.2 Gradivni blokovi i UML dijagram komponenata
 
