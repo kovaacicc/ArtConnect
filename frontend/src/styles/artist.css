@@ -320,3 +320,10 @@ textarea.ac-input { resize: vertical; }
 }
 
 @media (prefers-reduced-motion: reduce) { .ac * { transition: none !important; animation: none !important; } }
+.ac-chip-toggle {
+  padding: 0.45rem 1rem; border-radius: 999px; border: 1px solid var(--ac-line);
+  background: transparent; color: var(--ac-muted); font: inherit; font-size: 0.9rem; cursor: pointer;
+  transition: all 0.15s;
+}
+.ac-chip-toggle:hover { background: var(--ac-panel-2); }
+.ac-chip-toggle.is-on { background: var(--ac-blue); border-color: var(--ac-blue); color: #fff; }

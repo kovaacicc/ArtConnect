@@ -1,216 +1,270 @@
-import { useEffect, useRef, useState } from 'react';
-import { artistApi } from '../../services/artistApi';
-import { ART_FIELDS, type Application, type ArtField, type ArtistProfile as Profile, type Artwork } from '../../types/artist';
-import { Empty, Loading, Modal } from '../../components/artist/ui';
+import { useEffect, useState } from 'react';
+import { artistApi, errMsg, formatDate } from '../../services/artistApi';
+import { getArtFields, getMe, type ArtField, type User } from '../../services/auth';
+import type { ArtistProfile as Profile, Artwork, Exhibition } from '../../types/artist';
+import { Empty, ErrorBox, Loading, Modal } from '../../components/artist/ui';
 
-type Draft = Omit<Artwork, 'id'> & { id?: string };
-const blank = (): Draft => ({ title: '', year: new Date().getFullYear(), technique: '', dimensions: '', description: '', isPublic: true });
+type Draft = {
+  id?: number;
+  title: string;
+  year_created: string;
+  technique: string;
+  dimensions: string;
+  description: string;
+  is_public: boolean;
+  imageUrl: string;
+  files: Artwork['files'];
+};
+
+const blank = (): Draft => ({
+  title: '', year_created: String(new Date().getFullYear()), technique: '', dimensions: '',
+  description: '', is_public: true, imageUrl: '', files: [],
+});
+
+const toDraft = (a: Artwork): Draft => ({
+  id: a.id, title: a.title, year_created: a.year_created ? String(a.year_created) : '',
+  technique: a.technique, dimensions: a.dimensions, description: a.description,
+  is_public: a.is_public, imageUrl: a.files[0]?.url ?? '', files: a.files,
+});
 
 export default function ArtistProfile() {
   const [p, setP] = useState<Profile | null>(null);
-  const [apps, setApps] = useState<Application[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+  const [fields, setFields] = useState<ArtField[]>([]);
   const [works, setWorks] = useState<Artwork[]>([]);
-  
-  const [isEditing, setIsEditing] = useState(false); 
-  const [draft, setDraft] = useState<Draft | null>(null); 
-  const [saved, setSaved] = useState(false);
-  
-  const [newEx, setNewEx] = useState({ title: '', year: new Date().getFullYear(), place: '' });
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [exhibitions, setExhibitions] = useState<Exhibition[]>([]);
+  const [error, setError] = useState('');
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState<Draft | null>(null);
+  const [newEx, setNewEx] = useState({ title: '', year: String(new Date().getFullYear()), description: '' });
 
-  useEffect(() => {
-    Promise.all([artistApi.getProfile(), artistApi.getApplications(), artistApi.getArtworks()]).then(([pr, a, w]) => {
-      setP(pr); setApps(a); setWorks(w);
-    });
-  }, []);
+  const load = () =>
+    Promise.all([artistApi.getProfile(), getMe(), getArtFields(), artistApi.getArtworks(), artistApi.getExhibitions()])
+      .then(([pr, u, f, w, ex]) => { setP(pr); setUser(u); setFields(f); setWorks(w); setExhibitions(ex); })
+      .catch((e) => setError(errMsg(e)));
 
-  if (!p) return <Loading />;
+  useEffect(() => { load(); }, []);
 
-  const set = <K extends keyof Profile>(k: K, v: Profile[K]) => setP({ ...p, [k]: v });
+  if (!p) return error ? <ErrorBox message={error} /> : <Loading />;
 
-  const saveProfile = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setP(await artistApi.saveProfile(p));
-    setIsEditing(false); // Zatvori modal
-  };
+  const fullName = `${p.first_name} ${p.last_name}`.trim();
 
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => set('avatarUrl', String(reader.result));
-    reader.readAsDataURL(file);
+  const run = async (fn: () => Promise<unknown>) => {
+    try { setError(''); await fn(); await load(); } catch (e) { setError(errMsg(e)); }
   };
 
   const addExhibition = () => {
     if (!newEx.title.trim()) return;
-    set('exhibitions', [{ id: crypto.randomUUID(), ...newEx }, ...p.exhibitions]);
-    setNewEx({ title: '', year: new Date().getFullYear(), place: '' });
-  };
-
-  const participations = apps.filter((a) => a.status === 'prihvacena');
-
-  const togglePublic = async (a: Artwork) => setWorks(await artistApi.saveArtwork({ ...a, isPublic: !a.isPublic }));
-  const removeArtwork = async (a: Artwork) => {
-    if (window.confirm(`Obrisati rad „${a.title}”?`)) setWorks(await artistApi.deleteArtwork(a.id));
+    run(async () => {
+      await artistApi.createExhibition({
+        title: newEx.title.trim(),
+        year: newEx.year ? Number(newEx.year) : null,
+        description: newEx.description.trim(),
+      });
+      setNewEx({ title: '', year: String(new Date().getFullYear()), description: '' });
+    });
   };
 
   return (
     <>
-      {}
       <header className="ac-profile-header">
-        <div className="ac-avatar-wrapper" onClick={() => fileInputRef.current?.click()}>
-          {p.avatarUrl ? <img src={p.avatarUrl} alt="Profilna" className="ac-avatar-img" /> : <div className="ac-avatar-placeholder">{p.name.charAt(0)}</div>}
-          <div className="ac-avatar-overlay">Promijeni</div>
-          <input type="file" accept="image/*" ref={fileInputRef} onChange={handleAvatarChange} style={{ display: 'none' }} />
+        <div className="ac-avatar-wrapper" style={{ cursor: 'default' }}>
+          <div className="ac-avatar-placeholder">{(p.first_name || '?').charAt(0)}</div>
         </div>
 
         <div className="ac-profile-info">
-          <div className="ac-profile-title">
-            <h2>{p.username}</h2>
+          <h2>{fullName}</h2>
+          {user && <p className="ac-muted">{user.email}</p>}
+          <div className="ac-row">
+            {p.art_fields.map((f) => <span key={f.id} className="ac-chip">{f.name}</span>)}
           </div>
-          <p className="ac-name">{p.name}</p>
-          
           <div className="ac-profile-stats">
             <span><strong>{works.length}</strong> radova</span>
-            <span><strong>{p.exhibitions.length}</strong> izložbi</span>
-            <span><strong>{participations.length}</strong> sudjelovanja</span>
+            <span><strong>{exhibitions.length}</strong> izložbi</span>
+            <span><strong>{p.participations.length}</strong> sudjelovanja</span>
           </div>
-
-          <p className="ac-bio">{p.bio}</p>
+          {p.biography && <p className="ac-bio">{p.biography}</p>}
+          {p.work_description && <p className="ac-bio ac-muted">{p.work_description}</p>}
+          <div className="ac-row">
+            {p.website_url && <a className="ac-small" href={p.website_url} target="_blank" rel="noreferrer">Web-stranica ↗</a>}
+            {p.social_url && <a className="ac-small" href={p.social_url} target="_blank" rel="noreferrer">Društvena mreža ↗</a>}
+          </div>
         </div>
       </header>
 
-      {}
+      {error && <ErrorBox message={error} />}
+
       <div className="ac-profile-actions">
-        <button className="ac-btn ac-btn--block" onClick={() => setIsEditing(true)}>
-          Uredi profil
-        </button>
+        <button className="ac-btn ac-btn--block" onClick={() => setEditing(true)}>Uredi profil</button>
       </div>
 
-      {}
       <section style={{ marginTop: '3rem' }}>
         <div className="ac-row" style={{ justifyContent: 'space-between', marginBottom: '1.5rem' }}>
-          <h2 style={{ margin: 0 }}>Moji radovi</h2>
+          <h2>Moji radovi</h2>
           <button className="ac-btn ac-btn--primary ac-btn--small" onClick={() => setDraft(blank())}>+ Dodaj rad</button>
         </div>
-        
+
         {works.length === 0 ? (
-          <Empty title="Portfolio je prazan" text="Dodaj prvi rad kako bi se mogao prijaviti na natječaje." />
+          <Empty title="Portfolio je prazan" text="Dodaj prvi rad kako bi ga organizatori mogli vidjeti." />
         ) : (
           <div className="ac-grid ac-grid--works">
-            {works.map((a) => (
-              <article key={a.id} className="ac-work">
-                <div className="ac-work__img" style={a.imageUrl ? { backgroundImage: `url(${a.imageUrl})` } : undefined}>
-                  {!a.imageUrl && <span>{a.title.charAt(0)}</span>}
-                  <span className={`ac-pill ${a.isPublic ? 'is-public' : ''}`}>{a.isPublic ? 'Javno' : 'Privatno'}</span>
-                </div>
-                <div className="ac-work__body">
-                  <h3>{a.title}</h3>
-                  <p className="ac-muted ac-small">{a.year} · {a.technique}</p>
-                  <div className="ac-row">
-                    <button className="ac-btn ac-btn--small ac-btn--ghost" onClick={() => setDraft(a)}>Uredi</button>
-                    <button className="ac-btn ac-btn--small ac-btn--ghost" onClick={() => togglePublic(a)}>{a.isPublic ? 'Sakrij' : 'Objavi'}</button>
-                    <button className="ac-btn ac-btn--small ac-btn--danger" onClick={() => removeArtwork(a)}>Obriši</button>
+            {works.map((a) => {
+              const img = a.files[0]?.url;
+              return (
+                <article key={a.id} className="ac-work">
+                  <div className="ac-work__img" style={img ? { backgroundImage: `url("${img}")` } : undefined}>
+                    {!img && <span>{a.title.charAt(0)}</span>}
+                    <span className={`ac-pill ${a.is_public ? 'is-public' : ''}`}>{a.is_public ? 'Javno' : 'Privatno'}</span>
                   </div>
-                </div>
-              </article>
-            ))}
+                  <div className="ac-work__body">
+                    <h3>{a.title}</h3>
+                    <p className="ac-muted ac-small">{[a.year_created, a.technique].filter(Boolean).join(' · ')}</p>
+                    <div className="ac-row">
+                      <button className="ac-btn ac-btn--small ac-btn--ghost" onClick={() => setDraft(toDraft(a))}>Uredi</button>
+                      <button className="ac-btn ac-btn--small ac-btn--ghost" onClick={() => run(() => artistApi.updateArtwork(a.id, { is_public: !a.is_public }))}>
+                        {a.is_public ? 'Sakrij' : 'Objavi'}
+                      </button>
+                      <button className="ac-btn ac-btn--small ac-btn--danger" onClick={() => window.confirm(`Obrisati rad „${a.title}”?`) && run(() => artistApi.deleteArtwork(a.id))}>
+                        Obriši
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         )}
       </section>
 
       <section style={{ marginTop: '3rem' }}>
-        <h2>Sudjelovanja putem ArtConnecta</h2>
-        {participations.length === 0 ? <p className="ac-muted">Nema zabilježenih sudjelovanja.</p> : (
-          <ul className="ac-list">{participations.map((a) => <li key={a.id}><strong>{a.opportunityTitle}</strong></li>)}</ul>
+        <h2 style={{ marginBottom: '1rem' }}>Prethodne izložbe i projekti</h2>
+        <ul className="ac-list">
+          {exhibitions.map((x) => (
+            <li key={x.id}>
+              <div className="ac-list__main"><strong>{x.title}</strong><span>{[x.year, x.description].filter(Boolean).join(' · ')}</span></div>
+              <button className="ac-btn ac-btn--small ac-btn--danger" onClick={() => run(() => artistApi.deleteExhibition(x.id))}>Ukloni</button>
+            </li>
+          ))}
+        </ul>
+        <div className="ac-row" style={{ marginTop: '1rem' }}>
+          <input className="ac-input ac-grow" placeholder="Naziv" aria-label="Naziv izložbe" value={newEx.title} onChange={(e) => setNewEx({ ...newEx, title: e.target.value })} />
+          <input className="ac-input ac-input--year" type="number" aria-label="Godina" value={newEx.year} onChange={(e) => setNewEx({ ...newEx, year: e.target.value })} />
+          <input className="ac-input ac-grow" placeholder="Opis (neobavezno)" aria-label="Opis" value={newEx.description} onChange={(e) => setNewEx({ ...newEx, description: e.target.value })} />
+          <button className="ac-btn ac-btn--ghost" onClick={addExhibition}>Dodaj</button>
+        </div>
+      </section>
+
+      <section style={{ marginTop: '3rem' }}>
+        <h2 style={{ marginBottom: '1rem' }}>Sudjelovanja putem ArtConnecta</h2>
+        {p.participations.length === 0 ? <p className="ac-muted">Nema zabilježenih sudjelovanja.</p> : (
+          <ul className="ac-list">
+            {p.participations.map((x) => (
+              <li key={x.opportunity_id}>
+                <div className="ac-list__main"><strong>{x.title}</strong><span>{x.starts_at ? formatDate(x.starts_at) : ''}</span></div>
+              </li>
+            ))}
+          </ul>
         )}
       </section>
 
-      {}
-      {isEditing && (
-        <Modal title="Uredi profil" onClose={() => setIsEditing(false)}>
-          <form className="ac-form" onSubmit={saveProfile}>
-            <div className="ac-row">
-              <label className="ac-grow">Korisničko ime<input className="ac-input" required value={p.username} onChange={(e) => set('username', e.target.value)} /></label>
-              <label className="ac-grow">Ime i prezime<input className="ac-input" required value={p.name} onChange={(e) => set('name', e.target.value)} /></label>
-            </div>
-            <label>Područje umjetničkog djelovanja
-              <select className="ac-input" value={p.field} onChange={(e) => set('field', e.target.value as ArtField)}>
-                {ART_FIELDS.map((f) => <option key={f}>{f}</option>)}
-              </select>
-            </label>
-            <label>Kratki opis (Bio)<textarea className="ac-input" rows={2} value={p.bio} onChange={(e) => set('bio', e.target.value)} /></label>
-            <label>Umjetnička izjava<textarea className="ac-input" rows={3} value={p.statement} onChange={(e) => set('statement', e.target.value)} /></label>
-            <div className="ac-row">
-              <label className="ac-grow">Web-stranica<input className="ac-input" type="url" value={p.website} onChange={(e) => set('website', e.target.value)} /></label>
-              <label className="ac-grow">Društvena mreža<input className="ac-input" type="url" value={p.social} onChange={(e) => set('social', e.target.value)} /></label>
-            </div>
-
-            <fieldset>
-              <legend>Izložbe i projekti</legend>
-              <ul className="ac-list" style={{ maxHeight: '150px', overflowY: 'auto' }}>
-                {p.exhibitions.map((x) => (
-                  <li key={x.id}>
-                    <div className="ac-list__main"><strong>{x.title}</strong><span className="ac-muted">{x.year} · {x.place}</span></div>
-                    <button type="button" className="ac-btn ac-btn--small ac-btn--danger" onClick={() => set('exhibitions', p.exhibitions.filter((e) => e.id !== x.id))}>✕</button>
-                  </li>
-                ))}
-              </ul>
-              <div className="ac-row" style={{ marginTop: '0.5rem' }}>
-                <input className="ac-input ac-grow" placeholder="Naziv" value={newEx.title} onChange={(e) => setNewEx({ ...newEx, title: e.target.value })} />
-                <input className="ac-input ac-input--year" type="number" value={newEx.year} onChange={(e) => setNewEx({ ...newEx, year: Number(e.target.value) })} />
-                <input className="ac-input ac-grow" placeholder="Mjesto" value={newEx.place} onChange={(e) => setNewEx({ ...newEx, place: e.target.value })} />
-                <button type="button" className="ac-btn ac-btn--ghost" onClick={addExhibition}>Dodaj</button>
-              </div>
-            </fieldset>
-
-            <div className="ac-row ac-row--end">
-              <button type="button" className="ac-btn ac-btn--ghost" onClick={() => setIsEditing(false)}>Odustani</button>
-              <button className="ac-btn ac-btn--primary">Spremi promjene</button>
-            </div>
-          </form>
-        </Modal>
+      {editing && (
+        <ProfileModal
+          p={p} fields={fields} onClose={() => setEditing(false)}
+          onSave={async (data) => { await run(() => artistApi.saveProfile(data)); setEditing(false); }}
+        />
       )}
 
-      {}
       {draft && (
         <ArtworkModal
           draft={draft} onClose={() => setDraft(null)}
-          onSave={async (d) => { setWorks(await artistApi.saveArtwork(d)); setDraft(null); }}
+          onSave={async (d) => {
+            await run(async () => {
+              const input = {
+                title: d.title.trim(),
+                year_created: d.year_created ? Number(d.year_created) : null,
+                technique: d.technique, dimensions: d.dimensions, description: d.description, is_public: d.is_public,
+              };
+              const saved = d.id ? await artistApi.updateArtwork(d.id, input) : await artistApi.createArtwork(input);
+              const old = d.files[0];
+              const url = d.imageUrl.trim();
+              if ((old?.url ?? '') !== url) {
+                if (old) await artistApi.deleteArtworkFile(saved.id, old.id);
+                if (url) await artistApi.addArtworkFile(saved.id, url);
+              }
+            });
+            setDraft(null);
+          }}
         />
       )}
     </>
   );
 }
 
+function ProfileModal({ p, fields, onClose, onSave }: {
+  p: Profile; fields: ArtField[]; onClose: () => void;
+  onSave: (d: Parameters<typeof artistApi.saveProfile>[0]) => Promise<void>;
+}) {
+  const [f, setF] = useState({
+    first_name: p.first_name, last_name: p.last_name, biography: p.biography,
+    work_description: p.work_description, website_url: p.website_url, social_url: p.social_url,
+  });
+  const [ids, setIds] = useState<number[]>(p.art_fields.map((x) => x.id));
+  const set = (k: keyof typeof f, v: string) => setF((x) => ({ ...x, [k]: v }));
+  const toggle = (id: number) => setIds((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
+
+  return (
+    <Modal title="Uredi profil" onClose={onClose}>
+      <form className="ac-form" onSubmit={(e) => { e.preventDefault(); onSave({ ...f, art_fields: ids }); }}>
+        <div className="ac-row">
+          <label className="ac-grow">Ime<input className="ac-input" required value={f.first_name} onChange={(e) => set('first_name', e.target.value)} /></label>
+          <label className="ac-grow">Prezime<input className="ac-input" required value={f.last_name} onChange={(e) => set('last_name', e.target.value)} /></label>
+        </div>
+        <fieldset>
+          <legend>Područja umjetničkog djelovanja</legend>
+          <div className="ac-row">
+            {fields.map((x) => (
+              <button type="button" key={x.id} className={`ac-chip-toggle ${ids.includes(x.id) ? 'is-on' : ''}`} aria-pressed={ids.includes(x.id)} onClick={() => toggle(x.id)}>
+                {x.name}
+              </button>
+            ))}
+          </div>
+        </fieldset>
+        <label>Biografija<textarea className="ac-input" rows={3} value={f.biography} onChange={(e) => set('biography', e.target.value)} /></label>
+        <label>Opis umjetničkog rada<textarea className="ac-input" rows={3} value={f.work_description} onChange={(e) => set('work_description', e.target.value)} /></label>
+        <div className="ac-row">
+          <label className="ac-grow">Web-stranica<input className="ac-input" type="url" placeholder="https://" value={f.website_url} onChange={(e) => set('website_url', e.target.value)} /></label>
+          <label className="ac-grow">Društvena mreža<input className="ac-input" type="url" placeholder="https://" value={f.social_url} onChange={(e) => set('social_url', e.target.value)} /></label>
+        </div>
+        <div className="ac-row ac-row--end">
+          <button type="button" className="ac-btn ac-btn--ghost" onClick={onClose}>Odustani</button>
+          <button className="ac-btn ac-btn--primary" disabled={ids.length === 0}>Spremi promjene</button>
+        </div>
+      </form>
+    </Modal>
+  );
+}
+
 function ArtworkModal({ draft, onClose, onSave }: { draft: Draft; onClose: () => void; onSave: (d: Draft) => Promise<void> }) {
   const [d, setD] = useState<Draft>(draft);
+  const [busy, setBusy] = useState(false);
   const set = <K extends keyof Draft>(k: K, v: Draft[K]) => setD((x) => ({ ...x, [k]: v }));
-
-  const onFile = (f?: File) => {
-    if (!f) return;
-    const r = new FileReader();
-    r.onload = () => set('imageUrl', String(r.result));
-    r.readAsDataURL(f);
-  };
 
   return (
     <Modal title={d.id ? 'Uredi rad' : 'Novi rad'} onClose={onClose}>
-      <form className="ac-form" onSubmit={(e) => { e.preventDefault(); onSave(d); }}>
+      <form className="ac-form" onSubmit={async (e) => { e.preventDefault(); setBusy(true); await onSave(d); }}>
         <label>Naziv<input className="ac-input" required value={d.title} onChange={(e) => set('title', e.target.value)} /></label>
         <div className="ac-row">
-          <label className="ac-grow">Godina<input className="ac-input" type="number" required value={d.year} onChange={(e) => set('year', Number(e.target.value))} /></label>
+          <label className="ac-grow">Godina nastanka<input className="ac-input" type="number" value={d.year_created} onChange={(e) => set('year_created', e.target.value)} /></label>
           <label className="ac-grow">Dimenzije<input className="ac-input" placeholder="80 × 60 cm" value={d.dimensions} onChange={(e) => set('dimensions', e.target.value)} /></label>
         </div>
-        <label>Tehnika<input className="ac-input" required value={d.technique} onChange={(e) => set('technique', e.target.value)} /></label>
-        <label>Opis<textarea className="ac-input" rows={2} value={d.description} onChange={(e) => set('description', e.target.value)} /></label>
-        <label>Fotografija rada<input className="ac-input" type="file" accept="image/*" onChange={(e) => onFile(e.target.files?.[0])} /></label>
-        {d.imageUrl && <img className="ac-preview" src={d.imageUrl} alt="Pregled" />}
-        <label className="ac-check"><input type="checkbox" checked={d.isPublic} onChange={(e) => set('isPublic', e.target.checked)} />Javno vidljiv</label>
+        <label>Tehnika<input className="ac-input" value={d.technique} onChange={(e) => set('technique', e.target.value)} /></label>
+        <label>Opis<textarea className="ac-input" rows={3} value={d.description} onChange={(e) => set('description', e.target.value)} /></label>
+        <label>Poveznica na sliku rada<input className="ac-input" type="url" placeholder="https://" value={d.imageUrl} onChange={(e) => set('imageUrl', e.target.value)} /></label>
+        {d.imageUrl && <img className="ac-preview" src={d.imageUrl} alt="Pregled slike" />}
+        <label className="ac-check"><input type="checkbox" checked={d.is_public} onChange={(e) => set('is_public', e.target.checked)} />Javno vidljiv</label>
         <div className="ac-row ac-row--end">
           <button type="button" className="ac-btn ac-btn--ghost" onClick={onClose}>Odustani</button>
-          <button className="ac-btn ac-btn--primary">Spremi</button>
+          <button className="ac-btn ac-btn--primary" disabled={busy}>{busy ? 'Spremam…' : 'Spremi'}</button>
         </div>
       </form>
     </Modal>

@@ -42,6 +42,19 @@ export function Empty({ title, text, action }: { title: string; text?: string; a
   );
 }
 
+export function NotImplemented({ what }: { what?: string }) {
+  return (
+    <div className="ac-empty">
+      <h3>Ova funkcija još nije napravljena.</h3>
+      {what && <p>{what}</p>}
+    </div>
+  );
+}
+
+export function ErrorBox({ message }: { message: string }) {
+  return <div className="ac-alert" role="alert">{message}</div>;
+}
+
 export function Loading() {
   return <p className="ac-muted" role="status">Učitavanje…</p>;
 }

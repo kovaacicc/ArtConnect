@@ -1,40 +1,22 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { opportunitiesApi } from '../../services/opportunitiesApi';
-import { artistApi, formatDate } from '../../services/artistApi';
-import type { Application, Artwork, Opportunity } from '../../types/artist';
-import { ApplicationBadge, Empty, Loading, Modal, OpportunityBadge } from '../../components/artist/ui';
+import { formatDate } from '../../services/artistApi';
+import type { Opportunity } from '../../types/artist';
+import { Empty, Loading, NotImplemented, OpportunityBadge } from '../../components/artist/ui';
 
 export default function OpportunityDetail() {
   const { id = '' } = useParams();
-  const navigate = useNavigate();
   const [opp, setOpp] = useState<Opportunity | null | undefined>(undefined);
-  const [artworks, setArtworks] = useState<Artwork[]>([]);
-  const [existing, setExisting] = useState<Application | undefined>();
-  const [applying, setApplying] = useState(false);
 
   useEffect(() => {
     const numericId = Number(id);
-    if (isNaN(numericId)) {
-      setOpp(null);
-      return;
-    }
-
-    Promise.all([
-      opportunitiesApi.get(numericId),
-      artistApi.getArtworks(),
-      artistApi.getApplications()
-    ]).then(([o, a, apps]) => {
-      setOpp(o);
-      setArtworks(a);
-      setExisting(apps.find((x) => x.opportunityId === id));
-    }).catch(() => setOpp(null));
+    if (isNaN(numericId)) { setOpp(null); return; }
+    opportunitiesApi.get(numericId).then(setOpp).catch(() => setOpp(null));
   }, [id]);
 
   if (opp === undefined) return <Loading />;
   if (opp === null) return <Empty title="Prilika nije pronađena" action={<Link className="ac-btn" to="/umjetnik/prilike">Natrag na prilike</Link>} />;
-
-  const canApply = opp.status === 'open' && !existing;
 
   return (
     <>
@@ -45,27 +27,19 @@ export default function OpportunityDetail() {
         <p className="ac-muted">{opp.organizer_name}</p>
       </header>
 
-      <div className="ac-cols ac-cols--detail">
+      <div className="ac-cols--detail">
         <section>
           <p className="ac-prose">{opp.description}</p>
           <dl className="ac-meta ac-meta--stack">
             <div><dt>Rok za prijavu</dt><dd>{opp.deadline ? formatDate(opp.deadline) : 'Nema roka'}</dd></div>
             <div><dt>Događanje</dt><dd>{opp.starts_at ? formatDate(opp.starts_at) : 'Nije definirano'}</dd></div>
-            <div><dt>Mjesto</dt><dd>{opp.address}</dd></div>
+            <div><dt>Mjesto</dt><dd>{opp.address || 'Nije navedeno'}</dd></div>
             {opp.age_criteria && <div><dt>Dob</dt><dd>{opp.age_criteria}</dd></div>}
             {opp.reward && <div><dt>Nagrada / naknada</dt><dd>{opp.reward}</dd></div>}
           </dl>
 
-          {existing ? (
-            <div className="ac-alert">
-              Već si se prijavio/la. Status: <ApplicationBadge status={existing.status} />{' '}
-              <Link to="/umjetnik/prijave">Moje prijave</Link>
-            </div>
-          ) : canApply ? (
-            <button className="ac-btn ac-btn--primary" onClick={() => setApplying(true)}>Prijavi se</button>
-          ) : (
-            <p className="ac-muted">Prijave za ovu priliku trenutno nisu otvorene.</p>
-          )}
+          <h3 style={{ marginBottom: '0.75rem' }}>Prijava na priliku</h3>
+          <NotImplemented />
         </section>
 
         {opp.address && (
@@ -79,60 +53,6 @@ export default function OpportunityDetail() {
           </section>
         )}
       </div>
-
-      {applying && (
-        <ApplyModal
-          opp={opp} artworks={artworks}
-          onClose={() => setApplying(false)}
-          onDone={() => navigate('/umjetnik/prijave')}
-        />
-      )}
     </>
-  );
-}
-
-function ApplyModal({ opp, artworks, onClose, onDone }: { opp: Opportunity; artworks: Artwork[]; onClose: () => void; onDone: () => void }) {
-  const [selected, setSelected] = useState<string[]>([]);
-  const [message, setMessage] = useState('');
-  const [url, setUrl] = useState('');
-  const [busy, setBusy] = useState(false);
-
-  const toggle = (id: string) => setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setBusy(true);
-    await artistApi.createApplication({ opportunityId: String(opp.id), artworkIds: selected, message, materialsUrl: url || undefined });
-    onDone();
-  };
-
-  return (
-    <Modal title={`Prijava: ${opp.title}`} onClose={onClose}>
-      <form onSubmit={submit} className="ac-form">
-        <fieldset>
-          <legend>Radovi iz portfolija</legend>
-          {artworks.length === 0 ? (
-            <p className="ac-muted">Portfolio je prazan. <Link to="/umjetnik/portfolio">Dodaj prvi rad</Link></p>
-          ) : artworks.map((a) => (
-            <label key={a.id} className="ac-check ac-check--block">
-              <input type="checkbox" checked={selected.includes(a.id)} onChange={() => toggle(a.id)} />
-              {a.title} <span className="ac-muted">({a.year}, {a.technique})</span>
-            </label>
-          ))}
-        </fieldset>
-        <label>Poveznica na dodatne materijale
-          <input className="ac-input" type="url" placeholder="https://" value={url} onChange={(e) => setUrl(e.target.value)} />
-        </label>
-        <label>Poruka organizatoru
-          <textarea className="ac-input" rows={4} value={message} onChange={(e) => setMessage(e.target.value)} />
-        </label>
-        <div className="ac-row ac-row--end">
-          <button type="button" className="ac-btn ac-btn--ghost" onClick={onClose}>Odustani</button>
-          <button className="ac-btn ac-btn--primary" disabled={selected.length === 0 || busy}>
-            {busy ? 'Šaljem…' : 'Pošalji prijavu'}
-          </button>
-        </div>
-      </form>
-    </Modal>
   );
 }

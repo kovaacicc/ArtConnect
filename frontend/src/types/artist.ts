@@ -1,16 +1,7 @@
-export const ART_FIELDS = [
-  'Slikarstvo',
-  'Fotografija',
-  'Skulptura',
-  'Ilustracija',
-  'Digitalna umjetnost',
-] as const;
-export type ArtField = (typeof ART_FIELDS)[number];
+import type { ArtField } from '../services/auth'
 
 export type OpportunityType = 'exhibition' | 'competition' | 'workshop' | 'other'
 export type OpportunityStatus = 'preparation' | 'open' | 'closed' | 'selection' | 'finished'
-
-export type ApplicationStatus = 'predana' | 'u_pregledu' | 'potrebna_dopuna' | 'prihvacena' | 'odbijena';
 
 export const OPPORTUNITY_STATUS_LABEL: Record<OpportunityStatus, string> = {
   preparation: 'Priprema',
@@ -20,6 +11,8 @@ export const OPPORTUNITY_STATUS_LABEL: Record<OpportunityStatus, string> = {
   finished: 'Završeno',
 };
 
+// Statusi prijava (backend još nema endpoint za prijave umjetnika; za sada se ne koriste).
+export type ApplicationStatus = 'predana' | 'u_pregledu' | 'potrebna_dopuna' | 'prihvacena' | 'odbijena';
 export const APPLICATION_STATUS_LABEL: Record<ApplicationStatus, string> = {
   predana: 'Predana',
   u_pregledu: 'U pregledu',
@@ -28,35 +21,49 @@ export const APPLICATION_STATUS_LABEL: Record<ApplicationStatus, string> = {
   odbijena: 'Odbijena',
 };
 
+export interface ArtworkFile { id: number; url: string; file_type: string }
+
 export interface Artwork {
-  id: string;
+  id: number;
   title: string;
-  year: number;
+  year_created: number | null;
   technique: string;
   dimensions: string;
   description: string;
-  imageUrl?: string;
-  isPublic: boolean;
+  is_public: boolean;
+  files: ArtworkFile[];
 }
+export type ArtworkInput = Omit<Artwork, 'id' | 'files'>;
 
-export interface Exhibition {
-  id: string;
+export interface Exhibition { id: number; title: string; year: number | null; description: string }
+
+export interface Participation {
+  opportunity_id: number;
   title: string;
-  year: number;
-  place: string;
+  type: OpportunityType;
+  starts_at: string | null;
 }
 
 export interface ArtistProfile {
-  username: string;
-  name: string;
-  email: string;
-  field: ArtField;
-  bio: string;
-  statement: string;
-  website: string;
-  social: string;
-  avatarUrl?: string;
-  exhibitions: Exhibition[];
+  first_name: string;
+  last_name: string;
+  biography: string;
+  work_description: string;
+  website_url: string;
+  social_url: string;
+  portfolio_public: boolean;
+  art_fields: ArtField[];
+  participations: Participation[];
+}
+
+export interface ProfileUpdate {
+  first_name: string;
+  last_name: string;
+  biography: string;
+  work_description: string;
+  website_url: string;
+  social_url: string;
+  art_fields: number[]; // PATCH prima id-eve područja
 }
 
 export interface Opportunity {
@@ -77,17 +84,4 @@ export interface Opportunity {
   reward: string;
   status: OpportunityStatus;
   created_at: string;
-}
-
-export interface Application {
-  id: string;
-  opportunityId: string;
-  opportunityTitle: string;
-  submittedAt: string;
-  status: ApplicationStatus;
-  artworkIds: string[];
-  message: string;
-  materialsUrl?: string;
-  rejectionReason?: string;
-  revisionNote?: string;
 }
